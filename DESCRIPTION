@@ -35,6 +35,7 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
+    janitor (>= 2.0.0),
     lavaan (>= 0.6.0),
     psych (>= 2.0.0)
 VignetteBuilder: knitr

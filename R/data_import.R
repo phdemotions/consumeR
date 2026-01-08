@@ -14,6 +14,8 @@
 #'   and asks you to confirm variable types. If FALSE, imports without prompts.
 #' @param auto_convert Logical. If TRUE, attempts to intelligently convert
 #'   variables (e.g., strings with "1"/"2" to factors). Default TRUE.
+#' @param clean_names Logical. If TRUE (default), cleans column names using
+#'   janitor::clean_names() to make them R-friendly (lowercase, no spaces, etc.)
 #' @param create_report Logical. If TRUE, creates a data validation report
 #'   with visualizations. Default TRUE.
 #'
@@ -88,6 +90,7 @@
 import_research_data <- function(file_path,
                                 interactive = TRUE,
                                 auto_convert = TRUE,
+                                clean_names = TRUE,
                                 create_report = TRUE) {
 
   # Load required packages
@@ -145,6 +148,29 @@ import_research_data <- function(file_path,
 
   # Convert to tibble for consistency
   data <- as_tibble(data)
+
+  # Step 2b: Clean Column Names (if requested)
+  # ------------------------------------------
+  if (clean_names) {
+    if (!requireNamespace("janitor", quietly = TRUE)) {
+      warning("Package 'janitor' required for name cleaning. ",
+              "Install with: install.packages('janitor')\n",
+              "Skipping name cleaning.")
+    } else {
+      original_names <- names(data)
+      data <- janitor::clean_names(data)
+      cleaned_names <- names(data)
+
+      # Check if any names changed
+      n_changed <- sum(original_names != cleaned_names)
+
+      if (n_changed > 0) {
+        message("  ✓ Cleaned ", n_changed, " column name",
+                ifelse(n_changed > 1, "s", ""),
+                " (lowercase, no spaces, R-friendly)")
+      }
+    }
+  }
 
   n_rows <- nrow(data)
   n_cols <- ncol(data)

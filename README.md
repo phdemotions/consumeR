@@ -1,7 +1,7 @@
 # consumeR <img src="man/figures/logo.png" align="right" height="139" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/yourusername/consumeR/workflows/R-CMD-check/badge.svg)](https://github.com/yourusername/consumeR/actions)
+[![R-CMD-check](https://github.com/phdemotions/consumeR/workflows/R-CMD-check/badge.svg)](https://github.com/phdemotions/consumeR/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/consumeR)](https://CRAN.R-project.org/package=consumeR)
 <!-- badges: end -->
 
@@ -25,7 +25,7 @@ You can install the development version of consumeR from GitHub:
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/consumeR")
+devtools::install_github("phdemotions/consumeR")
 ```
 
 Once on CRAN, install with:
@@ -259,7 +259,7 @@ Contributions are welcome! This package prioritizes:
 
 - **Function documentation**: `?function_name`
 - **Vignette**: `vignette("getting-started", package = "consumeR")`
-- **Issues**: [GitHub Issues](https://github.com/yourusername/consumeR/issues)
+- **Issues**: [GitHub Issues](https://github.com/phdemotions/consumeR/issues)
 - **Source code**: Browse the extensively commented source
 
 ## Citation

@@ -28,5 +28,5 @@ Suggests:
     rmarkdown,
     ggplot2
 VignetteBuilder: knitr
-URL: https://github.com/yourusername/consumeR
-BugReports: https://github.com/yourusername/consumeR/issues
+URL: https://github.com/phdemotions/consumeR
+BugReports: https://github.com/phdemotions/consumeR/issues

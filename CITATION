@@ -6,11 +6,11 @@ bibentry(
   author   = "consumeR authors",
   year     = "2026",
   note     = "R package version 0.1.0",
-  url      = "https://github.com/yourusername/consumeR",
+  url      = "https://github.com/phdemotions/consumeR",
   textVersion = paste(
     "consumeR authors (2026).",
     "consumeR: Transparent and Reproducible Consumer Research Analysis.",
     "R package version 0.1.0.",
-    "https://github.com/yourusername/consumeR"
+    "https://github.com/phdemotions/consumeR"
   )
 )

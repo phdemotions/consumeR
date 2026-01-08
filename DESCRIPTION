@@ -1,0 +1,32 @@
+Package: consumeR
+Type: Package
+Title: Transparent and Reproducible Consumer Research Analysis
+Version: 0.1.0
+Authors@R: c(
+    person("Your", "Name", email = "your.email@example.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0000-0000-0000"))
+    )
+Description: Provides transparent, well-documented functions for consumer research
+    analysis that facilitate reproducibility during peer review. All functions are
+    designed with clarity and readability in mind, making code easy to understand
+    for reviewers with varying levels of programming experience. Functions include
+    clear documentation, sensible defaults, and extensive examples.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Depends:
+    R (>= 3.5.0)
+Imports:
+    stats,
+    utils,
+    graphics
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    ggplot2
+VignetteBuilder: knitr
+URL: https://github.com/yourusername/consumeR
+BugReports: https://github.com/yourusername/consumeR/issues

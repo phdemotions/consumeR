@@ -1,0 +1,9 @@
+# Git attributes for R package
+* text=auto
+*.R text
+*.Rmd text
+*.md text
+*.Rd text
+*.rda binary
+*.RData binary
+*.rds binary

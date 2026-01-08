@@ -1,0 +1,70 @@
+url: https://yourusername.github.io/consumeR
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+home:
+  title: "consumeR: Transparent Consumer Research Analysis"
+  description: >
+    Make your consumer research transparent, reproducible, and reviewer-friendly.
+    Inspired by Superstore and The Office for relatable examples!
+
+navbar:
+  structure:
+    left:  [home, intro, reference, articles, tutorials, news]
+    right: [search, github]
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    intro:
+      text: Get Started
+      href: articles/getting-started.html
+    reference:
+      text: Functions
+      href: reference/index.html
+    articles:
+      text: Examples
+      menu:
+        - text: Fun Examples Guide
+          href: EXAMPLES_GUIDE.html
+        - text: Quick Start
+          href: QUICKSTART.html
+    tutorials:
+      text: Guides
+      menu:
+        - text: Start Here
+          href: START_HERE.html
+        - text: Development Guide
+          href: DEVELOPMENT.html
+        - text: Package Overview
+          href: PACKAGE_OVERVIEW.html
+    news:
+      text: News
+      href: news/index.html
+
+reference:
+  - title: "Main Analysis Functions"
+    desc: >
+      Core functions for transparent consumer research analysis
+    contents:
+      - calculate_summary_stats
+      - test_group_differences
+      - create_analysis_report
+  - title: "Datasets"
+    desc: >
+      Example datasets for learning and teaching
+    contents:
+      - consumer_survey
+
+articles:
+  - title: Getting Started
+    navbar: ~
+    contents:
+      - getting-started
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with

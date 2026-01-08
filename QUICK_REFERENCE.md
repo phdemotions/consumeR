@@ -7,7 +7,7 @@
 
 # 2. In Terminal:
 cd "/Users/josh/My Drive/R/consumeR"
-git remote add origin https://github.com/YOUR_USERNAME/consumeR.git
+git remote add origin https://github.com/phdemotions/consumeR.git
 git push -u origin main
 
 # 3. On github.com:
@@ -15,10 +15,10 @@ git push -u origin main
 #    Settings → Pages → Deploy from: gh-pages → Save
 
 # 4. Wait 5 minutes, then visit:
-#    https://YOUR_USERNAME.github.io/consumeR
+#    https://phdemotions.github.io/consumeR
 ```
 
-**Full details**: See GITHUB_SETUP.md
+**Full details**: See UPLOAD_TO_GITHUB.md or GITHUB_SETUP.md
 
 ---
 
@@ -134,24 +134,14 @@ create_analysis_report(
 
 ---
 
-## 🌐 URLs to Update
+## 🌐 URLs (Already Updated!)
 
-Before publishing to GitHub, update `YOUR_USERNAME` in:
+All URLs have been updated to use `phdemotions`:
 
-1. **DESCRIPTION**
-   ```
-   URL: https://github.com/YOUR_USERNAME/consumeR
-   BugReports: https://github.com/YOUR_USERNAME/consumeR/issues
-   ```
-
-2. **_pkgdown.yml**
-   ```
-   url: https://YOUR_USERNAME.github.io/consumeR
-   ```
-
-3. **README.md**
-   - Installation instructions
-   - Badge URLs
+✅ **DESCRIPTION** - GitHub URLs set
+✅ **_pkgdown.yml** - Website URL set
+✅ **README.md** - Installation and badges set
+✅ **CITATION** - GitHub URL set
 
 ---
 
@@ -198,5 +188,5 @@ vignette("getting-started")       # Tutorial
 
 ---
 
-**Website**: https://YOUR_USERNAME.github.io/consumeR (after GitHub setup)
-**Install**: `devtools::install_github("YOUR_USERNAME/consumeR")`
+**Website**: https://phdemotions.github.io/consumeR (after GitHub setup)
+**Install**: `devtools::install_github("phdemotions/consumeR")`

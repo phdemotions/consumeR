@@ -9,9 +9,12 @@ Authors@R: c(
     )
 Description: Provides transparent, well-documented functions for consumer research
     analysis that facilitate reproducibility during peer review. All functions are
-    designed with clarity and readability in mind, making code easy to understand
-    for reviewers with varying levels of programming experience. Functions include
-    clear documentation, sensible defaults, and extensive examples.
+    designed with clarity and readability in mind using tidyverse principles, making
+    code easy to understand for reviewers with varying levels of programming experience.
+    Includes descriptive statistics, group comparisons, reliability analysis (Cronbach's
+    alpha, composite reliability, AVE), and factor analysis (EFA/CFA) with beautiful
+    ggplot2 visualizations. Functions include clear documentation, sensible defaults,
+    and extensive examples.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -21,12 +24,17 @@ Depends:
 Imports:
     stats,
     utils,
-    graphics
+    graphics,
+    dplyr (>= 1.0.0),
+    tidyr (>= 1.0.0),
+    ggplot2 (>= 3.3.0),
+    tibble (>= 3.0.0)
 Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    ggplot2
+    lavaan (>= 0.6.0),
+    psych (>= 2.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/phdemotions/consumeR
 BugReports: https://github.com/phdemotions/consumeR/issues

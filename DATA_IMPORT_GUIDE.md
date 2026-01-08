@@ -23,21 +23,23 @@ Our new functions solve all of these problems with complete transparency!
 ### What It Does
 
 1. ✅ **Imports** CSV or SPSS (.sav) files
-2. ✅ **Detects** variable types automatically
-3. ✅ **Suggests** improvements (e.g., "this should be a factor")
-4. ✅ **Converts** types intelligently
-5. ✅ **Creates** a visual quality report
-6. ✅ **Documents** everything for peer review
+2. ✅ **Cleans column names automatically** (lowercase, no spaces, R-friendly) using `janitor::clean_names()`
+3. ✅ **Detects** variable types automatically
+4. ✅ **Suggests** improvements (e.g., "this should be a factor")
+5. ✅ **Converts** types intelligently
+6. ✅ **Creates** a visual quality report
+7. ✅ **Documents** everything for peer review
 
 ### Basic Usage
 
 ```r
 library(consumeR)
 
-# Import a CSV file (interactive mode)
+# Import a CSV file (interactive mode with automatic name cleaning!)
 result <- import_research_data("my_survey_data.csv")
 
 # Access your cleaned data
+# Column names are now R-friendly (lowercase, no spaces)!
 my_data <- result$data
 
 # View variable summary
@@ -45,6 +47,25 @@ View(result$variable_summary)
 
 # See the quality report
 print(result$validation_report)
+```
+
+### Automatic Name Cleaning
+
+**By default**, all column names are automatically cleaned:
+
+- **Before**: "Customer ID", "Satisfaction Rating (1-7)", "Would Recommend?"
+- **After**: `customer_id`, `satisfaction_rating_1_7`, `would_recommend`
+
+Benefits:
+- ✅ All lowercase
+- ✅ No spaces (replaced with underscores)
+- ✅ No special characters
+- ✅ Valid R variable names
+- ✅ Works perfectly with dplyr pipelines
+
+To disable name cleaning:
+```r
+result <- import_research_data("data.csv", clean_names = FALSE)
 ```
 
 ### Import SPSS Files
@@ -72,9 +93,12 @@ Step 1: Importing data...
   ✓ CSV file imported successfully
   Dimensions: 200 rows × 15 columns
 
-Step 2: Analyzing variable types...
+Step 2: Cleaning column names...
+  ✓ Cleaned 8 column names (lowercase, no spaces, R-friendly)
 
-Step 3: Detecting potential type improvements...
+Step 3: Analyzing variable types...
+
+Step 4: Detecting potential type improvements...
   ✓ Found 3 suggested improvements
 
 ╔════════════════════════════════════════════════════════╗
@@ -118,12 +142,12 @@ FULL VARIABLE LIST:
 4          age      numeric       45             2.5
 ...
 
-Step 4: Applying suggested type conversions...
+Step 5: Applying suggested type conversions...
   ✓ gender: Converted to factor
   ✓ condition: Converted to factor
   ✓ satisfaction_rating: Converted to factor
 
-Step 5: Creating data validation report...
+Step 6: Creating data validation report...
   ✓ Validation plot created
 
 ╔════════════════════════════════════════════════════════╗

@@ -17,7 +17,9 @@ Peer reviewers often struggle to understand and verify statistical analyses, esp
 - **Plain English results**: Statistical outputs include human-readable interpretations
 - **Complete transparency**: All assumptions, decisions, and calculations are explicitly documented
 - **Reproducibility**: Reviewers can easily replicate your exact analysis
-- **Best practices built-in**: Automatic handling of missing data, appropriate test selection, and comprehensive reporting
+- **Tidyverse integration**: Modern, readable code using dplyr, tidyr, and ggplot2
+- **Complete workflow**: From data import to publication-ready analysis
+- **Best practices built-in**: Automatic name cleaning, appropriate test selection, and comprehensive reporting
 
 ## Installation
 
@@ -36,69 +38,68 @@ install.packages("consumeR")
 
 ## Quick Start
 
-### 1. Calculate Descriptive Statistics
+### Complete Research Workflow
 
 ```r
 library(consumeR)
+library(dplyr)
 
-# Your consumer spending data
-spending <- c(45.20, 67.80, 23.40, 89.10, 34.50, 56.70, 78.90, 12.30)
+# ──────────────────────────────────────────────────
+# 1. Import & Clean Data (auto name cleaning!)
+# ──────────────────────────────────────────────────
+result <- import_research_data("study_data.csv")
+study_data <- result$data  # Column names automatically cleaned!
 
-# Get comprehensive statistics
-stats <- calculate_summary_stats(spending)
-print(stats)
-#> $n
-#> [1] 8
-#>
-#> $mean
-#> [1] 51.24
-#>
-#> $median
-#> [1] 51.2
-#>
-#> $sd
-#> [1] 25.65
-```
+# ──────────────────────────────────────────────────
+# 2. Descriptive Statistics
+# ──────────────────────────────────────────────────
+spending_stats <- calculate_summary_stats(study_data$spending)
+#> Mean: 58.45, SD: 25.30, N: 200
 
-### 2. Compare Groups
+# ──────────────────────────────────────────────────
+# 3. Group Comparisons
+# ──────────────────────────────────────────────────
+h1_test <- test_group_differences(
+  study_data$spending[study_data$condition == "treatment"],
+  study_data$spending[study_data$condition == "control"]
+)
+cat(h1_test$interpretation)
 
-```r
-# Treatment vs Control experiment
-treatment_spending <- c(45.2, 67.8, 23.4, 89.1, 34.5, 56.7, 78.9, 12.3)
-control_spending <- c(34.1, 45.2, 28.9, 56.3, 41.2, 38.7, 49.1, 31.4)
+# ──────────────────────────────────────────────────
+# 4. Reliability Analysis
+# ──────────────────────────────────────────────────
+satisfaction_alpha <- calculate_alpha(
+  data = study_data,
+  items = c("sat_1", "sat_2", "sat_3", "sat_4"),
+  scale_name = "Customer Satisfaction"
+)
+#> α = 0.89, CR = 0.90, AVE = 0.68
 
-# Test for differences
-result <- test_group_differences(treatment_spending, control_spending)
-cat(result$interpretation)
-#> No significant difference detected between groups (p = 0.2145).
-#> Group 1 mean: 51.24, Group 2 mean: 40.61.
-```
-
-### 3. Generate Complete Report
-
-```r
-# Combine your data
-study_data <- data.frame(
-  purchase_amount = c(treatment_spending, control_spending),
-  condition = c(rep("Treatment", 8), rep("Control", 8))
+# ──────────────────────────────────────────────────
+# 5. Factor Analysis (with beautiful plots!)
+# ──────────────────────────────────────────────────
+efa_results <- perform_efa(
+  data = study_data,
+  items = c("q_1", "q_2", "q_3", "q_4", "q_5", "q_6"),
+  create_plots = TRUE
 )
 
-# Create comprehensive report for reviewers
+# Save publication-ready plots
+ggsave("scree_plot.png", efa_results$scree_plot)
+ggsave("loadings.png", efa_results$loading_plot)
+
+# ──────────────────────────────────────────────────
+# 6. Complete Report
+# ──────────────────────────────────────────────────
 create_analysis_report(
   data = study_data,
-  variable = "purchase_amount",
+  variable = "spending",
   group_var = "condition",
-  title = "Marketing Campaign Effectiveness Study",
-  report_file = "analysis_for_reviewers.txt"
+  title = "Study 1 Results"
 )
 ```
 
-This generates a complete, transparent report including:
-- Data overview and sample sizes
-- Descriptive statistics for each group
-- Statistical test results with interpretation
-- Methodological notes explaining all decisions
-- Software version information for reproducibility
+**See RESEARCH_WORKFLOW.md for step-by-step guide!**
 
 ## Key Features
 
@@ -148,17 +149,44 @@ result$full_test_output
 
 consumeR provides multiple levels of documentation:
 
-1. **Function help files**: `?calculate_summary_stats`
-2. **Comprehensive vignette**: `vignette("getting-started", package = "consumeR")`
-3. **Inline code comments**: View any function's source code
-4. **This README**: Quick overview and examples
+1. **Complete Workflow Guide**: See `RESEARCH_WORKFLOW.md` for step-by-step analysis workflow
+2. **Function help files**: `?calculate_summary_stats`, `?import_research_data`, etc.
+3. **Comprehensive vignette**: `vignette("getting-started", package = "consumeR")`
+4. **Detailed guides**:
+   - `DATA_IMPORT_GUIDE.md` - CSV/SPSS import with automatic name cleaning
+   - `NEW_FEATURES_SUMMARY.md` - Reliability & factor analysis
+   - `EXAMPLES_GUIDE.md` - Cloud 9 themed examples
+5. **Inline code comments**: View any function's source code
+6. **This README**: Quick overview and examples
 
 ## Main Functions
 
+### Data Management
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `import_research_data()` | Import CSV/SPSS files | **Auto name cleaning** + type detection |
+| `check_variable_types()` | Validate variables | Interactive checking with suggestions |
+
+### Descriptive & Comparative Analysis
 | Function | Purpose | Key Feature |
 |----------|---------|-------------|
 | `calculate_summary_stats()` | Descriptive statistics | Step-by-step documented calculations |
-| `test_group_differences()` | Compare two groups | Plain English interpretation |
+| `test_group_differences()` | Compare two groups | Plain English interpretation + effect size |
+
+### Reliability & Validity
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `calculate_alpha()` | Cronbach's alpha | Transparent item analysis + diagnostics |
+| `calculate_composite_reliability()` | CR & AVE | Quality thresholds with interpretation |
+
+### Factor Analysis
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `perform_efa()` | Exploratory factor analysis | **Beautiful ggplot2 visualizations** |
+
+### Reporting
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
 | `create_analysis_report()` | Full analysis report | Complete transparency for reviewers |
 
 ## Philosophy

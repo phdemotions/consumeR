@@ -268,7 +268,7 @@ library(dplyr)
 library(ggplot2)
 
 # Step 1: Load data
-data(consumer_survey)  # Our Cloud 9 example data
+consumer_survey  # Our Cloud 9 example data
 
 # Imagine we added satisfaction items (we'll create example dataset later)
 # For now, let's show the workflow:

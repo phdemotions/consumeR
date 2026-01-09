@@ -24,6 +24,11 @@
 #' @param conf_level Numeric. Confidence level for the interval. Default is 0.95
 #'   (95% confidence).
 #' @param paired Logical. Are the observations paired? Default is FALSE.
+#' @param check_assumptions Logical. Should assumptions be tested? Default is TRUE.
+#'   When TRUE, tests for normality and homogeneity of variance are performed
+#'   and results are included in output.
+#' @param verbose Logical. Should detailed explanations be provided? Default is TRUE.
+#'   When TRUE, includes verbose explanations suitable for learning.
 #'
 #' @return A list containing:
 #'   \itemize{
@@ -32,8 +37,13 @@
 #'     \item \code{significant}: Logical, TRUE if p < 0.05
 #'     \item \code{group1_mean}: Mean of group 1
 #'     \item \code{group2_mean}: Mean of group 2
+#'     \item \code{group1_sd}: Standard deviation of group 1
+#'     \item \code{group2_sd}: Standard deviation of group 2
 #'     \item \code{difference}: Difference between group means
+#'     \item \code{effect_size}: Cohen's d effect size
 #'     \item \code{interpretation}: Plain English interpretation of results
+#'     \item \code{assumptions}: List of assumption check results (if check_assumptions = TRUE)
+#'     \item \code{publication_text}: Publication-ready text block
 #'     \item \code{full_test_output}: Complete test results object
 #'   }
 #'
@@ -68,13 +78,15 @@
 #' test_group_differences(before, after, paired = TRUE)
 #'
 #' @export
-#' @importFrom stats t.test wilcox.test
+#' @importFrom stats t.test wilcox.test sd var
 test_group_differences <- function(group1,
                                   group2,
                                   test_type = "auto",
                                   alternative = "two.sided",
                                   conf_level = 0.95,
-                                  paired = FALSE) {
+                                  paired = FALSE,
+                                  check_assumptions = TRUE,
+                                  verbose = TRUE) {
 
   # Step 1: Input validation
   # -------------------------
@@ -124,19 +136,99 @@ test_group_differences <- function(group1,
          "after removing missing values.")
   }
 
+  # Step 2.5: Check statistical assumptions
+  # ----------------------------------------
+  assumptions <- list()
+
+  if (check_assumptions && !paired) {
+    # Check normality for both groups
+    if (verbose) {
+      message("\nChecking statistical assumptions...")
+    }
+
+    # Normality assumption
+    assumptions$normality_group1 <- check_normality(
+      group1_clean,
+      variable_name = "Group 1",
+      alpha = 0.05
+    )
+
+    assumptions$normality_group2 <- check_normality(
+      group2_clean,
+      variable_name = "Group 2",
+      alpha = 0.05
+    )
+
+    # Homogeneity of variance (for t-test)
+    if (test_type == "t.test" || test_type == "auto") {
+      assumptions$homogeneity <- check_homogeneity_of_variance(
+        data = c(group1_clean, group2_clean),
+        groups = c(rep("Group1", length(group1_clean)),
+                   rep("Group2", length(group2_clean))),
+        alpha = 0.05
+      )
+    }
+
+    # Independence - assumed based on design
+    assumptions$independence <- check_independence(
+      data_structure = "independent groups design",
+      is_independent = TRUE,
+      clustering_note = "If your data has clustering (e.g., participants nested within stores), use mixed effects models."
+    )
+
+    if (verbose) {
+      message("Assumption checks complete. See 'assumptions' element in results for details.\n")
+    }
+  }
+
   # Step 3: Determine which test to use
   # ------------------------------------
   actual_test <- test_type
+  use_welch <- FALSE
 
   if (test_type == "auto") {
-    # Use Central Limit Theorem as guide: n >= 30 is often sufficient for normality
-    # For smaller samples, use non-parametric test to be safe
-    if (length(group1_clean) >= 30 && length(group2_clean) >= 30) {
-      actual_test <- "t.test"
-      message("Auto-selection: Using t-test (both groups have n >= 30)")
+    # Use assumptions checks and sample size to select test
+    if (check_assumptions && !is.null(assumptions$normality_group1)) {
+      # Decision based on assumptions
+      norm1_met <- assumptions$normality_group1$assumption_met
+      norm2_met <- assumptions$normality_group2$assumption_met
+      homog_met <- if (!is.null(assumptions$homogeneity)) {
+        assumptions$homogeneity$assumption_met
+      } else {
+        TRUE
+      }
+
+      if (norm1_met && norm2_met) {
+        # Both groups are normal
+        actual_test <- "t.test"
+        if (!homog_met) {
+          use_welch <- TRUE
+          message("Auto-selection: Using Welch's t-test (normality met, but variances unequal)")
+        } else {
+          message("Auto-selection: Using t-test (assumptions met)")
+        }
+      } else {
+        # Normality violated
+        actual_test <- "wilcoxon"
+        message("Auto-selection: Using Wilcoxon test (normality assumption violated)")
+      }
     } else {
-      actual_test <- "wilcoxon"
-      message("Auto-selection: Using Wilcoxon test (small sample size)")
+      # No assumptions checked - use sample size heuristic
+      # Use Central Limit Theorem as guide: n >= 30 is often sufficient for normality
+      # For smaller samples, use non-parametric test to be safe
+      if (length(group1_clean) >= 30 && length(group2_clean) >= 30) {
+        actual_test <- "t.test"
+        message("Auto-selection: Using t-test (both groups have n >= 30)")
+      } else {
+        actual_test <- "wilcoxon"
+        message("Auto-selection: Using Wilcoxon test (small sample size)")
+      }
+    }
+  } else if (test_type == "t.test" && check_assumptions && !is.null(assumptions$homogeneity)) {
+    # Manual t-test selection - check if Welch's should be used
+    if (!assumptions$homogeneity$assumption_met) {
+      use_welch <- TRUE
+      message("Note: Using Welch's correction for unequal variances")
     }
   }
 
@@ -150,9 +242,17 @@ test_group_differences <- function(group1,
       y = group2_clean,
       alternative = alternative,
       conf.level = conf_level,
-      paired = paired
+      paired = paired,
+      var.equal = !use_welch  # Use Welch's if use_welch = TRUE
     )
-    test_name <- ifelse(paired, "Paired t-test", "Two-sample t-test")
+
+    if (paired) {
+      test_name <- "Paired t-test"
+    } else if (use_welch) {
+      test_name <- "Welch's t-test"
+    } else {
+      test_name <- "Student's t-test"
+    }
 
   } else if (actual_test == "wilcoxon") {
     # Wilcoxon test: Non-parametric, doesn't assume normality
@@ -167,12 +267,40 @@ test_group_differences <- function(group1,
     test_name <- ifelse(paired, "Paired Wilcoxon test", "Wilcoxon rank-sum test")
   }
 
-  # Step 5: Calculate descriptive statistics
-  # -----------------------------------------
-  # Calculate means to understand the direction of difference
+  # Step 5: Calculate descriptive statistics and effect sizes
+  # ----------------------------------------------------------
+  # Calculate means and SDs to understand the difference
   mean_g1 <- mean(group1_clean)
   mean_g2 <- mean(group2_clean)
+  sd_g1 <- sd(group1_clean)
+  sd_g2 <- sd(group2_clean)
   mean_diff <- mean_g1 - mean_g2
+
+  # Calculate Cohen's d effect size
+  if (paired) {
+    # For paired data, use SD of differences
+    differences <- group1_clean - group2_clean
+    pooled_sd <- sd(differences)
+    cohens_d <- mean_diff / pooled_sd
+  } else {
+    # For independent groups, use pooled SD
+    n1 <- length(group1_clean)
+    n2 <- length(group2_clean)
+    pooled_sd <- sqrt(((n1 - 1) * sd_g1^2 + (n2 - 1) * sd_g2^2) / (n1 + n2 - 2))
+    cohens_d <- mean_diff / pooled_sd
+  }
+
+  # Interpret effect size
+  abs_d <- abs(cohens_d)
+  if (abs_d < 0.2) {
+    effect_interp <- "negligible"
+  } else if (abs_d < 0.5) {
+    effect_interp <- "small"
+  } else if (abs_d < 0.8) {
+    effect_interp <- "medium"
+  } else {
+    effect_interp <- "large"
+  }
 
   # Step 6: Extract and interpret results
   # --------------------------------------
@@ -184,39 +312,173 @@ test_group_differences <- function(group1,
     if (mean_diff > 0) {
       interpretation <- paste0(
         "The groups are significantly different (p = ", round(p_value, 4), "). ",
-        "Group 1 has a higher mean (", round(mean_g1, 2), ") than Group 2 (",
-        round(mean_g2, 2), "), with a difference of ", round(mean_diff, 2), "."
+        "Group 1 (M = ", round(mean_g1, 2), ", SD = ", round(sd_g1, 2), ") ",
+        "has a higher mean than Group 2 (M = ", round(mean_g2, 2), ", SD = ",
+        round(sd_g2, 2), "), with a mean difference of ", round(mean_diff, 2), ". ",
+        "The effect size is ", effect_interp, " (Cohen's d = ", round(cohens_d, 2), ")."
       )
     } else {
       interpretation <- paste0(
         "The groups are significantly different (p = ", round(p_value, 4), "). ",
-        "Group 2 has a higher mean (", round(mean_g2, 2), ") than Group 1 (",
-        round(mean_g1, 2), "), with a difference of ", round(abs(mean_diff), 2), "."
+        "Group 2 (M = ", round(mean_g2, 2), ", SD = ", round(sd_g2, 2), ") ",
+        "has a higher mean than Group 1 (M = ", round(mean_g1, 2), ", SD = ",
+        round(sd_g1, 2), "), with a mean difference of ", round(abs(mean_diff), 2), ". ",
+        "The effect size is ", effect_interp, " (Cohen's d = ", round(cohens_d, 2), ")."
       )
     }
   } else {
     interpretation <- paste0(
       "No significant difference detected between groups (p = ", round(p_value, 4), "). ",
-      "Group 1 mean: ", round(mean_g1, 2), ", Group 2 mean: ", round(mean_g2, 2), "."
+      "Group 1: M = ", round(mean_g1, 2), ", SD = ", round(sd_g1, 2), "; ",
+      "Group 2: M = ", round(mean_g2, 2), ", SD = ", round(sd_g2, 2), ". ",
+      "The effect size is ", effect_interp, " (Cohen's d = ", round(cohens_d, 2), ")."
     )
   }
+
+  # Step 6.5: Generate publication-ready text
+  # ------------------------------------------
+  # Get confidence interval
+  ci_lower <- test_result$conf.int[1]
+  ci_upper <- test_result$conf.int[2]
+
+  # Prepare results for publication text generator
+  test_results_for_pub <- list(
+    test_name = test_name,
+    statistic = test_result$statistic,
+    df = test_result$parameter,
+    p_value = p_value,
+    group1_mean = mean_g1,
+    group2_mean = mean_g2,
+    group1_sd = sd_g1,
+    group2_sd = sd_g2,
+    mean_difference = mean_diff,
+    ci_lower = ci_lower,
+    ci_upper = ci_upper,
+    cohens_d = cohens_d,
+    effect_interpretation = effect_interp
+  )
+
+  # Determine test type for publication text
+  if (paired) {
+    pub_test_type <- "paired_t"
+  } else if (use_welch || actual_test == "wilcoxon") {
+    pub_test_type <- if (use_welch) "welch_t" else "wilcoxon"
+  } else {
+    pub_test_type <- "t_test"
+  }
+
+  # Generate publication text
+  pub_block <- generate_publication_block(
+    test_type = pub_test_type,
+    assumptions_checks = if (check_assumptions) assumptions else NULL,
+    test_results = test_results_for_pub,
+    effect_sizes = list(cohens_d = cohens_d)
+  )
 
   # Step 7: Package results into a clear list
   # ------------------------------------------
   results <- list(
     test_used = test_name,
     p_value = round(p_value, 6),
+    statistic = test_result$statistic,
+    df = test_result$parameter,
     significant = is_significant,
     group1_mean = round(mean_g1, 2),
     group2_mean = round(mean_g2, 2),
+    group1_sd = round(sd_g1, 2),
+    group2_sd = round(sd_g2, 2),
     difference = round(mean_diff, 2),
+    ci_lower = round(ci_lower, 2),
+    ci_upper = round(ci_upper, 2),
+    effect_size = round(cohens_d, 2),
+    effect_interpretation = effect_interp,
     group1_n = length(group1_clean),
     group2_n = length(group2_clean),
     interpretation = interpretation,
+    assumptions = if (check_assumptions && length(assumptions) > 0) assumptions else NULL,
+    publication_text = pub_block,
     full_test_output = test_result
   )
+
+  # Add class for custom printing
+  class(results) <- c("group_comparison", "list")
 
   # Step 8: Return results
   # ----------------------
   return(results)
 }
+
+
+#' Print Method for Group Comparison Results
+#'
+#' @param x A group_comparison object
+#' @param show_assumptions Logical - show assumption check details? (default FALSE)
+#' @param show_publication Logical - show publication text? (default FALSE)
+#' @param ... Additional arguments (not used)
+#'
+#' @export
+print.group_comparison <- function(x, show_assumptions = FALSE, show_publication = FALSE, ...) {
+  cat("\n")
+  cat("=" %+% rep("=", 70) %+% "=\n", sep = "")
+  cat("GROUP COMPARISON RESULTS\n")
+  cat("=" %+% rep("=", 70) %+% "=\n", sep = "")
+  cat("\n")
+
+  cat("Test Used:", x$test_used, "\n")
+  cat("Sample Sizes: Group 1 (n =", x$group1_n, "), Group 2 (n =", x$group2_n, ")\n")
+  cat("\n")
+
+  cat("DESCRIPTIVE STATISTICS:\n")
+  cat("  Group 1: M =", x$group1_mean, ", SD =", x$group1_sd, "\n")
+  cat("  Group 2: M =", x$group2_mean, ", SD =", x$group2_sd, "\n")
+  cat("  Difference:", x$difference, ", 95% CI [", x$ci_lower, ",", x$ci_upper, "]\n")
+  cat("\n")
+
+  cat("STATISTICAL RESULTS:\n")
+  cat("  Test statistic:", round(x$statistic, 3), "\n")
+  if (!is.null(x$df) && !is.na(x$df)) {
+    cat("  Degrees of freedom:", round(x$df, 1), "\n")
+  }
+  cat("  p-value:", x$p_value, "\n")
+  cat("  Significant:", ifelse(x$significant, "YES (p < .05)", "NO (p >= .05)"), "\n")
+  cat("\n")
+
+  cat("EFFECT SIZE:\n")
+  cat("  Cohen's d =", x$effect_size, "(", x$effect_interpretation, ")\n")
+  cat("\n")
+
+  cat("INTERPRETATION:\n")
+  cat(strwrap(x$interpretation, width = 70, prefix = "  "), sep = "\n")
+  cat("\n")
+
+  if (show_assumptions && !is.null(x$assumptions)) {
+    cat("\n")
+    cat("-" %+% rep("-", 70) %+% "-\n", sep = "")
+    cat("ASSUMPTION CHECKS:\n")
+    cat("-" %+% rep("-", 70) %+% "-\n", sep = "")
+    for (assump_name in names(x$assumptions)) {
+      cat("\n", toupper(gsub("_", " ", assump_name)), ":\n", sep = "")
+      print(x$assumptions[[assump_name]], verbose = FALSE)
+    }
+  }
+
+  if (show_publication && !is.null(x$publication_text)) {
+    cat("\n")
+    print(x$publication_text)
+  }
+
+  if (!show_assumptions && !is.null(x$assumptions)) {
+    cat("\nTip: Use print(result, show_assumptions = TRUE) to see assumption checks\n")
+  }
+
+  if (!show_publication) {
+    cat("Tip: Use print(result, show_publication = TRUE) to see publication-ready text\n")
+  }
+
+  cat("\n")
+
+  invisible(x)
+}
+
+# Helper function
+`%+%` <- function(a, b) paste0(a, b)

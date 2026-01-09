@@ -36,7 +36,8 @@ consumeR/
 │   ├── summary_stats.R         # Descriptive statistics
 │   ├── group_tests.R           # Group comparisons
 │   ├── analysis_report.R       # Report generation
-│   └── data.R                  # Dataset documentation
+│   ├── data.R                  # Dataset documentation
+│   └── consumer_survey_data.R  # Generated example dataset
 │
 ├── man/                # Auto-generated documentation (via roxygen2)
 │
@@ -49,9 +50,6 @@ consumeR/
 │
 ├── vignettes/          # Long-form documentation
 │   └── getting-started.Rmd
-│
-├── data/               # Example datasets
-│   └── consumer_survey.rda
 │
 ├── data-raw/           # Dataset creation scripts
 │   └── create_data.R
@@ -289,7 +287,7 @@ install.packages("path/to/consumeR", repos=NULL, type="source")
 library(consumeR)
 ?consumeR                              # Package overview
 vignette("getting-started")            # Tutorial
-data(consumer_survey)                  # Example data
+consumer_survey                  # Example data
 ```
 
 ---

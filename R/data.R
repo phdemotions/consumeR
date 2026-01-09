@@ -11,6 +11,7 @@
 #' increase their spending. They randomly gave flyers to 50 customers ("Got Flyer"
 #' group) and compared them to 50 customers who shopped normally ("No Flyer" group).
 #' This dataset contains the results.
+#' It is available as `consumer_survey` once the consumeR package is loaded.
 #'
 #' **Why use this data?**
 #'
@@ -70,7 +71,7 @@
 #'
 #' **Step 1: Load and explore**
 #' ```r
-#' data(consumer_survey)
+#' consumer_survey
 #' head(consumer_survey)  # See first few rows
 #' summary(consumer_survey)  # Get basic overview
 #' ```
@@ -101,7 +102,7 @@
 #' # ========================================
 #'
 #' # Load the Cloud 9 customer data
-#' data(consumer_survey)
+#' consumer_survey
 #'
 #' # Look at the first few rows to see what the data looks like
 #' head(consumer_survey)
@@ -197,4 +198,5 @@
 #' See data-raw/create_data.R for the complete simulation code.
 #'
 #' @keywords datasets
+#' @export
 "consumer_survey"

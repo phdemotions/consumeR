@@ -25,13 +25,25 @@ validate_spec <- function(spec) {
     rlang::abort("StudySpec$exclusions must be a list (can be empty).")
   }
 
-  purrr::walk(spec$exclusions, function(exclusion) {
-    required_exclusion <- c("id", "description", "filter")
-    missing_exclusion <- setdiff(required_exclusion, names(exclusion))
-    if (length(missing_exclusion) > 0) {
-      rlang::abort(paste0("Each exclusion must include: ", paste(required_exclusion, collapse = ", "), "."))
+  validate_exclusion_entries(spec$exclusions, "StudySpec$exclusions")
+
+  if (!is.null(spec$checks)) {
+    if (!is.list(spec$checks)) {
+      rlang::abort("StudySpec$checks must be a list when provided.")
     }
-  })
+    allowed_checks <- c("pretest", "screening", "attention", "manipulation")
+    unknown_checks <- setdiff(names(spec$checks), allowed_checks)
+    if (length(unknown_checks) > 0) {
+      rlang::abort(paste0("StudySpec$checks has unknown sections: ", paste(unknown_checks, collapse = ", "), "."))
+    }
+    purrr::walk(names(spec$checks), function(check_type) {
+      checks <- spec$checks[[check_type]]
+      if (!is.list(checks)) {
+        rlang::abort(paste0("StudySpec$checks$", check_type, " must be a list (can be empty)."))
+      }
+      validate_exclusion_entries(checks, paste0("StudySpec$checks$", check_type))
+    })
+  }
 
   if (!is.list(spec$constructs)) {
     rlang::abort("StudySpec$constructs must be a list (can be empty).")
@@ -83,6 +95,16 @@ validate_spec <- function(spec) {
   }
 
   list(valid = TRUE, spec = spec)
+}
+
+validate_exclusion_entries <- function(entries, context) {
+  purrr::walk(entries, function(entry) {
+    required_exclusion <- c("id", "description", "filter")
+    missing_exclusion <- setdiff(required_exclusion, names(entry))
+    if (length(missing_exclusion) > 0) {
+      rlang::abort(paste0(context, " entries must include: ", paste(required_exclusion, collapse = ", "), "."))
+    }
+  })
 }
 
 studyspec_template_paths <- function() {
@@ -200,20 +222,23 @@ apply_exclusions <- function(data, spec) {
   data <- tibble::as_tibble(data)
   data <- dplyr::mutate(data, .row_id = dplyr::row_number())
   audit_entries <- list()
+  exclusion_logs <- list()
+  exclusions <- assemble_exclusions(spec)
 
-  if (length(spec$exclusions) == 0) {
+  if (length(exclusions) == 0) {
     audit <- tibble::tibble(
       exclusion_id = character(),
+      exclusion_type = character(),
       description = character(),
       n_before = integer(),
       n_after = integer(),
       n_excluded = integer()
     )
     data <- dplyr::select(data, -".row_id")
-    return(list(data = data, audit = audit))
+    return(list(data = data, audit = audit, excluded = tibble::tibble()))
   }
 
-  for (exclusion in spec$exclusions) {
+  for (exclusion in exclusions) {
     filter_expr <- rlang::parse_expr(exclusion$filter)
     before_n <- nrow(data)
     excluded_rows <- dplyr::filter(data, !!filter_expr)
@@ -222,17 +247,26 @@ apply_exclusions <- function(data, spec) {
 
     audit_entries <- append(audit_entries, list(tibble::tibble(
       exclusion_id = exclusion$id,
+      exclusion_type = exclusion$type,
       description = exclusion$description,
       n_before = before_n,
       n_after = after_n,
       n_excluded = nrow(excluded_rows)
     )))
+
+    exclusion_logs <- append(exclusion_logs, list(tibble::tibble(
+      subject_id = excluded_rows[[spec$data$id_var]],
+      exclusion_id = exclusion$id,
+      exclusion_type = exclusion$type,
+      description = exclusion$description
+    )))
   }
 
   audit <- dplyr::bind_rows(audit_entries)
+  excluded <- dplyr::bind_rows(exclusion_logs)
   data <- dplyr::select(data, -".row_id")
 
-  list(data = data, audit = audit)
+  list(data = data, audit = audit, excluded = excluded)
 }
 
 score_constructs_from_dictionary <- function(data, spec) {
@@ -337,8 +371,24 @@ run_pipeline <- function(spec, data_or_path) {
   list(
     data = standardized$data,
     exclusions = exclusions$audit,
+    excluded_subjects = exclusions$excluded,
     constructs = scored$constructs,
     models = model_results$models,
     tables = tables$tables
   )
+}
+
+assemble_exclusions <- function(spec) {
+  base_exclusions <- purrr::map(spec$exclusions, function(entry) {
+    c(entry, list(type = "exclusion"))
+  })
+  if (is.null(spec$checks)) {
+    return(base_exclusions)
+  }
+  check_entries <- purrr::map(names(spec$checks), function(check_type) {
+    purrr::map(spec$checks[[check_type]], function(entry) {
+      c(entry, list(type = check_type))
+    })
+  })
+  c(base_exclusions, unlist(check_entries, recursive = FALSE))
 }

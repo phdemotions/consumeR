@@ -22,6 +22,41 @@
       "filter": "median_rt_ms < 200"
     }
   ],
+  "checks": {
+    "pretest": [
+      {
+        "id": "pretest_window",
+        "description": "Exclude participants who started before the launch date.",
+        "filter": "start_date < as.Date('2024-01-15')"
+      }
+    ],
+    "screening": [
+      {
+        "id": "screen_age",
+        "description": "Exclude participants outside the eligible age range.",
+        "filter": "age < 18 | age > 65"
+      },
+      {
+        "id": "screen_location",
+        "description": "Exclude participants outside the target region.",
+        "filter": "location != 'US'"
+      }
+    ],
+    "attention": [
+      {
+        "id": "attn_check",
+        "description": "Exclude participants failing the attention check.",
+        "filter": "attention_check == 0"
+      }
+    ],
+    "manipulation": [
+      {
+        "id": "manip_check",
+        "description": "Exclude participants failing the manipulation check.",
+        "filter": "manipulation_pass == 0"
+      }
+    ]
+  },
   "constructs": [
     {
       "name": "risk_tolerance",

@@ -11,6 +11,23 @@ exclusions:
   - id: "<string>"
     description: "<string>"
     filter: "<boolean expression>"
+checks:
+  pretest:
+    - id: "<string>"
+      description: "<string>"
+      filter: "<boolean expression>"
+  screening:
+    - id: "<string>"
+      description: "<string>"
+      filter: "<boolean expression>"
+  attention:
+    - id: "<string>"
+      description: "<string>"
+      filter: "<boolean expression>"
+  manipulation:
+    - id: "<string>"
+      description: "<string>"
+      filter: "<boolean expression>"
 constructs:
   - name: "<string>"
     items: ["<string>", "<string>"]

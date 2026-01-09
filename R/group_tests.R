@@ -78,7 +78,6 @@
 #' test_group_differences(before, after, paired = TRUE)
 #'
 #' @export
-#' @importFrom stats t.test wilcox.test sd var
 test_group_differences <- function(group1,
                                   group2,
                                   test_type = "auto",

@@ -68,7 +68,6 @@
 #' print(result, show_publication = TRUE)
 #'
 #' @export
-#' @importFrom stats aov anova lm oneway.test TukeyHSD pairwise.t.test
 compare_groups_anova <- function(data,
                                   groups = NULL,
                                   formula = NULL,

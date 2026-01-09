@@ -70,7 +70,6 @@
 #' print(result, show_publication = TRUE)
 #'
 #' @export
-#' @importFrom stats lm coef summary.lm residuals fitted anova shapiro.test cor
 analyze_regression <- function(data,
                                 formula,
                                 check_assumptions = TRUE,

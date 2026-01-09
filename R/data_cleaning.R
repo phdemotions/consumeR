@@ -1,106 +1,426 @@
 #' Clean and Prepare Survey Data with Publication-Ready Exclusion Reporting
 #'
 #' @description
-#' This is the FIRST STEP in your research workflow. Cleans survey data by
-#' systematically excluding cases based on pre-test status, inclusion criteria,
-#' and attention checks. Provides complete documentation suitable for the
-#' Journal of Consumer Psychology and creates publication-ready participant
-#' flow diagrams.
+#' **This is STEP 1 in your research workflow.** Cleans survey data by systematically
+#' excluding cases and creates publication-ready participant flow documentation.
 #'
-#' **Why this matters:** Journals require transparent reporting of all exclusions.
-#' This function creates the exact text you need for your Methods section and
-#' tracks every single case that was excluded and why.
+#' **What this function does:**
+#' - Removes pre-test/pilot data (if applicable)
+#' - Excludes participants who don't meet your inclusion criteria
+#' - Removes participants who failed attention checks
+#' - Tracks every exclusion with detailed reasons
+#' - Generates publication text for your Methods section
 #'
-#' @param data Data frame containing raw survey data
-#' @param pretest_var Name of variable indicating pre-test status (optional).
-#'   Values indicating pre-test (e.g., TRUE, 1, "pretest") should be specified
-#'   in pretest_values parameter
-#' @param pretest_values Values in pretest_var that indicate pre-test cases.
-#'   Default: c(TRUE, 1, "pretest", "pre-test", "test")
-#' @param inclusion_criteria List of inclusion criteria as named list.
-#'   Each element should be a logical vector indicating which cases meet that criterion.
-#'   Example: list(completed = data$finished == 1, adult = data$age >= 18)
-#' @param attention_checks List of attention check variables and their correct answers.
-#'   Example: list(ac1 = list(var = "attn_check1", correct = 3),
-#'                 ac2 = list(var = "attn_check2", correct = "strongly agree"))
-#' @param attention_check_rule How many attention checks must pass? Options:
-#'   - "all" (default): Must pass all attention checks
-#'   - "majority": Must pass > 50% of attention checks
-#'   - numeric: Must pass at least this many checks
-#' @param additional_exclusions Optional logical vector indicating additional cases
-#'   to exclude (e.g., duplicate IPs, suspicious patterns)
-#' @param additional_exclusion_reason Character string describing additional exclusions
-#' @param id_var Name of participant ID variable (for tracking)
-#' @param verbose Logical. Show detailed progress messages? Default TRUE
+#' @param data Data frame with your raw survey data (usually from Qualtrics, MTurk, etc.)
 #'
-#' @return A list containing:
-#'   \itemize{
-#'     \item \code{clean_data}: Final cleaned dataset (tibble)
-#'     \item \code{n_initial}: Initial sample size
-#'     \item \code{n_final}: Final sample size after all exclusions
-#'     \item \code{exclusion_summary}: Data frame with counts for each exclusion type
-#'     \item \code{exclusion_details}: Detailed information about each excluded case
-#'     \item \code{participant_flow}: CONSORT-style flow data
-#'     \item \code{publication_text}: Publication-ready Methods section text
-#'     \item \code{exclusion_table}: Formatted table for manuscript
-#'     \item \code{flags}: Data frame showing which cases were flagged for which reasons
-#'   }
+#' @param pretest_var **Column name** that marks pre-test cases (or NULL if no pre-tests).
 #'
-#' @details
-#' ## Exclusion Order (following best practices):
+#'   **What this is:** The name of the column in your data that identifies pre-test responses.
+#'   Pre-tests are responses you collected BEFORE your main study (pilot testing, your own
+#'   test responses, etc.). These shouldn't be counted in your sample size.
 #'
-#' 1. **Pre-test cases** - Removed first (pilot testing, researcher tests)
-#' 2. **Inclusion criteria failures** - Did not meet study requirements
-#' 3. **Attention check failures** - Failed quality checks
-#' 4. **Additional exclusions** - Other reasons (duplicates, etc.)
+#'   **Real examples:**
+#'   - Qualtrics often creates: `"Status"` (values: "Survey Preview" = pre-test)
+#'   - Or you might have: `"is_pilot"`, `"test_response"`, `"preview"`
+#'   - MTurk: You might mark your own tests with a specific worker ID
 #'
-#' ## Publication Standards:
+#'   **How to find it:**
+#'   Look at your column names: `names(raw_data)` or `colnames(raw_data)`
 #'
-#' The output provides everything needed for Journal of Consumer Psychology:
-#' - Exact sample sizes at each step
-#' - Specific exclusion criteria
-#' - Number excluded for each reason
-#' - Final analytical sample size
-#' - Percentage of initial sample retained
+#'   **If you don't have pre-tests:** Just use `pretest_var = NULL` (the default)
 #'
-#' ## Example Methods Section Text:
+#' @param pretest_values **Values** in the pretest_var column that indicate it's a pre-test.
 #'
-#' "Data were collected from 500 participants. We excluded 15 pre-test cases,
-#' 23 participants who did not complete the survey, 18 participants under age 18,
-#' and 12 participants who failed one or more attention checks. The final sample
-#' consisted of 432 participants (86.4% of initial sample)."
+#'   **What this is:** What values in that column mean "this is a pre-test"?
+#'
+#'   **Real examples:**
+#'   - If using Qualtrics Status: `pretest_values = "Survey Preview"`
+#'   - If you have a TRUE/FALSE column: `pretest_values = c(TRUE, 1, "yes")`
+#'   - If you marked tests with special ID: `pretest_values = "RESEARCHER_TEST"`
+#'
+#'   **Default:** c(TRUE, 1, "pretest", "pre-test", "test") - catches common cases
+#'
+#' @param date_var **Column name** containing response dates/timestamps (or NULL).
+#'
+#'   **What this is:** The column that shows when each response was collected.
+#'   Use this if you want to exclude responses collected before a certain date.
+#'
+#'   **Real examples:**
+#'   - Qualtrics: `"StartDate"`, `"EndDate"`, or `"RecordedDate"`
+#'   - MTurk: `"SubmitTime"` or `"AcceptTime"`
+#'   - Your own: Whatever timestamp column you have
+#'
+#'   **How to find it:**
+#'   Look for date/time columns: `names(raw_data)` - often contains "Date" or "Time"
+#'
+#'   **Note:** Works with most date formats (automatically converted)
+#'
+#' @param pretest_before_date **Cutoff date** - exclude responses collected before this date (or NULL).
+#'
+#'   **What this is:** Any responses collected BEFORE this date will be treated as pre-tests.
+#'   Useful when you did pilot testing before your main data collection.
+#'
+#'   **Real examples:**
+#'   ```r
+#'   # If you started real data collection on March 15, 2024:
+#'   pretest_before_date = "2024-03-15"
+#'
+#'   # Or use a Date object:
+#'   pretest_before_date = as.Date("2024-03-15")
+#'
+#'   # With specific time (if you have timestamps):
+#'   pretest_before_date = as.POSIXct("2024-03-15 09:00:00")
+#'   ```
+#'
+#'   **Date formats accepted:**
+#'   - "YYYY-MM-DD" (recommended): `"2024-03-15"`
+#'   - Date objects: `as.Date("2024-03-15")`
+#'   - POSIXct timestamps: `as.POSIXct("2024-03-15 09:00:00")`
+#'
+#'   **How to use with `date_var`:**
+#'   Both must be provided together. The function will exclude any rows where
+#'   `date_var < pretest_before_date`
+#'
+#'   **Can combine with `pretest_var`:** If you provide both date-based and column-based
+#'   pre-test criteria, responses matching EITHER will be removed
+#'
+#' @param inclusion_criteria **Named list** of requirements participants must meet.
+#'
+#'   **What this is:** Rules that determine if someone should be INCLUDED in your analysis.
+#'   Create a list where each element is a TRUE/FALSE check.
+#'
+#'   **Structure:** `list(criterion_name = TRUE/FALSE for each row)`
+#'
+#'   **Real examples:**
+#'
+#'   ```r
+#'   # Example 1: Basic Qualtrics survey
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1,              # Qualtrics completion flag
+#'     adult = raw_data$age >= 18,                      # Age requirement
+#'     consented = raw_data$consent == "I agree"        # Gave consent
+#'   )
+#'
+#'   # Example 2: MTurk study
+#'   inclusion_criteria = list(
+#'     completed = raw_data$status == "Submitted",
+#'     approval_rate = raw_data$approval >= 95,         # MTurk 95%+ approval
+#'     min_hits = raw_data$total_hits >= 100,           # At least 100 HITs
+#'     us_only = raw_data$location == "US"
+#'   )
+#'
+#'   # Example 3: Just want people who finished
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1
+#'   )
+#'   ```
+#'
+#'   **How to figure out column names:**
+#'   - Run: `names(raw_data)` to see all columns
+#'   - Look for: "Finished", "Status", "Progress", etc.
+#'   - Check what values mean completion: `table(raw_data$Finished)`
+#'
+#' @param attention_checks **Named list** of attention check questions and correct answers.
+#'
+#'   **What this is:** Questions where you told participants "Select [specific answer]".
+#'   These catch people who aren't paying attention.
+#'
+#'   **Structure:** Each attention check needs:
+#'   - `var`: The column name for that question
+#'   - `correct`: The correct answer
+#'
+#'   **Real examples:**
+#'
+#'   ```r
+#'   # Example 1: Likert scale attention checks (1-7 scale)
+#'   attention_checks = list(
+#'     ac1 = list(var = "Q5_1", correct = 7),           # "Select Strongly Agree (7)"
+#'     ac2 = list(var = "Q12_1", correct = 1)           # "Select Strongly Disagree (1)"
+#'   )
+#'
+#'   # Example 2: Text-based attention checks
+#'   attention_checks = list(
+#'     ac1 = list(var = "attention_1", correct = "blue"),       # "Select 'blue'"
+#'     ac2 = list(var = "attention_2", correct = "strongly agree")  # Exact text match
+#'   )
+#'
+#'   # Example 3: Multiple choice (numeric coding)
+#'   attention_checks = list(
+#'     ac1 = list(var = "AC_Q3", correct = 4)           # Option 4 was correct
+#'   )
+#'   ```
+#'
+#'   **How to find column names:**
+#'   - In Qualtrics: Questions are often "Q1", "Q2", "Q3", etc.
+#'   - Look at: `names(raw_data)` to find your attention check columns
+#'   - Check what values people selected: `table(raw_data$Q5_1)`
+#'
+#'   **What's the correct answer?**
+#'   - Look at your survey - what did you tell people to select?
+#'   - Check your data: `unique(raw_data$Q5_1)` to see possible values
+#'
+#' @param attention_check_rule **How many** attention checks must someone pass?
+#'
+#'   **Options:**
+#'   - `"all"` (default and recommended): Must pass EVERY attention check
+#'   - `"majority"`: Must pass more than half (e.g., 2 out of 3)
+#'   - A number: Must pass at least this many (e.g., `2` means pass at least 2)
+#'
+#'   **Examples:**
+#'   - If you have 3 attention checks and want to be strict: `"all"`
+#'   - If you want to be lenient (allow 1 failure): `2` (must pass 2 out of 3)
+#'   - If you have many checks and want majority: `"majority"`
+#'
+#'   **Recommendation:** Use `"all"` - it's most common in publications
+#'
+#' @param additional_exclusions **TRUE/FALSE vector** for any other exclusions.
+#'
+#'   **What this is:** Any other reason to exclude someone (duplicates, bots, etc.)
+#'
+#'   **Real examples:**
+#'
+#'   ```r
+#'   # Exclude duplicate IP addresses
+#'   additional_exclusions = duplicated(raw_data$IPAddress)
+#'
+#'   # Exclude people who finished too fast (< 2 minutes)
+#'   additional_exclusions = raw_data$Duration_seconds < 120
+#'
+#'   # Exclude based on multiple criteria
+#'   additional_exclusions = duplicated(raw_data$IPAddress) |
+#'                          raw_data$Duration_seconds < 120
+#'   ```
+#'
+#' @param additional_exclusion_reason **Text description** of those exclusions.
+#'
+#'   **Examples:**
+#'   - `"Duplicate IP addresses"`
+#'   - `"Completed survey too quickly (< 2 minutes)"`
+#'   - `"Failed quality checks"`
+#'
+#' @param id_var **Column name** with participant IDs (for tracking).
+#'
+#'   **Common names:**
+#'   - Qualtrics: `"ResponseId"` or `"ResponseID"`
+#'   - MTurk: `"WorkerId"` or `"worker_id"`
+#'   - Prolific: `"PROLIFIC_PID"`
+#'   - Your own: Whatever you named it
+#'
+#'   **To find it:** Run `names(raw_data)` and look for ID column
+#'
+#' @param verbose Show detailed progress messages? (TRUE = yes, see what's happening)
+#'
+#' @return A list with:
+#'   - `clean_data`: Your cleaned dataset (use this for analysis!)
+#'   - `n_initial`: Initial sample size (AFTER removing pre-tests)
+#'   - `n_final`: Final sample size
+#'   - `exclusion_summary`: Table of exclusions (for your manuscript)
+#'   - `publication_text`: Copy-paste into your Methods section
+#'   - `flags`: Which participants were excluded for which reasons
+#'
+#' @section For Novice Researchers:
+#'
+#' **Confused about what to put in each parameter?** Here's the easiest approach:
+#'
+#' 1. **First, look at your column names:**
+#'    ```r
+#'    names(raw_data)  # Shows all column names
+#'    ```
+#'
+#' 2. **Start simple - just exclude incomplete responses:**
+#'    ```r
+#'    result <- clean_survey_data(
+#'      data = raw_data,
+#'      inclusion_criteria = list(
+#'        completed = raw_data$Finished == 1  # Qualtrics completion column
+#'      )
+#'    )
+#'    ```
+#'
+#' 3. **Add attention checks (if you have them):**
+#'    ```r
+#'    # First, figure out which columns are your attention checks
+#'    names(raw_data)  # Look for your attention check question numbers
+#'
+#'    result <- clean_survey_data(
+#'      data = raw_data,
+#'      inclusion_criteria = list(
+#'        completed = raw_data$Finished == 1
+#'      ),
+#'      attention_checks = list(
+#'        # Replace Q5 with your actual question number
+#'        ac1 = list(var = "Q5", correct = 7)  # Whatever answer was correct
+#'      )
+#'    )
+#'    ```
+#'
+#' 4. **Add more criteria as needed:**
+#'    ```r
+#'    result <- clean_survey_data(
+#'      data = raw_data,
+#'      inclusion_criteria = list(
+#'        completed = raw_data$Finished == 1,
+#'        adult = raw_data$age >= 18,
+#'        consented = raw_data$consent == "I agree"
+#'      ),
+#'      attention_checks = list(
+#'        ac1 = list(var = "Q5", correct = 7),
+#'        ac2 = list(var = "Q12", correct = "agree")
+#'      ),
+#'      id_var = "ResponseId"
+#'    )
+#'    ```
+#'
+#' **Still confused?** Common issues:
+#' - **Don't know column names?** Run: `names(raw_data)` or `colnames(raw_data)`
+#' - **Don't know what values mean completion?** Run: `table(raw_data$Finished)`
+#' - **Don't have attention checks?** Just leave out the `attention_checks` parameter
+#' - **Don't have pre-tests?** Leave out `pretest_var` (it's NULL by default)
+#' - **Want to remove pre-tests by date instead?** Use `date_var` + `pretest_before_date`
+#'   (e.g., if you started real data collection on March 1, exclude anything before that date)
 #'
 #' @examples
 #' \dontrun{
-#' # Complete example with all exclusion types
+#' # ========================================================================
+#' # EXAMPLE 1: Minimal - Just exclude incomplete responses
+#' # ========================================================================
+#'
 #' result <- clean_survey_data(
 #'   data = raw_data,
-#'   pretest_var = "is_pretest",
-#'   pretest_values = c(1, TRUE),
 #'   inclusion_criteria = list(
-#'     completed = raw_data$finished == 1,
-#'     adult = raw_data$age >= 18,
-#'     us_resident = raw_data$country == "US"
-#'   ),
-#'   attention_checks = list(
-#'     ac1 = list(var = "attention_1", correct = 4),
-#'     ac2 = list(var = "attention_2", correct = "disagree")
-#'   ),
-#'   attention_check_rule = "all",
-#'   id_var = "participant_id"
+#'     completed = raw_data$Finished == 1
+#'   )
 #' )
 #'
-#' # Access cleaned data
+#' # ========================================================================
+#' # EXAMPLE 2: Typical Qualtrics study with attention checks
+#' # ========================================================================
+#'
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'
+#'   # Qualtrics marks preview responses in the Status column
+#'   pretest_var = "Status",
+#'   pretest_values = "Survey Preview",
+#'
+#'   # Requirements to be included
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1,        # Completed survey
+#'     adult = raw_data$age >= 18,                 # 18 or older
+#'     consented = raw_data$consent == "I agree"   # Gave consent
+#'   ),
+#'
+#'   # Attention checks (replace Q5, Q12 with your question numbers)
+#'   attention_checks = list(
+#'     ac1 = list(var = "Q5", correct = 7),       # Told them to select 7
+#'     ac2 = list(var = "Q12", correct = 1)       # Told them to select 1
+#'   ),
+#'   attention_check_rule = "all",  # Must pass both
+#'
+#'   id_var = "ResponseId"  # Qualtrics ID column
+#' )
+#'
+#' # ========================================================================
+#' # EXAMPLE 2B: Date-based pre-test removal
+#' # ========================================================================
+#'
+#' # If you ran pre-tests in February and started real data collection March 1
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'
+#'   # Remove anything collected before March 1, 2024
+#'   date_var = "StartDate",                       # Qualtrics start date column
+#'   pretest_before_date = "2024-03-01",           # Cutoff date
+#'
+#'   # Rest of your criteria
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1,
+#'     adult = raw_data$age >= 18
+#'   ),
+#'
+#'   attention_checks = list(
+#'     ac1 = list(var = "Q5", correct = 7)
+#'   ),
+#'
+#'   id_var = "ResponseId"
+#' )
+#'
+#' # ========================================================================
+#' # EXAMPLE 2C: Combine column-based AND date-based pre-test removal
+#' # ========================================================================
+#'
+#' # Remove BOTH "Survey Preview" responses AND anything before March 1
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'
+#'   # Column-based: Qualtrics preview responses
+#'   pretest_var = "Status",
+#'   pretest_values = "Survey Preview",
+#'
+#'   # Date-based: Anything before March 1
+#'   date_var = "StartDate",
+#'   pretest_before_date = "2024-03-01",
+#'
+#'   # Other criteria...
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1
+#'   ),
+#'
+#'   id_var = "ResponseId"
+#' )
+#'
+#' # Get your cleaned data
 #' clean_df <- result$clean_data
 #'
-#' # View publication text
-#' cat(result$publication_text)
+#' # Copy this into your Methods section
+#' cat(result$publication_text$concise)
 #'
-#' # View exclusion summary
-#' print(result$exclusion_summary)
+#' # ========================================================================
+#' # EXAMPLE 3: MTurk study
+#' # ========================================================================
 #'
-#' # Create flowchart from participant_flow data
-#' print(result$participant_flow)
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'
+#'   # Mark your own test responses
+#'   pretest_var = "WorkerId",
+#'   pretest_values = "YOUR_WORKER_ID_HERE",
+#'
+#'   # MTurk quality criteria
+#'   inclusion_criteria = list(
+#'     submitted = raw_data$AssignmentStatus == "Submitted",
+#'     approval = raw_data$ApprovalRate >= 95,
+#'     min_hits = raw_data$TotalHITS >= 100,
+#'     us_location = raw_data$CountryOfResidence == "US"
+#'   ),
+#'
+#'   # Your attention checks
+#'   attention_checks = list(
+#'     ac1 = list(var = "attention_1", correct = "blue"),
+#'     ac2 = list(var = "attention_2", correct = 4)
+#'   ),
+#'
+#'   # Also exclude duplicates and speeders
+#'   additional_exclusions = duplicated(raw_data$WorkerId) |
+#'                          raw_data$duration_sec < 120,
+#'   additional_exclusion_reason = "Duplicate worker IDs or completed too quickly",
+#'
+#'   id_var = "WorkerId"
+#' )
+#'
+#' # ========================================================================
+#' # EXAMPLE 4: No attention checks, just basic cleaning
+#' # ========================================================================
+#'
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1,
+#'     consented = raw_data$consent_given == TRUE
+#'   )
+#' )
+#' # That's it! No attention checks needed.
+#'
 #' }
 #'
 #' @export
@@ -108,6 +428,8 @@
 clean_survey_data <- function(data,
                                pretest_var = NULL,
                                pretest_values = c(TRUE, 1, "pretest", "pre-test", "test"),
+                               date_var = NULL,
+                               pretest_before_date = NULL,
                                inclusion_criteria = NULL,
                                attention_checks = NULL,
                                attention_check_rule = "all",
@@ -116,99 +438,305 @@ clean_survey_data <- function(data,
                                id_var = NULL,
                                verbose = TRUE) {
 
-  # Convert to tibble for consistent handling
+  # ===========================================================================
+  # STEP 0: SETUP
+  # ===========================================================================
+  # What we're doing: Prepare the data and set up tracking variables
+  # Why: Need to convert to data frame and create tracking for exclusions
+
+  # Convert to data frame for consistent handling (works with tibbles too)
   data <- as.data.frame(data)
 
+  # Get total rows BEFORE any exclusions (including pre-tests)
+  n_total_rows <- nrow(data)
+
   # Initialize tracking
-  n_initial <- nrow(data)
   exclusion_log <- list()
+
+  # Create flags data frame - tracks which rows get excluded for which reasons
+  # One row for each observation in the original data
   flags <- data.frame(
-    row_number = 1:n_initial,
-    pretest = FALSE,
-    inclusion_fail = FALSE,
-    attention_fail = FALSE,
-    additional = FALSE,
-    exclusion_reason = NA_character_,
+    row_number = 1:n_total_rows,
+    pretest = FALSE,              # Will mark TRUE if it's a pre-test
+    inclusion_fail = FALSE,       # Will mark TRUE if fails inclusion criteria
+    attention_fail = FALSE,       # Will mark TRUE if fails attention checks
+    additional = FALSE,           # Will mark TRUE for other exclusions
+    exclusion_reason = NA_character_,  # Text description of why excluded
     stringsAsFactors = FALSE
   )
 
+  # If user provided ID variable, add it to flags for tracking
   if (!is.null(id_var) && id_var %in% names(data)) {
     flags$id <- data[[id_var]]
   }
 
-  if (verbose) {
-    message("\n", rep("=", 70))
-    message("DATA CLEANING AND EXCLUSION TRACKING")
-    message("Journal of Consumer Psychology Standards")
-    message(rep("=", 70), "\n")
-    message("Initial sample size: n = ", n_initial)
-    message("\nBeginning systematic exclusion process...\n")
-  }
+  # ===========================================================================
+  # STEP 1: IDENTIFY AND REMOVE PRE-TEST CASES
+  # ===========================================================================
+  # What we're doing: Find rows that are pre-test/pilot data
+  # Why: Pre-tests were collected BEFORE the study and shouldn't count in sample
+  #
+  # Pre-tests are things like:
+  # - Your own test responses when building the survey
+  # - Pilot data collected to test if questions work
+  # - Preview responses in Qualtrics
+  # - Responses flagged as "test" in your data
+  # - Responses collected before your official data collection started
+  #
+  # IMPORTANT: These DON'T count toward your initial sample size!
+  #
+  # Two methods to identify pre-tests:
+  # 1. Column-based: Use a column that flags pre-test responses (pretest_var)
+  # 2. Date-based: Exclude anything collected before a certain date (date_var + pretest_before_date)
+  # You can use either method alone, or combine both!
 
-  # Step 1: Identify pre-test cases
-  # --------------------------------
   pretest_indices <- c()
   n_pretest <- 0
+  pretest_methods <- c()  # Track which methods were used
 
+  # --- METHOD 1: Column-based pre-test identification ---
   if (!is.null(pretest_var) && pretest_var %in% names(data)) {
-    pretest_indices <- which(data[[pretest_var]] %in% pretest_values)
-    n_pretest <- length(pretest_indices)
+    # Find which rows have pre-test values in the pre-test variable
+    # Example: If pretest_var = "Status" and pretest_values = "Survey Preview"
+    #          This finds all rows where Status == "Survey Preview"
+    pretest_indices_column <- which(data[[pretest_var]] %in% pretest_values)
+    n_pretest_column <- length(pretest_indices_column)
 
-    if (n_pretest > 0) {
-      flags$pretest[pretest_indices] <- TRUE
-      flags$exclusion_reason[pretest_indices] <- "Pre-test case"
-
-      exclusion_log$pretest <- list(
-        n = n_pretest,
-        reason = "Pre-test or pilot data",
-        indices = pretest_indices
-      )
+    if (n_pretest_column > 0) {
+      pretest_indices <- pretest_indices_column
+      pretest_methods <- c(pretest_methods, "column-based")
 
       if (verbose) {
-        message("STEP 1: Pre-test cases")
-        message("  Excluded: ", n_pretest, " pre-test cases")
-        message("  Remaining: ", n_initial - n_pretest, "\n")
+        message("\n", rep("=", 70))
+        message("DATA CLEANING: Removing Pre-Test Data")
+        message("(Pre-tests are NOT counted in your initial sample size)")
+        message(rep("=", 70))
+        message("\nMethod 1: Column-based identification")
+        message("  Column: '", pretest_var, "'")
+        message("  Looking for values: ", paste(pretest_values, collapse = ", "))
+        message("  Found ", n_pretest_column, " pre-test cases\n")
       }
     }
   } else if (verbose && !is.null(pretest_var)) {
-    message("STEP 1: Pre-test cases")
-    message("  Variable '", pretest_var, "' not found - skipping\n")
+    # User specified a pre-test variable but it doesn't exist in data
+    message("\nNote: Column '", pretest_var, "' not found in data - skipping column-based pre-test removal")
+    message("Your column names are: ", paste(names(data)[1:min(10, length(names(data)))], collapse = ", "), "...")
   }
 
-  # Current sample after pretest exclusion
-  current_indices <- setdiff(1:n_initial, pretest_indices)
+  # --- METHOD 2: Date-based pre-test identification ---
+  if (!is.null(date_var) && !is.null(pretest_before_date)) {
+    # Check if date column exists
+    if (date_var %in% names(data)) {
+      # Convert the date column to Date or POSIXct
+      # This handles various date formats automatically
+      date_column <- data[[date_var]]
 
-  # Step 2: Apply inclusion criteria
-  # ---------------------------------
-  inclusion_indices <- c()
+      # Try to convert to Date/POSIXct if it's not already
+      if (!inherits(date_column, c("Date", "POSIXct", "POSIXlt"))) {
+        # Try to parse as date
+        date_column <- tryCatch({
+          as.POSIXct(date_column)
+        }, error = function(e) {
+          tryCatch({
+            as.Date(date_column)
+          }, error = function(e2) {
+            warning("Could not convert '", date_var, "' to date format. Skipping date-based pre-test removal.")
+            NULL
+          })
+        })
+      }
+
+      if (!is.null(date_column)) {
+        # Convert the cutoff date to the same format
+        cutoff_date <- if (inherits(pretest_before_date, c("Date", "POSIXct", "POSIXlt"))) {
+          pretest_before_date
+        } else {
+          tryCatch({
+            as.POSIXct(pretest_before_date)
+          }, error = function(e) {
+            tryCatch({
+              as.Date(pretest_before_date)
+            }, error = function(e2) {
+              warning("Could not convert pretest_before_date to date format.")
+              NULL
+            })
+          })
+        }
+
+        if (!is.null(cutoff_date)) {
+          # Find rows where date < cutoff
+          pretest_indices_date <- which(date_column < cutoff_date)
+          n_pretest_date <- length(pretest_indices_date)
+
+          if (n_pretest_date > 0) {
+            # Combine with column-based indices (union - don't double count)
+            pretest_indices <- union(pretest_indices, pretest_indices_date)
+            pretest_methods <- c(pretest_methods, "date-based")
+
+            if (verbose) {
+              if (length(pretest_methods) == 1) {
+                # First method being used
+                message("\n", rep("=", 70))
+                message("DATA CLEANING: Removing Pre-Test Data")
+                message("(Pre-tests are NOT counted in your initial sample size)")
+                message(rep("=", 70), "\n")
+              }
+              message("Method 2: Date-based identification")
+              message("  Date column: '", date_var, "'")
+              message("  Cutoff date: ", format(cutoff_date))
+              message("  Found ", n_pretest_date, " responses before cutoff\n")
+            }
+          }
+        }
+      }
+    } else {
+      warning("Date column '", date_var, "' not found in data. Skipping date-based pre-test removal.")
+      if (verbose) {
+        message("Your date/time columns might be: ",
+                paste(names(data)[grep("date|time|start|end|record", names(data), ignore.case = TRUE)],
+                      collapse = ", "))
+      }
+    }
+  } else if (!is.null(date_var) && is.null(pretest_before_date)) {
+    warning("You provided 'date_var' but not 'pretest_before_date'. Both are needed for date-based pre-test removal.")
+  } else if (is.null(date_var) && !is.null(pretest_before_date)) {
+    warning("You provided 'pretest_before_date' but not 'date_var'. Both are needed for date-based pre-test removal.")
+  }
+
+  # --- FINALIZE PRE-TEST IDENTIFICATION ---
+  n_pretest <- length(pretest_indices)
+
+  if (n_pretest > 0) {
+    # Mark these rows as pre-tests in our flags
+    flags$pretest[pretest_indices] <- TRUE
+
+    # Create detailed exclusion reason based on methods used
+    if (length(pretest_methods) == 2) {
+      reason_text <- "Pre-test case (column-based and date-based)"
+    } else if ("column-based" %in% pretest_methods) {
+      reason_text <- "Pre-test case (column-based)"
+    } else {
+      reason_text <- "Pre-test case (date-based)"
+    }
+
+    flags$exclusion_reason[pretest_indices] <- reason_text
+
+    # Log this exclusion
+    exclusion_log$pretest <- list(
+      n = n_pretest,
+      reason = "Pre-test or pilot data",
+      methods = pretest_methods,
+      indices = pretest_indices
+    )
+
+    if (verbose) {
+      if (length(pretest_methods) > 1) {
+        message("Combined total: ", n_pretest, " pre-test cases (using both methods)")
+      }
+      message("These will be removed before counting your sample.\n")
+    }
+  }
+
+  # Remove pre-test cases from the data NOW
+  # Everything after this point works with the non-pretest data
+  if (n_pretest > 0) {
+    data <- data[-pretest_indices, , drop = FALSE]
+    # Renumber rows to match the new data
+    row_nums_remaining <- (1:n_total_rows)[-pretest_indices]
+  } else {
+    row_nums_remaining <- 1:n_total_rows
+  }
+
+  # ===========================================================================
+  # STEP 2: COUNT INITIAL SAMPLE SIZE (AFTER PRE-TESTS REMOVED)
+  # ===========================================================================
+  # What we're doing: Count how many participants we actually collected data from
+  # Why: This is your "n = X" that you report in your methods section
+  #
+  # IMPORTANT: We count AFTER removing pre-tests because pre-tests aren't
+  # real participants - they're test runs done before the study began
+
+  n_initial <- nrow(data)  # This is your real starting sample size
+
+  if (verbose) {
+    message(rep("=", 70))
+    message("INITIAL SAMPLE SIZE")
+    message(rep("=", 70))
+    message("Starting with ", n_initial, " participants")
+    if (n_pretest > 0) {
+      message("(", n_pretest, " pre-test cases were removed first)")
+    }
+    message("\nNow beginning systematic exclusion process...")
+    message(rep("=", 70), "\n")
+  }
+
+  # Track which rows we're currently keeping
+  current_indices <- 1:n_initial
+
+  # ===========================================================================
+  # STEP 3: APPLY INCLUSION CRITERIA
+  # ===========================================================================
+  # What we're doing: Check if participants meet requirements to be included
+  # Why: Studies have specific requirements (age, completion, location, etc.)
+  #
+  # Inclusion criteria are requirements participants MUST meet, like:
+  # - Completed the survey (didn't quit halfway)
+  # - Meet age requirement (e.g., 18+)
+  # - From correct country (e.g., US only)
+  # - Gave consent
+  #
+  # Each criterion is a TRUE/FALSE check for every participant
+
+  inclusion_indices <- c()  # Will hold indices of people who FAIL criteria
   inclusion_details <- list()
 
   if (!is.null(inclusion_criteria) && length(inclusion_criteria) > 0) {
     if (verbose) {
-      message("STEP 2: Inclusion criteria")
+      message("STEP 1: Checking Inclusion Criteria")
+      message("-" %+% rep("-", 50), "\n")
     }
 
     for (criterion_name in names(inclusion_criteria)) {
+      # Get the TRUE/FALSE vector for this criterion
       criterion_met <- inclusion_criteria[[criterion_name]]
 
-      if (length(criterion_met) != n_initial) {
-        warning("Inclusion criterion '", criterion_name, "' has wrong length. Skipping.")
+      # Safety check: Make sure it has the right length
+      # Should have one TRUE/FALSE for each row in ORIGINAL data (before pre-test removal)
+      if (length(criterion_met) != n_total_rows) {
+        warning("Inclusion criterion '", criterion_name, "' has wrong length (should be ",
+                n_total_rows, ", got ", length(criterion_met), "). Skipping.")
         next
       }
 
-      # Find cases that fail this criterion (among current sample)
+      # Remove pre-test indices from the criterion check
+      if (n_pretest > 0) {
+        criterion_met <- criterion_met[-pretest_indices]
+      }
+
+      # Find participants who FAIL this criterion (among those not yet excluded)
+      # We only check people in current_indices (haven't been excluded yet)
       fails_criterion <- intersect(current_indices, which(!criterion_met))
       n_fails <- length(fails_criterion)
 
       if (n_fails > 0) {
+        # Add to our list of people failing inclusion criteria
         inclusion_indices <- union(inclusion_indices, fails_criterion)
-        flags$inclusion_fail[fails_criterion] <- TRUE
-        flags$exclusion_reason[fails_criterion] <- paste0(
-          ifelse(is.na(flags$exclusion_reason[fails_criterion]), "",
-                 paste0(flags$exclusion_reason[fails_criterion], "; ")),
-          "Failed: ", criterion_name
-        )
 
+        # Update flags with this specific failure reason
+        # Note: We need to map back to original row numbers
+        original_rows <- row_nums_remaining[fails_criterion]
+        flags$inclusion_fail[original_rows] <- TRUE
+
+        # Add to exclusion reason (might already have text from previous criteria)
+        for (i in original_rows) {
+          if (is.na(flags$exclusion_reason[i])) {
+            flags$exclusion_reason[i] <- paste0("Failed: ", criterion_name)
+          } else {
+            flags$exclusion_reason[i] <- paste0(flags$exclusion_reason[i], "; Failed: ", criterion_name)
+          }
+        }
+
+        # Log details about this criterion
         inclusion_details[[criterion_name]] <- list(
           n = n_fails,
           reason = paste0("Did not meet criterion: ", criterion_name),
@@ -216,128 +744,212 @@ clean_survey_data <- function(data,
         )
 
         if (verbose) {
-          message("  '", criterion_name, "': ", n_fails, " excluded")
+          message("  '", criterion_name, "': excluded ", n_fails, " participant",
+                  ifelse(n_fails > 1, "s", ""))
         }
+      } else if (verbose) {
+        message("  '", criterion_name, "': all passed ✓")
       }
     }
 
+    # Total number excluded for ANY inclusion criterion failure
     n_inclusion <- length(inclusion_indices)
-    exclusion_log$inclusion <- list(
-      n = n_inclusion,
-      reason = "Failed inclusion criteria",
-      details = inclusion_details
-    )
 
-    if (verbose) {
-      message("  Total excluded for inclusion criteria: ", n_inclusion)
-      message("  Remaining: ", length(setdiff(current_indices, inclusion_indices)), "\n")
+    if (n_inclusion > 0) {
+      exclusion_log$inclusion <- list(
+        n = n_inclusion,
+        reason = "Failed inclusion criteria",
+        details = inclusion_details
+      )
+
+      if (verbose) {
+        message("\n  Total excluded for inclusion criteria: ", n_inclusion)
+        message("  Remaining: ", n_initial - n_inclusion, "\n")
+      }
+
+      # Update current indices - remove those who failed
+      current_indices <- setdiff(current_indices, inclusion_indices)
     }
-
-    # Update current sample
-    current_indices <- setdiff(current_indices, inclusion_indices)
   }
 
-  # Step 3: Check attention checks
-  # -------------------------------
+  # ===========================================================================
+  # STEP 4: CHECK ATTENTION CHECKS
+  # ===========================================================================
+  # What we're doing: See who failed attention check questions
+  # Why: Attention checks catch people who aren't reading carefully
+  #
+  # Attention checks are questions like:
+  # "To show you are paying attention, please select 'Strongly Agree'"
+  # "Select the color blue from the options below"
+  #
+  # They have one obviously correct answer that you told people to select
+
   attention_indices <- c()
   attention_details <- list()
 
   if (!is.null(attention_checks) && length(attention_checks) > 0) {
     if (verbose) {
-      message("STEP 3: Attention checks")
+      message("STEP 2: Checking Attention Checks")
+      message("-" %+% rep("-", 50), "\n")
     }
 
-    # Create matrix to track which checks each person passed
     n_checks <- length(attention_checks)
+
+    # Create matrix to track pass/fail for each check
+    # Rows = participants, Columns = attention checks
     check_matrix <- matrix(NA, nrow = n_initial, ncol = n_checks)
     colnames(check_matrix) <- names(attention_checks)
 
+    # Check each attention check
     for (i in seq_along(attention_checks)) {
       check_name <- names(attention_checks)[i]
       check_info <- attention_checks[[i]]
 
+      # Get the column name and correct answer
       var_name <- check_info$var
       correct_answer <- check_info$correct
 
+      # Safety check: Does this column exist?
       if (!var_name %in% names(data)) {
-        warning("Attention check variable '", var_name, "' not found. Skipping.")
+        warning("Attention check variable '", var_name, "' not found in data. Skipping.")
+        if (verbose) {
+          message("  Warning: Column '", var_name, "' not found")
+          message("  Your column names: ", paste(names(data)[1:min(5, length(names(data)))], collapse = ", "), "...")
+        }
         next
       }
 
-      # Check which cases got it right
+      # Check who got it right: Does their answer == correct answer?
       passed <- data[[var_name]] == correct_answer
-      passed[is.na(passed)] <- FALSE  # Treat NA as failure
+      passed[is.na(passed)] <- FALSE  # Treat missing as failure
 
+      # Store in matrix
       check_matrix[, i] <- passed
 
+      # Count failures (among current sample only)
       n_failed_this <- sum(!passed[current_indices])
       if (verbose && n_failed_this > 0) {
         message("  '", check_name, "': ", n_failed_this, " failed")
+      } else if (verbose) {
+        message("  '", check_name, "': all passed ✓")
       }
     }
 
-    # Determine who fails based on rule
+    # ===========================================================================
+    # Determine who fails based on the rule
+    # ===========================================================================
+    # Count how many checks each person passed
     checks_passed <- rowSums(check_matrix, na.rm = TRUE)
 
+    # Apply the rule to determine who fails
     if (attention_check_rule == "all") {
+      # Must pass ALL checks
       fails_attention <- which(checks_passed < n_checks)
+      rule_text <- "all"
     } else if (attention_check_rule == "majority") {
+      # Must pass > 50%
       fails_attention <- which(checks_passed < (n_checks / 2))
+      rule_text <- "the majority of"
     } else if (is.numeric(attention_check_rule)) {
+      # Must pass at least this many
       fails_attention <- which(checks_passed < attention_check_rule)
+      rule_text <- paste0("at least ", attention_check_rule, " of")
     } else {
-      warning("Invalid attention_check_rule. Using 'all'.")
+      warning("Invalid attention_check_rule: '", attention_check_rule, "'. Using 'all'.")
       fails_attention <- which(checks_passed < n_checks)
+      rule_text <- "all"
     }
 
-    # Only count those in current sample
+    # Only count failures among current sample (not already excluded)
     attention_indices <- intersect(current_indices, fails_attention)
     n_attention <- length(attention_indices)
 
     if (n_attention > 0) {
-      flags$attention_fail[attention_indices] <- TRUE
-      flags$exclusion_reason[attention_indices] <- paste0(
-        ifelse(is.na(flags$exclusion_reason[attention_indices]), "",
-               paste0(flags$exclusion_reason[attention_indices], "; ")),
-        "Failed attention checks (", checks_passed[attention_indices], "/", n_checks, " passed)"
-      )
+      # Update flags
+      original_rows <- row_nums_remaining[attention_indices]
+      flags$attention_fail[original_rows] <- TRUE
 
+      # Add to exclusion reason
+      for (i in seq_along(original_rows)) {
+        row_idx <- original_rows[i]
+        n_passed <- checks_passed[attention_indices[i]]
+
+        reason_text <- paste0("Failed attention checks (", n_passed, "/", n_checks, " passed)")
+
+        if (is.na(flags$exclusion_reason[row_idx])) {
+          flags$exclusion_reason[row_idx] <- reason_text
+        } else {
+          flags$exclusion_reason[row_idx] <- paste0(flags$exclusion_reason[row_idx], "; ", reason_text)
+        }
+      }
+
+      # Log this exclusion
       exclusion_log$attention <- list(
         n = n_attention,
         reason = paste0("Failed attention checks (rule: ", attention_check_rule, ")"),
         n_checks = n_checks,
+        rule = rule_text,
         indices = attention_indices
       )
 
       if (verbose) {
-        message("  Total excluded for attention check failures: ", n_attention)
+        message("\n  Total excluded for attention check failures: ", n_attention)
+        message("  (Required: ", rule_text, " ", n_checks, " check", ifelse(n_checks > 1, "s", ""), ")")
         message("  Remaining: ", length(setdiff(current_indices, attention_indices)), "\n")
       }
 
+      # Update current sample
       current_indices <- setdiff(current_indices, attention_indices)
+    } else if (verbose) {
+      message("\n  No failures - all passed the required attention checks ✓\n")
     }
   }
 
-  # Step 4: Additional exclusions
-  # ------------------------------
+  # ===========================================================================
+  # STEP 5: ADDITIONAL EXCLUSIONS
+  # ===========================================================================
+  # What we're doing: Apply any other exclusion criteria
+  # Why: Catch things like duplicate IPs, speeders, bots, suspicious patterns
+
   additional_indices <- c()
   n_additional <- 0
 
   if (!is.null(additional_exclusions)) {
-    if (length(additional_exclusions) != n_initial) {
-      warning("additional_exclusions has wrong length. Skipping.")
+    if (verbose) {
+      message("STEP 3: Additional Exclusions")
+      message("-" %+% rep("-", 50), "\n")
+    }
+
+    # Safety check: Right length?
+    if (length(additional_exclusions) != n_total_rows) {
+      warning("additional_exclusions has wrong length (should be ", n_total_rows,
+              ", got ", length(additional_exclusions), "). Skipping.")
     } else {
+      # Remove pre-test indices if applicable
+      if (n_pretest > 0) {
+        additional_exclusions <- additional_exclusions[-pretest_indices]
+      }
+
+      # Find who gets excluded (among current sample only)
       additional_indices <- intersect(current_indices, which(additional_exclusions))
       n_additional <- length(additional_indices)
 
       if (n_additional > 0) {
-        flags$additional[additional_indices] <- TRUE
-        flags$exclusion_reason[additional_indices] <- paste0(
-          ifelse(is.na(flags$exclusion_reason[additional_indices]), "",
-                 paste0(flags$exclusion_reason[additional_indices], "; ")),
-          additional_exclusion_reason
-        )
+        # Update flags
+        original_rows <- row_nums_remaining[additional_indices]
+        flags$additional[original_rows] <- TRUE
 
+        # Add to exclusion reason
+        for (row_idx in original_rows) {
+          if (is.na(flags$exclusion_reason[row_idx])) {
+            flags$exclusion_reason[row_idx] <- additional_exclusion_reason
+          } else {
+            flags$exclusion_reason[row_idx] <- paste0(flags$exclusion_reason[row_idx],
+                                                       "; ", additional_exclusion_reason)
+          }
+        }
+
+        # Log this
         exclusion_log$additional <- list(
           n = n_additional,
           reason = additional_exclusion_reason,
@@ -345,18 +957,24 @@ clean_survey_data <- function(data,
         )
 
         if (verbose) {
-          message("STEP 4: Additional exclusions")
           message("  Excluded: ", n_additional, " (", additional_exclusion_reason, ")")
           message("  Remaining: ", length(setdiff(current_indices, additional_indices)), "\n")
         }
 
+        # Update current sample
         current_indices <- setdiff(current_indices, additional_indices)
+      } else if (verbose) {
+        message("  No additional exclusions needed ✓\n")
       }
     }
   }
 
-  # Final sample
-  # ------------
+  # ===========================================================================
+  # STEP 6: CREATE FINAL CLEAN DATASET
+  # ===========================================================================
+  # What we're doing: Extract only the rows that passed all checks
+  # Why: This is your analysis dataset!
+
   n_final <- length(current_indices)
   pct_retained <- round(100 * n_final / n_initial, 1)
 
@@ -364,16 +982,24 @@ clean_survey_data <- function(data,
 
   if (verbose) {
     message(rep("=", 70))
-    message("FINAL SAMPLE")
+    message("CLEANING COMPLETE!")
     message(rep("=", 70))
-    message("Initial sample:  ", n_initial)
-    message("Final sample:    ", n_final)
-    message("Retention rate:  ", pct_retained, "%")
+    message("Initial sample:     ", n_initial, " participants")
+    if (n_pretest > 0) {
+      message("(Pre-test cases:    ", n_pretest, " removed before counting)")
+    }
+    message("Final sample:       ", n_final, " participants")
+    message("Excluded:           ", n_initial - n_final, " participants")
+    message("Retention rate:     ", pct_retained, "%")
     message(rep("=", 70), "\n")
   }
 
-  # Create exclusion summary table
-  # -------------------------------
+  # ===========================================================================
+  # STEP 7: CREATE EXCLUSION SUMMARY TABLE
+  # ===========================================================================
+  # What we're doing: Make a nice table showing all exclusions
+  # Why: Perfect for Table 1 in your manuscript
+
   exclusion_summary <- data.frame(
     exclusion_type = character(),
     n_excluded = integer(),
@@ -384,15 +1010,8 @@ clean_survey_data <- function(data,
 
   cumulative <- 0
 
-  if (n_pretest > 0) {
-    cumulative <- cumulative + n_pretest
-    exclusion_summary <- rbind(exclusion_summary, data.frame(
-      exclusion_type = "Pre-test cases",
-      n_excluded = n_pretest,
-      cumulative_n = n_initial - cumulative,
-      percentage_of_initial = round(100 * n_pretest / n_initial, 1)
-    ))
-  }
+  # Note: Pre-tests are NOT included in exclusion summary because they weren't
+  # part of the initial sample. They were removed BEFORE counting began.
 
   if (!is.null(inclusion_criteria) && length(inclusion_indices) > 0) {
     cumulative <- cumulative + length(inclusion_indices)
@@ -432,66 +1051,83 @@ clean_survey_data <- function(data,
     percentage_of_initial = pct_retained
   ))
 
-  # Generate publication text
-  # --------------------------
+  # ===========================================================================
+  # STEP 8: GENERATE PUBLICATION TEXT
+  # ===========================================================================
+  # What we're doing: Create text you can copy into your manuscript
+  # Why: Saves you time and ensures you report everything correctly
+
   pub_text <- generate_cleaning_publication_text(
     n_initial = n_initial,
     n_final = n_final,
+    n_pretest = n_pretest,
     exclusion_log = exclusion_log,
     inclusion_details = if (!is.null(inclusion_criteria)) inclusion_details else NULL,
     attention_n_checks = if (!is.null(attention_checks)) length(attention_checks) else 0,
     attention_rule = if (!is.null(attention_checks)) attention_check_rule else NULL
   )
 
-  # Create participant flow (CONSORT-style)
-  # ----------------------------------------
+  # ===========================================================================
+  # STEP 9: CREATE PARTICIPANT FLOW
+  # ===========================================================================
+  # What we're doing: CONSORT-style flow diagram data
+  # Why: Shows the flow of participants through your study
+
   flow <- list(
     step1 = list(
-      label = "Initial Sample",
-      n = n_initial
-    ),
-    step2 = if (n_pretest > 0) list(
-      label = "After excluding pre-test cases",
-      n = n_initial - n_pretest,
-      excluded = n_pretest,
-      reason = "Pre-test or pilot data"
-    ) else NULL,
-    step3 = if (length(inclusion_indices) > 0) list(
+      label = "Initial Sample (after removing pre-tests)",
+      n = n_initial,
+      note = if (n_pretest > 0) paste0(n_pretest, " pre-test cases removed first") else NULL
+    )
+  )
+
+  step_num <- 2
+  if (length(inclusion_indices) > 0) {
+    flow[[paste0("step", step_num)]] <- list(
       label = "After applying inclusion criteria",
-      n = n_initial - n_pretest - length(inclusion_indices),
+      n = n_initial - length(inclusion_indices),
       excluded = length(inclusion_indices),
       reason = "Did not meet inclusion criteria"
-    ) else NULL,
-    step4 = if (length(attention_indices) > 0) list(
+    )
+    step_num <- step_num + 1
+  }
+
+  if (length(attention_indices) > 0) {
+    flow[[paste0("step", step_num)]] <- list(
       label = "After attention check screening",
-      n = n_initial - n_pretest - length(inclusion_indices) - length(attention_indices),
+      n = n_initial - length(inclusion_indices) - length(attention_indices),
       excluded = length(attention_indices),
       reason = "Failed attention checks"
-    ) else NULL,
-    step5 = if (n_additional > 0) list(
+    )
+    step_num <- step_num + 1
+  }
+
+  if (n_additional > 0) {
+    flow[[paste0("step", step_num)]] <- list(
       label = paste0("After ", tolower(additional_exclusion_reason)),
       n = n_final,
       excluded = n_additional,
       reason = additional_exclusion_reason
-    ) else NULL,
-    final = list(
-      label = "Final Analytical Sample",
-      n = n_final,
-      percentage_retained = pct_retained
     )
+  }
+
+  flow$final <- list(
+    label = "Final Analytical Sample",
+    n = n_final,
+    percentage_retained = pct_retained
   )
 
-  # Remove NULL steps
-  flow <- flow[!sapply(flow, is.null)]
+  # ===========================================================================
+  # STEP 10: RETURN EVERYTHING
+  # ===========================================================================
 
-  # Return comprehensive results
-  # -----------------------------
   results <- structure(
     list(
       clean_data = clean_data,
       n_initial = n_initial,
       n_final = n_final,
       n_excluded_total = n_initial - n_final,
+      n_pretest = n_pretest,  # Reported separately
       retention_rate = pct_retained,
       exclusion_summary = exclusion_summary,
       exclusion_log = exclusion_log,
@@ -511,6 +1147,7 @@ clean_survey_data <- function(data,
 #' @noRd
 generate_cleaning_publication_text <- function(n_initial,
                                                 n_final,
+                                                n_pretest,
                                                 exclusion_log,
                                                 inclusion_details,
                                                 attention_n_checks,
@@ -519,21 +1156,21 @@ generate_cleaning_publication_text <- function(n_initial,
   # Build comprehensive methods text
   sections <- list()
 
-  # Sample collection
-  sections$sample_collection <- paste0(
-    "Data were collected from ", n_initial, " participants."
-  )
+  # Sample collection - NOTE: n_initial is AFTER pre-test removal
+  if (n_pretest > 0) {
+    sections$sample_collection <- paste0(
+      "We collected data from ", n_initial, " participants. ",
+      "(An additional ", n_pretest, " pre-test response", ifelse(n_pretest > 1, "s were", " was"),
+      " collected during pilot testing and removed prior to analysis.)"
+    )
+  } else {
+    sections$sample_collection <- paste0(
+      "Data were collected from ", n_initial, " participants."
+    )
+  }
 
   # Exclusions
   exclusion_sentences <- c()
-
-  if (!is.null(exclusion_log$pretest)) {
-    exclusion_sentences <- c(exclusion_sentences, paste0(
-      "We first removed ", exclusion_log$pretest$n, " pre-test case",
-      ifelse(exclusion_log$pretest$n > 1, "s", ""),
-      " that were collected during pilot testing"
-    ))
-  }
 
   if (!is.null(exclusion_log$inclusion)) {
     # Detail each inclusion criterion
@@ -544,12 +1181,12 @@ generate_cleaning_publication_text <- function(n_initial,
       })
 
       exclusion_sentences <- c(exclusion_sentences, paste0(
-        "We then excluded participants who did not meet our inclusion criteria: ",
+        "We excluded participants who did not meet our inclusion criteria: ",
         paste(criterion_texts, collapse = ", ")
       ))
     } else {
       exclusion_sentences <- c(exclusion_sentences, paste0(
-        "We then excluded ", exclusion_log$inclusion$n, " participant",
+        "We excluded ", exclusion_log$inclusion$n, " participant",
         ifelse(exclusion_log$inclusion$n > 1, "s", ""),
         " who did not meet our inclusion criteria"
       ))
@@ -577,7 +1214,7 @@ generate_cleaning_publication_text <- function(n_initial,
 
   if (!is.null(exclusion_log$additional)) {
     exclusion_sentences <- c(exclusion_sentences, paste0(
-      "Additionally, we excluded ", exclusion_log$additional$n, " participant",
+      "We also excluded ", exclusion_log$additional$n, " participant",
       ifelse(exclusion_log$additional$n > 1, "s", ""),
       " due to ", tolower(exclusion_log$additional$reason)
     ))
@@ -601,21 +1238,22 @@ generate_cleaning_publication_text <- function(n_initial,
 
   # Also create a verbose version with more detail
   verbose_text <- paste0(
-    "SAMPLE AND DATA CLEANING PROCEDURE\n\n",
-    "Initial Sample: We initially collected data from ", n_initial, " participants.\n\n",
-    "Exclusion Criteria: Following best practices in consumer research ",
-    "(see Oppenheimer, Meyvis, & Davidenko, 2009), we applied systematic exclusion ",
-    "criteria to ensure data quality.\n\n"
+    "SAMPLE AND DATA CLEANING PROCEDURE\n\n"
   )
 
-  if (!is.null(exclusion_log$pretest)) {
+  if (n_pretest > 0) {
     verbose_text <- paste0(verbose_text,
-      "Pre-test Exclusions: We first removed ", exclusion_log$pretest$n, " cases ",
-      "that were collected during pre-testing and pilot data collection. These cases ",
-      "were used to validate survey flow and question wording but were not part of ",
-      "the main data collection effort.\n\n"
+      "Pre-test Data: Prior to the main data collection, we conducted ", n_pretest,
+      " pre-test response", ifelse(n_pretest > 1, "s", ""),
+      " during pilot testing to validate survey flow and question wording. ",
+      "These pre-test cases were removed from the dataset before analysis and are not ",
+      "included in the reported sample size.\n\n"
     )
   }
+
+  verbose_text <- paste0(verbose_text,
+    "Initial Sample: We collected data from ", n_initial, " participants for the main study.\n\n"
+  )
 
   if (!is.null(exclusion_log$inclusion) && !is.null(inclusion_details)) {
     verbose_text <- paste0(verbose_text,
@@ -641,7 +1279,7 @@ generate_cleaning_publication_text <- function(n_initial,
       exclusion_log$attention$n, " participant",
       ifelse(exclusion_log$attention$n > 1, "s", ""),
       " who failed ", rule_text, " attention check",
-      ifelse(attention_n_checks > 1, "s", ""), ".\n\n"
+      ifelse(attention_n_checks > 1, "s", ""), " (following Oppenheimer et al., 2009).\n\n"
     )
   }
 
@@ -655,41 +1293,34 @@ generate_cleaning_publication_text <- function(n_initial,
 
   verbose_text <- paste0(verbose_text,
     "Final Sample: After all exclusions, the final analytical sample consisted of ",
-    n_final, " participants (", pct_retained, "% retention rate from initial sample). ",
+    n_final, " participants (", pct_retained, "% retention rate from initial sample",
+    ifelse(n_pretest > 0, ", not counting pre-tests", ""), "). ",
     "This retention rate is ", ifelse(pct_retained >= 80, "excellent",
                                       ifelse(pct_retained >= 70, "good",
                                              ifelse(pct_retained >= 60, "acceptable", "low"))),
     " and is consistent with standards in consumer research."
   )
 
-  list(
-    concise = full_text,
-    verbose = verbose_text,
-    consort = generate_consort_text(n_initial, n_final, exclusion_log)
+  # CONSORT text
+  consort_text <- paste0(
+    "PARTICIPANT FLOW (CONSORT Style):\n\n"
   )
-}
 
+  if (n_pretest > 0) {
+    consort_text <- paste0(consort_text,
+      "PRE-TEST RESPONSES (excluded before counting): n = ", n_pretest, "\n",
+      "  ↓\n"
+    )
+  }
 
-#' Generate CONSORT-Style Flow Text
-#' @noRd
-generate_consort_text <- function(n_initial, n_final, exclusion_log) {
-  text <- paste0(
-    "PARTICIPANT FLOW (CONSORT Style):\n\n",
-    "Assessed for eligibility: n = ", n_initial, "\n"
+  consort_text <- paste0(consort_text,
+    "Initial sample collected: n = ", n_initial, "\n"
   )
 
   current_n <- n_initial
 
-  if (!is.null(exclusion_log$pretest)) {
-    text <- paste0(text,
-      "  ↓ Excluded (pre-test): n = ", exclusion_log$pretest$n, "\n",
-      "After pre-test exclusion: n = ", current_n - exclusion_log$pretest$n, "\n"
-    )
-    current_n <- current_n - exclusion_log$pretest$n
-  }
-
   if (!is.null(exclusion_log$inclusion)) {
-    text <- paste0(text,
+    consort_text <- paste0(consort_text,
       "  ↓ Excluded (inclusion criteria): n = ", exclusion_log$inclusion$n, "\n",
       "After inclusion screening: n = ", current_n - exclusion_log$inclusion$n, "\n"
     )
@@ -697,7 +1328,7 @@ generate_consort_text <- function(n_initial, n_final, exclusion_log) {
   }
 
   if (!is.null(exclusion_log$attention)) {
-    text <- paste0(text,
+    consort_text <- paste0(consort_text,
       "  ↓ Excluded (attention checks): n = ", exclusion_log$attention$n, "\n",
       "After attention screening: n = ", current_n - exclusion_log$attention$n, "\n"
     )
@@ -705,7 +1336,7 @@ generate_consort_text <- function(n_initial, n_final, exclusion_log) {
   }
 
   if (!is.null(exclusion_log$additional)) {
-    text <- paste0(text,
+    consort_text <- paste0(consort_text,
       "  ↓ Excluded (", exclusion_log$additional$reason, "): n = ",
       exclusion_log$additional$n, "\n",
       "After additional exclusions: n = ", current_n - exclusion_log$additional$n, "\n"
@@ -713,14 +1344,18 @@ generate_consort_text <- function(n_initial, n_final, exclusion_log) {
     current_n <- current_n - exclusion_log$additional$n
   }
 
-  text <- paste0(text,
+  consort_text <- paste0(consort_text,
     "\n",
     "═══════════════════════════════\n",
     "FINAL ANALYTICAL SAMPLE: n = ", n_final, "\n",
     "═══════════════════════════════"
   )
 
-  text
+  list(
+    concise = full_text,
+    verbose = verbose_text,
+    consort = consort_text
+  )
 }
 
 
@@ -744,6 +1379,9 @@ print.cleaning_result <- function(x, show_flow = TRUE, show_details = FALSE,
 
   cat("SAMPLE SUMMARY:\n")
   cat("  Initial sample:      n =", x$n_initial, "\n")
+  if (x$n_pretest > 0) {
+    cat("  Pre-tests removed:   n =", x$n_pretest, "(not counted in initial sample)\n")
+  }
   cat("  Final sample:        n =", x$n_final, "\n")
   cat("  Total excluded:      n =", x$n_excluded_total, "\n")
   cat("  Retention rate:      ", x$retention_rate, "%\n")

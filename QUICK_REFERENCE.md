@@ -1,24 +1,8 @@
 # consumeR Quick Reference Card
 
-## 🚀 GitHub Upload (Quick Version)
+Quick reference for all consumeR package functions.
 
-```bash
-# 1. Create repo on github.com (name: consumeR, public, don't initialize)
-
-# 2. In Terminal:
-cd "/Users/josh/My Drive/R/consumeR"
-git remote add origin https://github.com/phdemotions/consumeR.git
-git push -u origin main
-
-# 3. On github.com:
-#    Settings → Actions → General → Read and write permissions → Save
-#    Settings → Pages → Deploy from: gh-pages → Save
-
-# 4. Wait 5 minutes, then visit:
-#    https://phdemotions.github.io/consumeR
-```
-
-**Full details**: See UPLOAD_TO_GITHUB.md or GITHUB_SETUP.md
+For complete workflow guidance, see `RESEARCH_WORKFLOW.md`.
 
 ---
 

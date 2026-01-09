@@ -133,7 +133,7 @@ Then try:
 
 ```r
 library(consumeR)
-data(consumer_survey)
+consumer_survey
 
 # See fun character names
 head(consumer_survey)

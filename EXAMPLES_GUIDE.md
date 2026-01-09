@@ -29,7 +29,7 @@ The dataset includes familiar names like Amy Sosa, Jim Halpert, Dwight Schrute, 
 library(consumeR)
 
 # Load the Cloud 9 customer data
-data(consumer_survey)
+consumer_survey
 
 # Look at the first few customers
 head(consumer_survey)
@@ -282,7 +282,7 @@ spending_analysis <- calculate_summary_stats(consumer_survey$spending)
 
 ```r
 library(consumeR)
-data(consumer_survey)
+consumer_survey
 
 # One-liner for quick stats
 stats <- calculate_summary_stats(consumer_survey$spending)
@@ -360,7 +360,7 @@ create_analysis_report(
 
 ## Next Steps
 
-- Try these examples yourself: `data(consumer_survey)`
+- Try these examples yourself: `consumer_survey`
 - Read the full vignette: `vignette("getting-started")`
 - Explore the source code: it's extensively commented!
 - Adapt examples to your own retail/consumer research

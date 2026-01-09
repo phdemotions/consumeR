@@ -279,7 +279,7 @@ x2 <- df_tmp$var2
 **But this** (End user style):
 ```r
 # Load the Cloud 9 customer data
-data(consumer_survey)
+consumer_survey
 
 # Separate spending by group for comparison
 flyer_spending <- consumer_survey$spending[consumer_survey$flyer_group == "Got Flyer"]

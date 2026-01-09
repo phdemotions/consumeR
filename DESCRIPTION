@@ -17,7 +17,7 @@ Description: Provides transparent, well-documented functions for consumer resear
     and extensive examples.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 RoxygenNote: 7.3.1
 Depends:
     R (>= 3.5.0)

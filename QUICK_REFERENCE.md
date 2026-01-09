@@ -53,7 +53,7 @@ create_analysis_report(data=df, variable="spending",
 ## 📊 Example Dataset
 
 ```r
-data(consumer_survey)  # Cloud 9 themed customer data
+consumer_survey  # Cloud 9 themed customer data
 
 # 100 customers with fun names (Amy Sosa, Jim Halpert, Dwight Schrute, etc.)
 # Variables: customer_id, customer_name, flyer_group, spending,
@@ -116,7 +116,7 @@ calculate_summary_stats(spending)
 
 ### Example 2: Group Comparison
 ```r
-data(consumer_survey)
+consumer_survey
 flyer <- consumer_survey$spending[consumer_survey$flyer_group == "Got Flyer"]
 no_flyer <- consumer_survey$spending[consumer_survey$flyer_group == "No Flyer"]
 test_group_differences(flyer, no_flyer)

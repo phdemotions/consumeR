@@ -91,7 +91,7 @@ with a difference of 9.00.
 
 ```r
 # Using the built-in example dataset
-data(consumer_survey)
+consumer_survey
 
 # Generate complete analysis report
 create_analysis_report(

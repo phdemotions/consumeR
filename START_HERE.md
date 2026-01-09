@@ -39,7 +39,7 @@ This will:
 library(consumeR)
 
 # Load the Cloud 9 customer data
-data(consumer_survey)
+consumer_survey
 
 # See customers with fun names (Amy Sosa, Jim Halpert, Dwight Schrute, etc.)
 head(consumer_survey)
@@ -125,7 +125,7 @@ Generate comprehensive, publication-ready reports for peer review.
 
 ```r
 # Example: Full analysis report
-data(consumer_survey)
+consumer_survey
 create_analysis_report(
   data = consumer_survey,
   variable = "spending",
@@ -353,7 +353,7 @@ source("data-raw/create_data.R")
 ### Load and Use
 ```r
 library(consumeR)
-data(consumer_survey)
+consumer_survey
 calculate_summary_stats(consumer_survey$spending)
 ```
 

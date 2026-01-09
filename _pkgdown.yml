@@ -45,13 +45,62 @@ navbar:
       href: news/index.html
 
 reference:
-  - title: "Main Analysis Functions"
+  - title: "Data Import & Preparation"
     desc: >
-      Core functions for transparent consumer research analysis
+      Import and clean survey data with interactive validation and transparent exclusion reporting
+    contents:
+      - import_research_data
+      - check_variable_types
+      - clean_survey_data
+
+  - title: "Descriptive Statistics"
+    desc: >
+      Calculate and report summary statistics for your data
     contents:
       - calculate_summary_stats
-      - test_group_differences
       - create_analysis_report
+
+  - title: "Reliability & Scale Analysis"
+    desc: >
+      Assess internal consistency and composite reliability of measurement scales
+    contents:
+      - calculate_alpha
+      - calculate_composite_reliability
+
+  - title: "Statistical Assumptions Testing"
+    desc: >
+      Test assumptions required for parametric statistical tests
+    contents:
+      - check_normality
+      - check_homogeneity_of_variance
+      - check_independence
+
+  - title: "Group Comparisons"
+    desc: >
+      Compare groups using t-tests, Wilcoxon tests, and ANOVA
+    contents:
+      - test_group_differences
+      - compare_groups_anova
+
+  - title: "Correlation & Regression Analysis"
+    desc: >
+      Analyze relationships between variables
+    contents:
+      - analyze_correlation
+      - analyze_regression
+
+  - title: "Exploratory Factor Analysis"
+    desc: >
+      Explore dimensionality and factor structure of your measures
+    contents:
+      - perform_efa
+
+  - title: "Publication Support"
+    desc: >
+      Generate APA-formatted text for your results sections
+    contents:
+      - generate_publication_block
+
   - title: "Datasets"
     desc: >
       Example datasets for learning and teaching

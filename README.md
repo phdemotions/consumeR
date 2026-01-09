@@ -163,12 +163,16 @@ print(alpha)
 
 ### 📚 Complete Documentation
 
-**Start Here:**
-- **DATA_CLEANING_WORKFLOW.md** - Data cleaning is STEP 1 (always!)
-- **STATISTICAL_METHODS_GUIDE.md** - All statistical tests explained
-- **JCP_STANDARDS.md** - How the package meets Journal of Consumer Psychology standards
+**🎓 New to Statistics? Start Here:**
+- **[STATISTICS_FOR_NOVICES.md](STATISTICS_FOR_NOVICES.md)** - Everything explained in plain English (no stats background needed!)
 
-**Workflow Guides:**
+**Essential Guides (in order of workflow):**
+1. **[DATA_CLEANING_WORKFLOW.md](DATA_CLEANING_WORKFLOW.md)** - STEP 1: Data cleaning with exclusion tracking
+2. **[STATISTICAL_METHODS_GUIDE.md](STATISTICAL_METHODS_GUIDE.md)** - STEP 2: All statistical tests with examples
+3. **[JCP_STANDARDS.md](JCP_STANDARDS.md)** - Why this package meets Journal of Consumer Psychology standards
+
+**Additional Resources:**
+- **[CODE_REVIEW_IMPROVEMENTS.md](CODE_REVIEW_IMPROVEMENTS.md)** - How we ensure gold-standard quality
 - **RESEARCH_WORKFLOW.md** - Complete analysis workflow
 - **EXAMPLES_GUIDE.md** - Real-world examples
 

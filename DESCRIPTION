@@ -37,7 +37,8 @@ Suggests:
     rmarkdown,
     janitor (>= 2.0.0),
     lavaan (>= 0.6.0),
-    psych (>= 2.0.0)
+    psych (>= 2.0.0),
+    broom (>= 1.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/phdemotions/consumeR
 BugReports: https://github.com/phdemotions/consumeR/issues

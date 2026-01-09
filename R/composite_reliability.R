@@ -72,7 +72,6 @@
 #' cat(reliability$interpretation)
 #'
 #' @export
-#' @importFrom stats cov cor princomp
 calculate_composite_reliability <- function(data,
                                            items,
                                            scale_name = "Scale",

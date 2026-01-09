@@ -76,7 +76,6 @@
 #' print(result, show_publication = TRUE)
 #'
 #' @export
-#' @importFrom stats cor cor.test shapiro.test
 analyze_correlation <- function(data,
                                  var1 = NULL,
                                  var2 = NULL,

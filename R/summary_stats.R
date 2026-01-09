@@ -41,7 +41,6 @@
 #' calculate_summary_stats(prices, include_all = FALSE, round_digits = 3)
 #'
 #' @export
-#' @importFrom stats mean sd median IQR quantile var
 calculate_summary_stats <- function(data,
                                    include_all = TRUE,
                                    round_digits = 2) {

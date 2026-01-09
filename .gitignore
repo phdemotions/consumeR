@@ -3,3 +3,12 @@
 .RData
 .Ruserdata
 inst/doc
+
+# Internal documentation (not for end users)
+*_CHECK.md
+*_IMPROVEMENTS.md
+*_SUMMARY.md
+README_FIRST.md
+START_HERE.md
+GITHUB_SETUP.md
+UPLOAD_TO_GITHUB.md

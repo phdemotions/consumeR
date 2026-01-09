@@ -105,7 +105,6 @@
 #' )
 #'
 #' @export
-#' @importFrom stats var cor sd na.omit
 calculate_alpha <- function(data,
                            items,
                            scale_name = "Scale",

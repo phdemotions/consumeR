@@ -198,6 +198,59 @@
 #'   - `"Completed survey too quickly (< 2 minutes)"`
 #'   - `"Failed quality checks"`
 #'
+#' @param rename_vars **Named list** for renaming variables (or NULL).
+#'
+#'   **What this is:** Renames columns from Qualtrics' random names to meaningful names.
+#'
+#'   **Real examples:**
+#'   ```r
+#'   # Qualtrics often names questions Q1, Q2, Q3...
+#'   # Give them meaningful names:
+#'   rename_vars = list(
+#'     brand_attitude = "Q1",           # Rename Q1 to brand_attitude
+#'     purchase_intent = "Q2",          # Rename Q2 to purchase_intent
+#'     age = "Q17",                     # Rename Q17 to age
+#'     condition = "FL_16_DO"           # Rename Qualtrics flow to condition
+#'   )
+#'   ```
+#'
+#'   **Structure:** `list(new_name = "old_name")`
+#'   - Left side = what you WANT to call it
+#'   - Right side = what Qualtrics CURRENTLY calls it
+#'
+#'   **How to find old names:** Run `names(raw_data)` to see current column names
+#'
+#' @param recode_vars **Named list** for recoding variable values (or NULL).
+#'
+#'   **What this is:** Changes coded values to meaningful labels.
+#'   Useful for converting numeric codes to text labels or fixing typos.
+#'
+#'   **Real examples:**
+#'   ```r
+#'   # Example 1: Recode numeric condition codes to text labels
+#'   recode_vars = list(
+#'     condition = c("1" = "control", "2" = "treatment_A", "3" = "treatment_B")
+#'   )
+#'
+#'   # Example 2: Fix inconsistent text responses
+#'   recode_vars = list(
+#'     gender = c("m" = "Male", "M" = "Male", "male" = "Male",
+#'                "f" = "Female", "F" = "Female", "female" = "Female")
+#'   )
+#'
+#'   # Example 3: Recode multiple variables
+#'   recode_vars = list(
+#'     condition = c("1" = "control", "2" = "treatment"),
+#'     consent = c("1" = "yes", "2" = "no"),
+#'     likert_scale = c("1" = "Strongly Disagree", "2" = "Disagree",
+#'                      "3" = "Neutral", "4" = "Agree", "5" = "Strongly Agree")
+#'   )
+#'   ```
+#'
+#'   **Structure:** `list(var_name = c("old" = "new", "old2" = "new2"))`
+#'
+#'   **Note:** Use the NEW names if you're also using `rename_vars`
+#'
 #' @param id_var **Column name** with participant IDs (for tracking).
 #'
 #'   **Common names:**
@@ -217,6 +270,8 @@
 #'   - `exclusion_summary`: Table of exclusions (for your manuscript)
 #'   - `publication_text`: Copy-paste into your Methods section
 #'   - `flags`: Which participants were excluded for which reasons
+#'   - `renamed_vars`: Which variables were renamed (old → new)
+#'   - `recoded_vars`: Which variables had values recoded
 #'
 #' @section For Novice Researchers:
 #'
@@ -421,10 +476,53 @@
 #' )
 #' # That's it! No attention checks needed.
 #'
+#' # ========================================================================
+#' # EXAMPLE 5: Rename variables and recode values (VERY USEFUL!)
+#' # ========================================================================
+#'
+#' # First, check what Qualtrics named your columns
+#' names(raw_data)
+#' # [1] "ResponseId" "Q1" "Q2" "Q3" "Q17" "FL_16_DO" "Finished" ...
+#'
+#' result <- clean_survey_data(
+#'   data = raw_data,
+#'
+#'   # Rename Qualtrics' random names to meaningful names
+#'   rename_vars = list(
+#'     brand_attitude = "Q1",          # Q1 → brand_attitude
+#'     purchase_intent = "Q2",         # Q2 → purchase_intent
+#'     satisfaction = "Q3",            # Q3 → satisfaction
+#'     age = "Q17",                    # Q17 → age
+#'     condition = "FL_16_DO"          # Flow field → condition
+#'   ),
+#'
+#'   # Recode numeric codes to meaningful labels
+#'   # IMPORTANT: Use the NEW names (after renaming)
+#'   recode_vars = list(
+#'     condition = c("1" = "control", "2" = "treatment_A", "3" = "treatment_B"),
+#'     age = c("1" = "18-24", "2" = "25-34", "3" = "35-44", "4" = "45-54", "5" = "55+")
+#'   ),
+#'
+#'   # Now use the NEW names in your inclusion criteria
+#'   inclusion_criteria = list(
+#'     completed = raw_data$Finished == 1
+#'   ),
+#'
+#'   id_var = "ResponseId"
+#' )
+#'
+#' # Your clean data now has meaningful variable names and labels!
+#' names(result$clean_data)
+#' # [1] "ResponseId" "brand_attitude" "purchase_intent" "satisfaction" "age" "condition" ...
+#'
+#' table(result$clean_data$condition)
+#' # control  treatment_A  treatment_B
+#' #     150          145          143
+#'
 #' }
 #'
 #' @export
-#' @importFrom dplyr tibble filter mutate
+#' @importFrom dplyr tibble filter mutate rename
 clean_survey_data <- function(data,
                                pretest_var = NULL,
                                pretest_values = c(TRUE, 1, "pretest", "pre-test", "test"),
@@ -435,6 +533,8 @@ clean_survey_data <- function(data,
                                attention_check_rule = "all",
                                additional_exclusions = NULL,
                                additional_exclusion_reason = "Additional exclusions",
+                               rename_vars = NULL,
+                               recode_vars = NULL,
                                id_var = NULL,
                                verbose = TRUE) {
 
@@ -468,6 +568,115 @@ clean_survey_data <- function(data,
   # If user provided ID variable, add it to flags for tracking
   if (!is.null(id_var) && id_var %in% names(data)) {
     flags$id <- data[[id_var]]
+  }
+
+  # ===========================================================================
+  # STEP 0.5: RENAME VARIABLES AND RECODE VALUES
+  # ===========================================================================
+  # What we're doing: Clean up variable names and recode values
+  # Why: Qualtrics uses random names (Q1, Q2, FL_16_DO) and numeric codes.
+  #      We rename these to meaningful names and recode values to labels.
+  #
+  # This happens FIRST so all subsequent operations use the clean names.
+
+  renamed_vars <- character(0)
+  recoded_vars <- character(0)
+
+  # --- RENAMING VARIABLES ---
+  if (!is.null(rename_vars) && length(rename_vars) > 0) {
+    if (verbose) {
+      message("\n", rep("=", 70))
+      message("VARIABLE RENAMING")
+      message(rep("=", 70), "\n")
+    }
+
+    for (new_name in names(rename_vars)) {
+      old_name <- rename_vars[[new_name]]
+
+      # Check if old column exists
+      if (old_name %in% names(data)) {
+        # Rename the column
+        names(data)[names(data) == old_name] <- new_name
+        renamed_vars <- c(renamed_vars, paste0(old_name, " → ", new_name))
+
+        if (verbose) {
+          message("  Renamed: '", old_name, "' → '", new_name, "'")
+        }
+
+        # Update references in other parameters if needed
+        if (!is.null(pretest_var) && pretest_var == old_name) {
+          pretest_var <- new_name
+          if (verbose) message("    (Updated pretest_var reference)")
+        }
+        if (!is.null(date_var) && date_var == old_name) {
+          date_var <- new_name
+          if (verbose) message("    (Updated date_var reference)")
+        }
+        if (!is.null(id_var) && id_var == old_name) {
+          id_var <- new_name
+          if (verbose) message("    (Updated id_var reference)")
+        }
+      } else {
+        warning("Cannot rename '", old_name, "' - column not found in data")
+        if (verbose) {
+          message("  ✗ Column '", old_name, "' not found")
+          message("    Available columns: ", paste(names(data)[1:min(10, length(names(data)))], collapse = ", "), "...")
+        }
+      }
+    }
+
+    if (verbose && length(renamed_vars) > 0) {
+      message("\nRenamed ", length(renamed_vars), " variable",
+              ifelse(length(renamed_vars) > 1, "s", ""), "\n")
+    }
+  }
+
+  # --- RECODING VALUES ---
+  if (!is.null(recode_vars) && length(recode_vars) > 0) {
+    if (verbose) {
+      message(rep("=", 70))
+      message("VALUE RECODING")
+      message(rep("=", 70), "\n")
+    }
+
+    for (var_name in names(recode_vars)) {
+      # Check if variable exists
+      if (var_name %in% names(data)) {
+        recode_map <- recode_vars[[var_name]]
+
+        # Count how many values will be recoded
+        values_to_recode <- as.character(data[[var_name]]) %in% names(recode_map)
+        n_recoded <- sum(values_to_recode, na.rm = TRUE)
+
+        if (n_recoded > 0) {
+          # Perform the recoding
+          data[[var_name]] <- as.character(data[[var_name]])
+          for (old_val in names(recode_map)) {
+            data[[var_name]][data[[var_name]] == old_val] <- recode_map[old_val]
+          }
+
+          recoded_vars <- c(recoded_vars, var_name)
+
+          if (verbose) {
+            message("  Recoded '", var_name, "': ", n_recoded, " value",
+                    ifelse(n_recoded > 1, "s", ""), " changed")
+            message("    Mapping: ", paste(names(recode_map), "→", recode_map, collapse = ", "))
+          }
+        } else if (verbose) {
+          message("  '", var_name, "': No matching values found to recode")
+        }
+      } else {
+        warning("Cannot recode '", var_name, "' - column not found in data")
+        if (verbose) {
+          message("  ✗ Column '", var_name, "' not found")
+        }
+      }
+    }
+
+    if (verbose && length(recoded_vars) > 0) {
+      message("\nRecoded values in ", length(recoded_vars), " variable",
+              ifelse(length(recoded_vars) > 1, "s", ""), "\n")
+    }
   }
 
   # ===========================================================================
@@ -1134,6 +1343,8 @@ clean_survey_data <- function(data,
       participant_flow = flow,
       publication_text = pub_text,
       flags = flags,
+      renamed_vars = renamed_vars,  # Track which variables were renamed
+      recoded_vars = recoded_vars,  # Track which variables had values recoded
       timestamp = Sys.time()
     ),
     class = c("cleaning_result", "list")

@@ -28,4 +28,9 @@
 #' @docType package
 #' @name consumeR-package
 #' @aliases consumeR
+#' @import stats
+#' @import graphics
+#' @import grDevices
+#' @import utils
+#' @import methods
 NULL

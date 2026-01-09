@@ -5,21 +5,29 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/consumeR)](https://CRAN.R-project.org/package=consumeR)
 <!-- badges: end -->
 
-## Transparent and Reproducible Consumer Research Analysis
+## Statistical Analysis for Journal of Consumer Psychology Standards
 
-**consumeR** is an R package designed specifically for researchers who need to make their consumer research analysis transparent, reproducible, and easy to understand during peer review.
+**consumeR** is an R package designed specifically for consumer researchers who need publication-ready statistical analysis that meets **Journal of Consumer Psychology (JCP)** standards - even if you're not a statistician.
 
-### Why consumeR?
+### 🎯 Why consumeR?
 
-Peer reviewers often struggle to understand and verify statistical analyses, especially when they have limited programming experience. **consumeR** solves this by providing:
+**The Problem:** Top journals like JCP require rigorous reporting of:
+- Complete data cleaning documentation with all exclusions
+- Explicit assumption checking for every test
+- Effect sizes and confidence intervals for all analyses
+- Publication-ready Methods and Results text
 
-- **Crystal-clear code**: Every function is extensively commented with step-by-step explanations
-- **Plain English results**: Statistical outputs include human-readable interpretations
-- **Complete transparency**: All assumptions, decisions, and calculations are explicitly documented
-- **Reproducibility**: Reviewers can easily replicate your exact analysis
-- **Tidyverse integration**: Modern, readable code using dplyr, tidyr, and ggplot2
-- **Complete workflow**: From data import to publication-ready analysis
-- **Best practices built-in**: Automatic name cleaning, appropriate test selection, and comprehensive reporting
+**The Solution:** consumeR provides all of this automatically, with:
+
+✅ **Publication-Ready Text** - Copy-paste directly into your manuscript (follows APA 7th edition and JCP guidelines)
+✅ **Complete Assumption Checking** - Every test explicitly checks and reports its assumptions
+✅ **Explicit Methods** - Never wonder "which test should I use?" - it tells you exactly what it's running and why
+✅ **Novice-Friendly** - Designed for researchers who aren't statisticians (includes verbose explanations)
+✅ **Data Cleaning First** - Comprehensive exclusion tracking with CONSORT-style participant flow
+✅ **Effect Sizes Always** - Cohen's d, eta-squared, R², and clear interpretation (small/medium/large)
+✅ **More Text Than You Need** - Select the sentences appropriate for your specific journal
+
+**Key Insight:** Most packages give you statistics. consumeR gives you everything you need for publication.
 
 ## Installation
 
@@ -38,68 +46,131 @@ install.packages("consumeR")
 
 ## Quick Start
 
-### Complete Research Workflow
+### Complete Research Workflow (Following JCP Standards)
 
 ```r
 library(consumeR)
-library(dplyr)
 
-# ──────────────────────────────────────────────────
-# 1. Import & Clean Data (auto name cleaning!)
-# ──────────────────────────────────────────────────
-result <- import_research_data("study_data.csv")
-study_data <- result$data  # Column names automatically cleaned!
+# ═══════════════════════════════════════════════════════════════
+# STEP 1: DATA CLEANING (ALWAYS FIRST! Required for JCP)
+# ═══════════════════════════════════════════════════════════════
 
-# ──────────────────────────────────────────────────
-# 2. Descriptive Statistics
-# ──────────────────────────────────────────────────
-spending_stats <- calculate_summary_stats(study_data$spending)
-#> Mean: 58.45, SD: 25.30, N: 200
+# Import raw data
+raw_data <- read.csv("qualtrics_export.csv")
 
-# ──────────────────────────────────────────────────
-# 3. Group Comparisons
-# ──────────────────────────────────────────────────
-h1_test <- test_group_differences(
-  study_data$spending[study_data$condition == "treatment"],
-  study_data$spending[study_data$condition == "control"]
-)
-cat(h1_test$interpretation)
+# Clean with complete exclusion tracking
+cleaning <- clean_survey_data(
+  data = raw_data,
 
-# ──────────────────────────────────────────────────
-# 4. Reliability Analysis
-# ──────────────────────────────────────────────────
-satisfaction_alpha <- calculate_alpha(
-  data = study_data,
-  items = c("sat_1", "sat_2", "sat_3", "sat_4"),
-  scale_name = "Customer Satisfaction"
-)
-#> α = 0.89, CR = 0.90, AVE = 0.68
+  # Track pre-test cases
+  pretest_var = "is_pretest",
+  pretest_values = c(1, TRUE),
 
-# ──────────────────────────────────────────────────
-# 5. Factor Analysis (with beautiful plots!)
-# ──────────────────────────────────────────────────
-efa_results <- perform_efa(
-  data = study_data,
-  items = c("q_1", "q_2", "q_3", "q_4", "q_5", "q_6"),
-  create_plots = TRUE
+  # Document inclusion criteria
+  inclusion_criteria = list(
+    completed = raw_data$Finished == 1,
+    adult = raw_data$age >= 18,
+    us_resident = raw_data$country == "US"
+  ),
+
+  # Check attention
+  attention_checks = list(
+    ac1 = list(var = "AC_1", correct = 3),
+    ac2 = list(var = "AC_2", correct = "agree")
+  ),
+  attention_check_rule = "all",
+
+  id_var = "ResponseId"
 )
 
-# Save publication-ready plots
-ggsave("scree_plot.png", efa_results$scree_plot)
-ggsave("loadings.png", efa_results$loading_plot)
+# View results
+print(cleaning)
+# Initial sample:  n = 500
+# Final sample:    n = 432
+# Retention rate:  86.4%
 
-# ──────────────────────────────────────────────────
-# 6. Complete Report
-# ──────────────────────────────────────────────────
-create_analysis_report(
-  data = study_data,
-  variable = "spending",
-  group_var = "condition",
-  title = "Study 1 Results"
+# Get publication text for your Methods section
+cat(cleaning$publication_text$concise)
+# "Data were collected from 500 participants. We excluded 15 pre-test cases,
+#  23 participants who did not meet inclusion criteria, 28 who failed attention
+#  checks. Final sample: 432 participants (86.4% retention)."
+
+# Extract clean data for analysis
+df <- cleaning$clean_data
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 2: STATISTICAL ANALYSES (with automatic assumption checking)
+# ═══════════════════════════════════════════════════════════════
+
+# Compare two groups (automatically checks ALL assumptions!)
+result <- test_group_differences(
+  df$satisfaction[df$condition == "Treatment"],
+  df$satisfaction[df$condition == "Control"]
 )
+
+# View standard output
+print(result)
+# GROUP COMPARISON RESULTS
+# Test Used: Student's t-test
+# Group 1: M = 7.45, SD = 1.23
+# Group 2: M = 6.12, SD = 1.45
+# Cohen's d = 0.98 (large effect)
+# p < .001 ✓ Significant
+
+# See assumption checks (verbose explanations included!)
+print(result, show_assumptions = TRUE)
+# NORMALITY GROUP 1: ✓ MET (Shapiro-Wilk W = 0.97, p = .234)
+# NORMALITY GROUP 2: ✓ MET (Shapiro-Wilk W = 0.95, p = .156)
+# HOMOGENEITY OF VARIANCE: ✓ MET (Levene's F = 1.23, p = .267)
+
+# Get publication-ready text for your manuscript
+print(result, show_publication = TRUE)
+# PUBLICATION-READY TEXT
+#
+# ASSUMPTIONS:
+# Data normality was assessed using the Shapiro-Wilk test. Both groups
+# met the normality assumption...
+#
+# METHODS:
+# An independent samples t-test was conducted to compare means between
+# groups...
+#
+# RESULTS:
+# The independent samples t-test revealed a statistically significant
+# difference (t(430) = 5.67, p < .001, Cohen's d = 0.98)...
+
+# ═══════════════════════════════════════════════════════════════
+# OTHER STATISTICAL TESTS (all with assumption checking!)
+# ═══════════════════════════════════════════════════════════════
+
+# ANOVA for 3+ groups
+anova_result <- compare_groups_anova(df, satisfaction ~ segment)
+print(anova_result, show_publication = TRUE)
+
+# Linear regression
+reg_result <- analyze_regression(df, satisfaction ~ price + quality + service)
+print(reg_result, show_assumptions = TRUE)
+
+# Correlation
+cor_result <- analyze_correlation(df, "satisfaction", "loyalty")
+print(cor_result, show_publication = TRUE)
+
+# Reliability analysis
+alpha <- calculate_alpha(df, items = c("sat1", "sat2", "sat3", "sat4"))
+print(alpha)
+# α = 0.92 (Excellent reliability)
 ```
 
-**See RESEARCH_WORKFLOW.md for step-by-step guide!**
+### 📚 Complete Documentation
+
+**Start Here:**
+- **DATA_CLEANING_WORKFLOW.md** - Data cleaning is STEP 1 (always!)
+- **STATISTICAL_METHODS_GUIDE.md** - All statistical tests explained
+- **JCP_STANDARDS.md** - How the package meets Journal of Consumer Psychology standards
+
+**Workflow Guides:**
+- **RESEARCH_WORKFLOW.md** - Complete analysis workflow
+- **EXAMPLES_GUIDE.md** - Real-world examples
 
 ## Key Features
 

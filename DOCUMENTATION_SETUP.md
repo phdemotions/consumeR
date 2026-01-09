@@ -2,6 +2,16 @@
 
 This guide will help you create individual reference pages for each function in the consumeR package.
 
+## Getting Started in RStudio
+
+**First time setup:**
+1. Open `consumeR.Rproj` in RStudio
+2. See `RSTUDIO_WORKFLOW.md` for complete RStudio development guide
+3. Install required packages (if needed):
+   ```r
+   install.packages(c("devtools", "roxygen2", "pkgdown"))
+   ```
+
 ## Quick Start (Automated)
 
 Run the provided setup script:

@@ -1,0 +1,32 @@
+version: "1.0"
+study:
+  id: "<string>"
+  title: "<string>"
+  description: "<string>"
+data:
+  source: "<file path or data.frame>"
+  format: "<csv|rds>"
+  id_var: "<string>"
+exclusions:
+  - id: "<string>"
+    description: "<string>"
+    filter: "<boolean expression>"
+constructs:
+  - name: "<string>"
+    items: ["<string>", "<string>"]
+    method: "<mean|sum>"
+    na_rm: "<true|false>"
+standardize:
+  vars: ["<string>", "<string>"]
+  method: "<z>"
+models:
+  - id: "<string>"
+    description: "<string>"
+    formula: "<lhs ~ rhs + covariates>"
+    family: "<gaussian|binomial>"
+tables:
+  - id: "<string>"
+    type: "<model_summary>"
+    model_id: "<string>"
+pipeline:
+  steps: ["ingest", "exclude", "score", "standardize", "models", "tables"]

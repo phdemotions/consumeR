@@ -1,0 +1,46 @@
+version: "1.0"
+study:
+  id: "demo_study_001"
+  title: "Behavioral Choice Pilot"
+  description: "Pilot study examining choice behavior and self-report constructs."
+data:
+  source: "data/placeholder_participants.csv"
+  format: "csv"
+  id_var: "participant_id"
+exclusions:
+  - id: "ex_attention"
+    description: "Exclude participants failing attention checks."
+    filter: "attention_check == 0"
+  - id: "ex_rt"
+    description: "Exclude extremely fast responders."
+    filter: "median_rt_ms < 200"
+constructs:
+  - name: "risk_tolerance"
+    items: ["risk_q1", "risk_q2", "risk_q3"]
+    method: "mean"
+    na_rm: false
+  - name: "impulsivity"
+    items: ["imp_q1", "imp_q2", "imp_q3", "imp_q4"]
+    method: "sum"
+    na_rm: false
+standardize:
+  vars: ["risk_tolerance", "impulsivity", "age"]
+  method: "z"
+models:
+  - id: "m1"
+    description: "Risk tolerance predicting choice accuracy."
+    formula: "choice_accuracy ~ risk_tolerance + age + condition"
+    family: "gaussian"
+  - id: "m2"
+    description: "Impulsivity predicting choice latency."
+    formula: "choice_latency ~ impulsivity + age + condition"
+    family: "gaussian"
+tables:
+  - id: "t1"
+    type: "model_summary"
+    model_id: "m1"
+  - id: "t2"
+    type: "model_summary"
+    model_id: "m2"
+pipeline:
+  steps: ["ingest", "exclude", "score", "standardize", "models", "tables"]

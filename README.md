@@ -243,28 +243,89 @@ consumeR provides multiple levels of documentation:
 |----------|---------|-------------|
 | `import_research_data()` | Import CSV/SPSS files | **Auto name cleaning** + type detection |
 | `check_variable_types()` | Validate variables | Interactive checking with suggestions |
+| `clean_survey_data()` | Clean with exclusion tracking | **CONSORT-style participant flow** |
 
 ### Descriptive & Comparative Analysis
 | Function | Purpose | Key Feature |
 |----------|---------|-------------|
 | `calculate_summary_stats()` | Descriptive statistics | Step-by-step documented calculations |
 | `test_group_differences()` | Compare two groups | Plain English interpretation + effect size |
+| `run_anova()` | ANOVA with effect sizes | Type II/III SS + partial η² |
+| `emmeans_contrasts()` | Planned contrasts | Post-hoc with Tukey/Bonferroni |
+
+### Categorical Data Analysis (NEW ✨)
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `chisq_test()` | Chi-square test | **Cramér's V effect size** + cell residuals |
+| `fisher_exact_test()` | Fisher's exact test | For small samples + odds ratios |
+| `mcnemar_test()` | Paired categorical | Before-after measurements |
+| `odds_ratio_table()` | Odds ratios with CIs | 2×2 tables with Wald tests |
+
+### Binary Outcomes & Logistic Regression (NEW ✨)
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `run_logistic()` | Logistic regression | Binary outcomes with validation |
+| `tidy_logistic()` | Extract odds ratios | **Publication-ready** interpretation |
+| `logistic_assumptions()` | Comprehensive diagnostics | VIF, Cook's D, linearity checks |
+| `pseudo_r2()` | Model fit statistics | McFadden, Nagelkerke, AIC/BIC |
+
+### Mediation & Moderation (NEW ✨)
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `mediation_simple()` | X→M→Y mediation | **Bootstrap CIs** (BCa, 5000 samples) |
+| `simple_slopes()` | Probe interactions | Effect at ±1 SD moderator values |
+| `johnson_neyman()` | Regions of significance | **Exact transition points** for mods |
+
+### Non-Parametric Tests (NEW ✨)
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `mann_whitney_test()` | Two independent groups | Rank-biserial r + medians |
+| `kruskal_wallis_test()` | Three+ independent groups | Epsilon-squared + post-hoc advice |
+| `wilcoxon_signed_rank_test()` | Paired samples | Pre-post designs |
+| `friedman_test()` | Repeated measures 3+ times | Kendall's W concordance |
 
 ### Reliability & Validity
 | Function | Purpose | Key Feature |
 |----------|---------|-------------|
-| `calculate_alpha()` | Cronbach's alpha | Transparent item analysis + diagnostics |
-| `calculate_composite_reliability()` | CR & AVE | Quality thresholds with interpretation |
+| `calculate_alpha()` | Cronbach's alpha | Item analysis + diagnostics |
+| `calculate_composite_reliability()` | CR & AVE | Thresholds with interpretation |
+| `run_cfa()` | Confirmatory factor analysis | **lavaan** integration |
+| `alpha_table()` | Batch reliability | Multiple scales at once |
 
 ### Factor Analysis
 | Function | Purpose | Key Feature |
 |----------|---------|-------------|
 | `perform_efa()` | Exploratory factor analysis | **Beautiful ggplot2 visualizations** |
+| `efa_diagnostics()` | EFA suitability checks | KMO, Bartlett's, parallel analysis |
+
+### Robust Inference
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `tidy_lm_robust()` | Robust standard errors | **HC3 robust SEs** |
+| `compare_ols_robust()` | OLS vs robust | Side-by-side comparison |
+| `assumption_checks()` | Model diagnostics | With remediation advice |
+
+### Composite Scoring
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `score_composite()` | Create composites | **Metadata tracking** + NA rules |
+| `reverse_score_likert()` | Reverse scoring | Strict error detection |
+| `row_sd()` | Detect straight-lining | Row-wise SD |
+
+### Effect Sizes & Formatting
+| Function | Purpose | Key Feature |
+|----------|---------|-------------|
+| `cohens_d_table()` | Cohen's d with CIs | effectsize package |
+| `correlation_table()` | Correlation matrix | With CIs and p-values |
+| `format_p()` | APA p-values | "p < .001" formatting |
+| `format_est_ci()` | Estimates with CIs | "2.34 [1.23, 3.45]" |
+| `write_table()` | Export tables | TSV/CSV/MD/RDS formats |
 
 ### Reporting
 | Function | Purpose | Key Feature |
 |----------|---------|-------------|
 | `create_analysis_report()` | Full analysis report | Complete transparency for reviewers |
+| `make_table_md()` | Markdown tables | For RMarkdown documents |
 
 ## Philosophy
 
@@ -327,6 +388,111 @@ result <- test_group_differences(
 )
 
 cat(result$interpretation)
+```
+
+### Example 4: Categorical Data Analysis (NEW ✨)
+
+```r
+# Analyze purchase decision by promotion type
+df <- data.frame(
+  promotion = rep(c("Discount", "BOGO", "Free Shipping"), each = 100),
+  purchased = sample(c("Yes", "No"), 300, replace = TRUE)
+)
+
+# Chi-square test with effect size
+result <- chisq_test(df, x = "promotion", y = "purchased")
+print(result)
+# Chi-Square Test
+# χ²(2) = 8.45, p = .015, Cramér's V = 0.17 (small effect)
+# Significant association between promotion type and purchase decision.
+```
+
+### Example 5: Logistic Regression (NEW ✨)
+
+```r
+# Predict purchase likelihood from price and quality perceptions
+df <- data.frame(
+  purchased = sample(0:1, 200, replace = TRUE),
+  price_perception = rnorm(200, 50, 10),
+  quality_rating = rnorm(200, 7, 1.5)
+)
+
+# Fit logistic model
+model <- run_logistic(purchased ~ price_perception + quality_rating, data = df)
+
+# Get odds ratios with publication-ready interpretation
+results <- tidy_logistic(model)
+print(results)
+# Shows odds ratios, 95% CIs, and interpretation:
+# "12.3% increase in odds (significant, p < .001)"
+
+# Check assumptions
+checks <- logistic_assumptions(model, data = df)
+print(checks)
+# ✓ Multicollinearity: PASS (VIF < 5)
+# ✓ Influential cases: PASS (no high Cook's D)
+# ✓ Separation: PASS
+```
+
+### Example 6: Mediation Analysis (NEW ✨)
+
+```r
+# Test if brand attitude mediates price → purchase intention
+df <- data.frame(
+  price = rnorm(150),
+  brand_attitude = rnorm(150),
+  purchase_intention = rnorm(150)
+)
+
+# Simple mediation with bootstrap CIs
+result <- mediation_simple(
+  data = df,
+  x = "price",
+  m = "brand_attitude",
+  y = "purchase_intention",
+  boot_samples = 5000,  # Gold standard
+  seed = 42
+)
+
+print(result)
+# Partial mediation detected.
+# Indirect effect = 0.25, 95% CI [0.12, 0.41]
+# Path a: 0.52 (p < .001), Path b: 0.48 (p < .001)
+# Direct effect (c'): 0.33 (p = .012)
+```
+
+### Example 7: Interaction Probing (NEW ✨)
+
+```r
+# Test if loyalty moderates price sensitivity
+model <- lm(purchase ~ price * loyalty, data = df)
+
+# Simple slopes at ±1 SD
+slopes <- simple_slopes(model, focal = "price", moderator = "loyalty")
+print(slopes)
+# Low loyalty (-1 SD):  slope = -0.65 (p < .001)
+# Mean loyalty:         slope = -0.42 (p = .002)
+# High loyalty (+1 SD): slope = -0.19 (p = .089)
+
+# Find exact transition point with Johnson-Neyman
+jn <- johnson_neyman(model, focal = "price", moderator = "loyalty")
+print(jn)
+# The effect of price is significant when loyalty < 5.2
+```
+
+### Example 8: Non-Parametric Tests (NEW ✨)
+
+```r
+# Compare satisfaction between groups (non-normal data)
+result <- mann_whitney_test(
+  df,
+  outcome = "satisfaction",
+  group = "condition"
+)
+
+print(result)
+# Significant difference (p = .008, r_rb = 0.42, medium effect)
+# Control: Mdn = 5.0, Treatment: Mdn = 7.0
 ```
 
 ## CRAN Compliance

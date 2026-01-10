@@ -28,7 +28,8 @@ Imports:
     ggplot2 (>= 3.3.0),
     tibble (>= 3.0.0),
     readr (>= 2.0.0),
-    haven (>= 2.4.0)
+    haven (>= 2.4.0),
+    rlang (>= 1.0.0)
 Suggests:
     testthat (>= 3.0.0),
     knitr,
@@ -36,7 +37,13 @@ Suggests:
     janitor (>= 2.0.0),
     lavaan (>= 0.6.0),
     psych (>= 2.0.0),
-    broom (>= 1.0.0)
+    broom (>= 1.0.0),
+    car (>= 3.0.0),
+    emmeans (>= 1.7.0),
+    sandwich (>= 3.0.0),
+    lmtest (>= 0.9.0),
+    effectsize (>= 0.7.0),
+    correlation (>= 0.8.0)
 VignetteBuilder: knitr
 URL: https://github.com/phdemotions/consumeR
 BugReports: https://github.com/phdemotions/consumeR/issues

@@ -458,6 +458,3 @@ print.anova_result <- function(x, show_assumptions = FALSE, show_posthoc = TRUE,
 
   invisible(x)
 }
-
-# Helper function
-`%+%` <- function(a, b) paste0(a, b)

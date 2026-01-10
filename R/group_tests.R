@@ -479,5 +479,3 @@ print.group_comparison <- function(x, show_assumptions = FALSE, show_publication
   invisible(x)
 }
 
-# Helper function
-`%+%` <- function(a, b) paste0(a, b)

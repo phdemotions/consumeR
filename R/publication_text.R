@@ -521,6 +521,3 @@ print.publication_block <- function(x, ...) {
 
   invisible(x)
 }
-
-# Helper for string concatenation
-`%+%` <- function(a, b) paste0(a, b)

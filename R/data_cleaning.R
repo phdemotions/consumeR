@@ -1643,5 +1643,3 @@ print.cleaning_result <- function(x, show_flow = TRUE, show_details = FALSE,
   invisible(x)
 }
 
-# Helper function
-`%+%` <- function(a, b) paste0(a, b)

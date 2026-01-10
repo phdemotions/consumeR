@@ -531,6 +531,3 @@ print.assumption_check <- function(x, verbose = TRUE, ...) {
 
   invisible(x)
 }
-
-# Helper function for string concatenation
-`%+%` <- function(a, b) paste0(a, b)

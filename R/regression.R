@@ -541,5 +541,3 @@ print.regression_result <- function(x, show_assumptions = FALSE, show_publicatio
   invisible(x)
 }
 
-# Helper function
-`%+%` <- function(a, b) paste0(a, b)

@@ -451,5 +451,3 @@ print.correlation_result <- function(x, show_assumptions = FALSE, show_publicati
   invisible(x)
 }
 
-# Helper function
-`%+%` <- function(a, b) paste0(a, b)

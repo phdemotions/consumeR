@@ -6,13 +6,29 @@ test_that("test_group_differences returns correct structure", {
   group1 <- c(1, 2, 3, 4, 5)
   group2 <- c(2, 3, 4, 5, 6)
 
-  result <- test_group_differences(group1, group2)
+  result <- test_group_differences(group1, group2, verbose = FALSE)
 
   expect_type(result, "list")
-  expect_named(result, c("test_used", "p_value", "significant",
-                        "group1_mean", "group2_mean", "difference",
-                        "group1_n", "group2_n", "interpretation",
-                        "full_test_output"))
+  # Check that all essential fields are present (using expect_true for individual checks)
+  expect_true("test_used" %in% names(result))
+  expect_true("p_value" %in% names(result))
+  expect_true("statistic" %in% names(result))
+  expect_true("df" %in% names(result))
+  expect_true("significant" %in% names(result))
+  expect_true("group1_mean" %in% names(result))
+  expect_true("group2_mean" %in% names(result))
+  expect_true("group1_sd" %in% names(result))
+  expect_true("group2_sd" %in% names(result))
+  expect_true("difference" %in% names(result))
+  expect_true("ci_lower" %in% names(result))
+  expect_true("ci_upper" %in% names(result))
+  expect_true("effect_size" %in% names(result))
+  expect_true("effect_interpretation" %in% names(result))
+  expect_true("group1_n" %in% names(result))
+  expect_true("group2_n" %in% names(result))
+  expect_true("interpretation" %in% names(result))
+  expect_true("publication_text" %in% names(result))
+  expect_true("full_test_output" %in% names(result))
 })
 
 test_that("test_group_differences detects significant differences", {

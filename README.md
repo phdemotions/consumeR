@@ -9,6 +9,8 @@
 
 **consumeR** is an R package designed specifically for consumer researchers who need publication-ready statistical analysis that meets **Journal of Consumer Psychology (JCP)** standards - even if you're not a statistician.
 
+consumeR supports the most common analytical workflows in business and consumer research, with planned extensions for multilevel models, measurement models, and generalized linear models. All methods—current and future—adhere to the same transparency and reporting constraints.
+
 ### 🎯 Why consumeR?
 
 **The Problem:** Top journals like JCP require rigorous reporting of:
@@ -348,6 +350,52 @@ If you're reviewing a paper that uses consumeR:
 3. **Understand the methods**: Every statistical decision is documented
 4. **Review the assumptions**: All assumptions are explicitly stated
 5. **Trust but verify**: Complete transparency enables thorough review
+
+consumeR Roadmap: Method Coverage and Development Plan
+
+consumeR is designed to support the dominant analytical workflows used in business, marketing, and consumer research, while enforcing transparent exclusions, integrated diagnostics, and standardized reporting.
+The roadmap below outlines current support and planned extensions.
+
+Current Support
+Analytical Area	Typical Use Cases	Status	Notes
+Data Cleaning & Exclusions	Surveys, experiments, archival datasets	✔ Implemented	Explicit exclusion rules and participant flow summaries
+Missing Data Handling	Survey and panel data	✔ Implemented	Missing values preserved; handling specified downstream
+Descriptive Statistics	All empirical studies	✔ Implemented	Reproducible summaries with consistent output
+Group Comparisons (t-tests, ANOVA)	Experiments, lab and field studies	✔ Implemented	Assumption diagnostics and effect sizes included
+Linear Regression (OLS)	Observational and experimental designs	✔ Implemented	Diagnostics integrated into analysis objects
+Moderation (Interactions)	Theory-driven hypothesis tests	✔ Implemented	Explicit model specification and reporting
+Correlation Analysis	Scale validation, exploratory analysis	✔ Implemented	Confidence intervals and transparent reporting
+Scale Reliability (e.g., α, ω)	Measurement development	✔ Implemented	Reproducible scoring and report-ready summaries
+Planned Extensions
+Analytical Area	Typical Use Cases	Planned Status	Design Requirements
+Exploratory Factor Analysis (EFA)	Scale development	🔜 Planned	Transparent factor selection and assumption reporting
+Confirmatory Factor Analysis (CFA)	Measurement validation	🔜 Planned	Standardized fit indices and reporting outputs
+Logistic Regression	Binary outcomes (choice, adoption)	🔜 Planned	Model-specific diagnostics and effect reporting
+Count Models (Poisson, Negative Binomial)	Engagement and event frequency	🔜 Planned	Assumption checks and uncertainty reporting
+Multilevel Models (Random Intercepts)	Nested data (teams, firms, time)	🔜 Planned	Explicit cluster structure and diagnostics
+Regression-Based Mediation	Process and mechanism models	🔜 Planned	Transparent decomposition and reporting
+Out of Scope (By Design)
+Analytical Area	Reason
+Machine Learning / Black-Box Prediction	Not aligned with inferential reporting goals
+Highly Customized Bayesian Models	Requires domain-specific assumptions not yet supported
+Bespoke Causal Inference Frameworks	Planned only if transparency constraints can be enforced
+Design Principles Guiding the Roadmap
+
+All current and future methods in consumeR must satisfy the same workflow constraints:
+
+Explicit exclusion tracking
+
+Integrated assumption diagnostics
+
+Standardized, report-ready outputs
+
+Methods that cannot be implemented while preserving these constraints are intentionally excluded.
+
+Why this roadmap exists
+
+consumeR is not a general-purpose modeling library. It is research infrastructure for business fields.
+The roadmap reflects a commitment to expanding coverage of dominant analytical forms while maintaining transparency, interpretability, and pedagogical clarity.
+
 
 ## Contributing
 

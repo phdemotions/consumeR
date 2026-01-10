@@ -1,7 +1,7 @@
 # Workflow for building and deploying pkgdown site to GitHub Pages
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, claude/add-function-reference-docs-dJZSW]
   pull_request:
     branches: [main, master]
   release:

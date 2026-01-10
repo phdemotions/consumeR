@@ -29,7 +29,8 @@ Imports:
     tibble (>= 3.0.0),
     readr (>= 2.0.0),
     haven (>= 2.4.0),
-    rlang (>= 1.0.0)
+    rlang (>= 1.0.0),
+    purrr (>= 1.0.0)
 Suggests:
     testthat (>= 3.0.0),
     knitr,

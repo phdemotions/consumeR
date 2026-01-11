@@ -32,6 +32,30 @@ remotes::install_github("phdemotions/consumeR")
 
 ## Quick Start
 
+### Not Sure Which Test to Use? 🤔
+
+**NEW!** The package includes a helper for beginners:
+
+```r
+library(consumeR)
+data(consumer_survey)
+
+# Get personalized test recommendation
+quick_test_help(
+  data = consumer_survey,
+  outcome = "spending",        # What you're measuring
+  predictor = "flyer_group"    # What you think affects it
+)
+
+# This will:
+# 1. Tell you which test to use
+# 2. Explain WHY that test is appropriate
+# 3. Give you ready-to-run code
+# 4. List the next steps
+```
+
+### Basic Examples
+
 The package includes a built-in example dataset (`consumer_survey`) for trying out functions:
 
 ```r

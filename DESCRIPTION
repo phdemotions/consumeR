@@ -31,7 +31,8 @@ Imports:
     readr (>= 2.0.0),
     haven (>= 2.4.0),
     rlang (>= 1.0.0),
-    purrr (>= 1.0.0)
+    purrr (>= 1.0.0),
+    magrittr
 Suggests:
     testthat (>= 3.0.0),
     knitr,
@@ -45,7 +46,12 @@ Suggests:
     sandwich (>= 3.0.0),
     lmtest (>= 0.9.0),
     effectsize (>= 0.7.0),
-    correlation (>= 0.8.0)
+    correlation (>= 0.8.0),
+    jsonlite,
+    lme4,
+    lmerTest,
+    performance,
+    yaml
 VignetteBuilder: knitr
 URL: https://github.com/phdemotions/consumeR
 BugReports: https://github.com/phdemotions/consumeR/issues

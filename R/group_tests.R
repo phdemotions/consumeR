@@ -336,9 +336,9 @@ test_group_differences <- function(group1,
 
   # Step 6.5: Generate publication-ready text
   # ------------------------------------------
-  # Get confidence interval
-  ci_lower <- test_result$conf.int[1]
-  ci_upper <- test_result$conf.int[2]
+  # Get confidence interval (handle cases where conf.int is NULL or unavailable)
+  ci_lower <- if (!is.null(test_result$conf.int)) test_result$conf.int[1] else NA
+  ci_upper <- if (!is.null(test_result$conf.int)) test_result$conf.int[2] else NA
 
   # Prepare results for publication text generator
   test_results_for_pub <- list(
@@ -387,8 +387,8 @@ test_group_differences <- function(group1,
     group1_sd = round(sd_g1, 2),
     group2_sd = round(sd_g2, 2),
     difference = round(mean_diff, 2),
-    ci_lower = round(ci_lower, 2),
-    ci_upper = round(ci_upper, 2),
+    ci_lower = if (!is.na(ci_lower)) round(ci_lower, 2) else NA,
+    ci_upper = if (!is.na(ci_upper)) round(ci_upper, 2) else NA,
     effect_size = round(cohens_d, 2),
     effect_interpretation = effect_interp,
     group1_n = length(group1_clean),
@@ -430,7 +430,11 @@ print.group_comparison <- function(x, show_assumptions = FALSE, show_publication
   cat("DESCRIPTIVE STATISTICS:\n")
   cat("  Group 1: M =", x$group1_mean, ", SD =", x$group1_sd, "\n")
   cat("  Group 2: M =", x$group2_mean, ", SD =", x$group2_sd, "\n")
-  cat("  Difference:", x$difference, ", 95% CI [", x$ci_lower, ",", x$ci_upper, "]\n")
+  if (!is.na(x$ci_lower) && !is.na(x$ci_upper)) {
+    cat("  Difference:", x$difference, ", 95% CI [", x$ci_lower, ",", x$ci_upper, "]\n")
+  } else {
+    cat("  Difference:", x$difference, "\n")
+  }
   cat("\n")
 
   cat("STATISTICAL RESULTS:\n")

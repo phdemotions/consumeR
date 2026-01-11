@@ -269,12 +269,18 @@ The roadmap reflects a commitment to expanding coverage of dominant analytical f
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for detailed guidelines on:
 
+- Reporting bugs and suggesting enhancements
+- Submitting pull requests
+- Development setup and testing
+- Code style requirements
+
+For quick contributions:
 - Prioritize readability and documentation
 - Include tests for new functions
-- Follow the existing code style
-- Update documentation
+- Follow the existing code style (fully qualified function calls, roxygen2 docs)
+- Run `devtools::check()` before submitting
 
 ## Getting Help
 

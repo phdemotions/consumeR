@@ -1,0 +1,254 @@
+* using log directory ‘/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmpz3TkSc/fileb5d758664ec5/consumeR.Rcheck’
+* using R version 4.3.1 (2023-06-16)
+* using platform: aarch64-apple-darwin20 (64-bit)
+* R was compiled by
+    Apple clang version 14.0.0 (clang-1400.0.29.202)
+    GNU Fortran (GCC) 12.2.0
+* running under: macOS 15.6.1
+* using session charset: UTF-8
+* using options ‘--no-manual --as-cran’
+* checking for file ‘consumeR/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘consumeR’ version ‘0.1.0’
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ...Warning: score_composite.Rd:39: unknown macro '\item'
+Warning: score_composite.Rd:41: unexpected section header '\value'
+Warning: score_composite.Rd:59: unexpected section header '\description'
+Warning: score_composite.Rd:63: unexpected section header '\details'
+Warning: score_composite.Rd:73: unexpected section header '\examples'
+Warning: score_composite.Rd:116: unexpected END_OF_INPUT '
+'
+Warning: test_group_differences.Rd:39: unknown macro '\item'
+Warning: test_group_differences.Rd:41: unknown macro '\item'
+Warning: test_group_differences.Rd:45: unknown macro '\item'
+Warning: test_group_differences.Rd:48: unexpected section header '\value'
+Warning: test_group_differences.Rd:66: unexpected section header '\description'
+Warning: test_group_differences.Rd:71: unexpected section header '\details'
+Warning: test_group_differences.Rd:89: unexpected section header '\examples'
+Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+'
+Warning: score_composite.Rd:39: unknown macro '\item'
+Warning: score_composite.Rd:41: unexpected section header '\value'
+Warning: score_composite.Rd:59: unexpected section header '\description'
+Warning: score_composite.Rd:63: unexpected section header '\details'
+Warning: score_composite.Rd:73: unexpected section header '\examples'
+Warning: score_composite.Rd:116: unexpected END_OF_INPUT '
+'
+Warning: test_group_differences.Rd:39: unknown macro '\item'
+Warning: test_group_differences.Rd:41: unknown macro '\item'
+Warning: test_group_differences.Rd:45: unknown macro '\item'
+Warning: test_group_differences.Rd:48: unexpected section header '\value'
+Warning: test_group_differences.Rd:66: unexpected section header '\description'
+Warning: test_group_differences.Rd:71: unexpected section header '\details'
+Warning: test_group_differences.Rd:89: unexpected section header '\examples'
+Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+'
+ [5s/15s] NOTE
+Maintainer: ‘Josh Gonzales <joshgonzalesphd@gmail.com>’
+
+New submission
+
+License components with restrictions and base license permitting such:
+  MIT + file LICENSE
+File 'LICENSE':
+  MIT License
+  
+  Copyright (c) 2026 Josh Gonzales
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.5281/zenodo.XXXXXXX
+    From: inst/CITATION
+    Status: 404
+    Message: Not Found
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘consumeR’ can be installed ... WARNING
+Found the following significant warnings:
+  Warning: score_composite.Rd:39: unknown macro '\item'
+  Warning: score_composite.Rd:41: unexpected section header '\value'
+  Warning: score_composite.Rd:59: unexpected section header '\description'
+  Warning: score_composite.Rd:63: unexpected section header '\details'
+  Warning: score_composite.Rd:73: unexpected section header '\examples'
+  Warning: score_composite.Rd:116: unexpected END_OF_INPUT '
+  Warning: test_group_differences.Rd:39: unknown macro '\item'
+  Warning: test_group_differences.Rd:41: unknown macro '\item'
+  Warning: test_group_differences.Rd:45: unknown macro '\item'
+  Warning: test_group_differences.Rd:48: unexpected section header '\value'
+  Warning: test_group_differences.Rd:66: unexpected section header '\description'
+  Warning: test_group_differences.Rd:71: unexpected section header '\details'
+  Warning: test_group_differences.Rd:89: unexpected section header '\examples'
+  Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+See ‘/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmpz3TkSc/fileb5d758664ec5/consumeR.Rcheck/00install.out’ for details.
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking ‘build’ directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... NOTE
+Non-standard files/directories found at top level:
+  ‘CITATION.cff’ ‘cran-comments.md’ ‘data-raw’ ‘paper’
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... NOTE
+Found the following CITATION file in a non-standard place:
+  CITATION.cff
+Most likely ‘inst/CITATION’ should be used instead.
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... WARNING
+Missing or unexported objects:
+  ‘emmeans::pairs’ ‘stats::scale’
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [12s/14s] NOTE
+import_research_data: no visible global function definition for
+  ‘scale_fill_brewer’
+import_research_data: no visible global function definition for
+  ‘element_blank’
+perform_efa: no visible global function definition for ‘all_of’
+perform_efa: no visible global function definition for ‘desc’
+perform_efa: no visible global function definition for ‘group_by’
+perform_efa: no visible global function definition for ‘summarise’
+perform_efa: no visible global function definition for ‘geom_point’
+perform_efa: no visible global function definition for ‘geom_hline’
+perform_efa: no visible global function definition for ‘annotate’
+perform_efa: no visible global function definition for
+  ‘scale_x_continuous’
+perform_efa: no visible global function definition for ‘element_blank’
+perform_efa: no visible global function definition for ‘ungroup’
+Undefined global functions or variables:
+  all_of annotate desc element_blank geom_hline geom_point group_by
+  scale_fill_brewer scale_x_continuous summarise ungroup
+* checking Rd files ... WARNING
+prepare_Rd: score_composite.Rd:39: unknown macro '\item'
+prepare_Rd: score_composite.Rd:41: unexpected section header '\value'
+prepare_Rd: score_composite.Rd:59: unexpected section header '\description'
+prepare_Rd: score_composite.Rd:63: unexpected section header '\details'
+prepare_Rd: score_composite.Rd:73: unexpected section header '\examples'
+prepare_Rd: score_composite.Rd:116: unexpected END_OF_INPUT '
+'
+checkRd: (5) score_composite.Rd:0-117: Must have a \description
+prepare_Rd: test_group_differences.Rd:39: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:41: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:45: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:48: unexpected section header '\value'
+prepare_Rd: test_group_differences.Rd:66: unexpected section header '\description'
+prepare_Rd: test_group_differences.Rd:71: unexpected section header '\details'
+prepare_Rd: test_group_differences.Rd:89: unexpected section header '\examples'
+prepare_Rd: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+'
+checkRd: (5) test_group_differences.Rd:0-107: Must have a \description
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'score_composite'
+  ‘name’
+
+Undocumented arguments in documentation object 'test_group_differences'
+  ‘paired’ ‘check_assumptions’ ‘verbose’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking installed files from ‘inst/doc’ ... OK
+* checking files in ‘vignettes’ ... OK
+* checking examples ... ERROR
+Running examples in ‘consumeR-Ex.R’ failed
+The error most likely occurred in:
+
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: rm_pairwise
+> ### Title: Pairwise Comparisons for Repeated Measures ANOVA
+> ### Aliases: rm_pairwise
+> 
+> ### ** Examples
+> 
+> # After significant RM ANOVA
+> # Create example data
+> set.seed(42)
+> df <- expand.grid(
++   id = 1:30,
++   time = c("Before", "During", "After")
++ )
+> df$satisfaction <- rnorm(nrow(df), mean = 5 + as.numeric(factor(df$time)), sd = 1)
+> 
+> result <- run_rm_anova(df, outcome = "satisfaction", within = "time", subject = "id")
+Error in UseMethod("vcov") : 
+  no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Calls: run_rm_anova -> <Anonymous> -> Anova.default -> getVcov -> vcov
+Execution halted
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ...
+  Running ‘testthat.R’ [254s/312s]
+ [255s/313s] ERROR
+Running the tests in ‘tests/testthat.R’ failed.
+Last 13 lines of output:
+   6. └─consumeR::calculate_summary_stats(c(NA, NA, NA))
+  ── Failure ('test-utilities.R:34:3'): format_p handles different digit specifications ──
+  format_p(1e-05, digits = 4) not equal to "p < .0001".
+  1/1 mismatches
+  x[1]: "p < 1e-04"
+  y[1]: "p < .0001"
+  ── Failure ('test-utilities.R:91:3'): format_est_ci handles different digits ───
+  format_est_ci(2.3456, 1.2345, 3.4567, digits = 3) not equal to "2.346 [1.235, 3.457]".
+  1/1 mismatches
+  x[1]: "2.346 [1.234, 3.457]"
+  y[1]: "2.346 [1.235, 3.457]"
+  
+  [ FAIL 84 | WARN 28 | SKIP 1 | PASS 769 ]
+  Error: Test failures
+  Execution halted
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in ‘inst/doc’ ... OK
+* checking re-building of vignette outputs ... OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+
+Status: 2 ERRORs, 4 WARNINGs, 4 NOTEs
+See
+  ‘/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmpz3TkSc/fileb5d758664ec5/consumeR.Rcheck/00check.log’
+for details.
+
+

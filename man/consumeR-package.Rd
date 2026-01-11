@@ -44,6 +44,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Your Name \email{your.email@example.com} (\href{https://orcid.org/0000-0000-0000-0000}{ORCID})
+\strong{Maintainer}: Josh Gonzales \email{joshgonzalesphd@gmail.com} (\href{https://orcid.org/0000-0001-8633-3380}{ORCID})
 
 }

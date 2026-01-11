@@ -12,13 +12,13 @@ NULL
 #'
 #' @description
 #' Conducts chi-square test of independence for contingency tables with
-#' Cramér's V effect size and standardized residuals. Publication-ready
+#' Cramer's V effect size and standardized residuals. Publication-ready
 #' output for JCP standards.
 #'
 #' @param data Data frame (optional if x and y are vectors)
 #' @param x Character (column name) or vector (first categorical variable)
 #' @param y Character (column name) or vector (second categorical variable)
-#' @param correct Logical. Apply Yates' continuity correction for 2×2 tables? (default TRUE)
+#' @param correct Logical. Apply Yates' continuity correction for 2x2 tables? (default TRUE)
 #' @param simulate_p Logical. Use Monte Carlo simulation for p-value? (default FALSE)
 #' @param B Integer. Number of Monte Carlo replicates if simulate_p = TRUE (default 2000)
 #'
@@ -27,7 +27,7 @@ NULL
 #'   \item \code{chisq}: Chi-square statistic
 #'   \item \code{df}: Degrees of freedom
 #'   \item \code{p_value}: P-value
-#'   \item \code{cramers_v}: Cramér's V effect size
+#'   \item \code{cramers_v}: Cramer's V effect size
 #'   \item \code{effect_interp}: Effect size interpretation
 #'   \item \code{observed}: Observed frequencies table
 #'   \item \code{expected}: Expected frequencies table
@@ -38,18 +38,18 @@ NULL
 #' }
 #'
 #' @details
-#' **Cramér's V Effect Size:**
-#' - For 2×2 tables: V = √(χ²/n)
-#' - For larger tables: V = √(χ²/(n × min(rows-1, cols-1)))
+#' **Cramer's V Effect Size:**
+#' - For 2x2 tables: V = sqrt(chi^2/n)
+#' - For larger tables: V = sqrt(chi^2/(n x min(rows-1, cols-1)))
 #' - Interpretation: 0.10 = small, 0.30 = medium, 0.50 = large
 #'
 #' **Assumptions:**
-#' - Expected frequency ≥ 5 in all cells (for 2×2)
-#' - Expected frequency ≥ 5 in 80% of cells (for larger tables)
+#' - Expected frequency >= 5 in all cells (for 2x2)
+#' - Expected frequency >= 5 in 80% of cells (for larger tables)
 #' - If violated, use Fisher's exact test instead
 #'
 #' **Yates' Correction:**
-#' - Applied by default for 2×2 tables
+#' - Applied by default for 2x2 tables
 #' - Makes test more conservative (reduces Type I error)
 #' - Can turn off with correct = FALSE
 #'
@@ -118,7 +118,7 @@ chisq_test <- function(data = NULL,
   n_total <- sum(obs_table)
 
   message("\nChi-square test of independence")
-  message("  Table size: ", n_rows, " × ", n_cols)
+  message("  Table size: ", n_rows, " x ", n_cols)
   message("  Total n: ", n_total)
 
   # Run chi-square test
@@ -149,14 +149,14 @@ chisq_test <- function(data = NULL,
     use_fisher <- TRUE
   }
 
-  # Calculate Cramér's V effect size
-  # V = sqrt(χ² / (n * min(rows-1, cols-1)))
+  # Calculate Cramer's V effect size
+  # V = sqrt(chi^2 / (n * min(rows-1, cols-1)))
   min_dim <- min(n_rows - 1, n_cols - 1)
   cramers_v <- sqrt(chisq_stat / (n_total * min_dim))
 
   # Interpret effect size (Cohen's guidelines)
   if (min_dim == 1) {
-    # 2×2 table
+    # 2x2 table
     if (cramers_v < 0.10) {
       effect_interp <- "Negligible"
     } else if (cramers_v < 0.30) {
@@ -186,13 +186,13 @@ chisq_test <- function(data = NULL,
   interpretation <- paste0(
     "CHI-SQUARE TEST OF INDEPENDENCE\n",
     "================================\n\n",
-    "Variables: ", x_name, " × ", y_name, "\n",
-    "Table: ", n_rows, " rows × ", n_cols, " columns\n",
+    "Variables: ", x_name, " x ", y_name, "\n",
+    "Table: ", n_rows, " rows x ", n_cols, " columns\n",
     "Sample size: N = ", n_total, "\n\n",
     "RESULTS:\n",
-    "χ²(", df, ") = ", round(chisq_stat, 2),
+    "chi^2(", df, ") = ", round(chisq_stat, 2),
     ", p ", if (p_value < 0.001) "< .001" else paste("=", round(p_value, 3)), "\n",
-    "Cramér's V = ", round(cramers_v, 3), " (", effect_interp, " effect)\n"
+    "Cramer's V = ", round(cramers_v, 3), " (", effect_interp, " effect)\n"
   )
 
   if (correct && n_rows == 2 && n_cols == 2) {
@@ -202,7 +202,7 @@ chisq_test <- function(data = NULL,
 
   if (use_fisher) {
     interpretation <- paste0(interpretation, "\n",
-                             "⚠ WARNING: Expected frequencies assumption violated.\n",
+                             "WARNING: WARNING: Expected frequencies assumption violated.\n",
                              "Consider using fisher_exact_test() instead.\n")
   }
 
@@ -213,7 +213,7 @@ chisq_test <- function(data = NULL,
              "The variables are NOT independent (p < .05).\n")
     } else {
       paste0("No significant association detected between ", x_name, " and ", y_name, ".\n",
-             "Cannot reject independence hypothesis (p ≥ .05).\n")
+             "Cannot reject independence hypothesis (p >= .05).\n")
     }
   )
 
@@ -223,9 +223,9 @@ chisq_test <- function(data = NULL,
     "association between ", x_name, " and ", y_name, ". ",
     "The association was ",
     if (p_value < 0.05) "significant" else "not significant",
-    ", χ²(", df, ") = ", round(chisq_stat, 2),
+    ", chi^2(", df, ") = ", round(chisq_stat, 2),
     ", p ", if (p_value < 0.001) "< .001" else paste("=", round(p_value, 3)),
-    ", Cramér's V = ", round(cramers_v, 3),
+    ", Cramer's V = ", round(cramers_v, 3),
     ", indicating a ", tolower(effect_interp), " effect size."
   )
 
@@ -256,7 +256,7 @@ chisq_test <- function(data = NULL,
 #' Fisher's Exact Test for Small Samples
 #'
 #' @description
-#' Conducts Fisher's exact test for 2×2 (and larger) contingency tables.
+#' Conducts Fisher's exact test for 2x2 (and larger) contingency tables.
 #' Appropriate when chi-square assumptions are violated (expected frequencies < 5).
 #'
 #' @param data Data frame (optional)
@@ -265,11 +265,11 @@ chisq_test <- function(data = NULL,
 #' @param alternative Character. Alternative hypothesis: "two.sided" (default), "greater", "less"
 #' @param conf_level Numeric. Confidence level for odds ratio CI (default 0.95)
 #'
-#' @return A list containing test results and odds ratio (for 2×2 tables)
+#' @return A list containing test results and odds ratio (for 2x2 tables)
 #'
 #' @examples
 #' \dontrun{
-#' # Small sample 2×2 table
+#' # Small sample 2x2 table
 #' result <- fisher_exact_test(
 #'   data = df,
 #'   x = "treatment",
@@ -308,7 +308,7 @@ fisher_exact_test <- function(data = NULL,
   obs_table <- table(x_clean, y_clean)
 
   message("\nFisher's exact test")
-  message("  Table size: ", nrow(obs_table), " × ", ncol(obs_table))
+  message("  Table size: ", nrow(obs_table), " x ", ncol(obs_table))
   message("  Total n: ", sum(obs_table))
 
   # Run Fisher's exact test
@@ -321,7 +321,7 @@ fisher_exact_test <- function(data = NULL,
   # Extract results
   p_value <- fisher_result$p.value
 
-  # For 2×2 tables, get odds ratio
+  # For 2x2 tables, get odds ratio
   is_2x2 <- nrow(obs_table) == 2 && ncol(obs_table) == 2
   if (is_2x2) {
     or <- fisher_result$estimate
@@ -337,7 +337,7 @@ fisher_exact_test <- function(data = NULL,
   interpretation <- paste0(
     "FISHER'S EXACT TEST\n",
     "===================\n\n",
-    "Variables: ", x_name, " × ", y_name, "\n",
+    "Variables: ", x_name, " x ", y_name, "\n",
     "Sample size: N = ", sum(obs_table), "\n",
     "Alternative: ", alternative, "\n\n",
     "RESULTS:\n",
@@ -356,7 +356,7 @@ fisher_exact_test <- function(data = NULL,
     if (p_value < 0.05) {
       "Significant association detected (p < .05).\n"
     } else {
-      "No significant association (p ≥ .05).\n"
+      "No significant association (p >= .05).\n"
     }
   )
 
@@ -395,7 +395,7 @@ fisher_exact_test <- function(data = NULL,
 #' **Assumptions:**
 #' - Paired observations (same individuals measured twice)
 #' - Nominal or ordinal variables
-#' - For 2×2 tables with ≥25 discordant pairs
+#' - For 2x2 tables with >=25 discordant pairs
 #'
 #' @examples
 #' \dontrun{
@@ -436,7 +436,7 @@ mcnemar_test <- function(data,
   chisq_stat <- mcnemar_result$statistic
   p_value <- mcnemar_result$p.value
 
-  # Calculate effect size (phi for 2×2)
+  # Calculate effect size (phi for 2x2)
   if (nrow(obs_table) == 2 && ncol(obs_table) == 2) {
     # Discordant pairs
     b <- obs_table[1, 2]  # Changed from no to yes
@@ -461,10 +461,10 @@ mcnemar_test <- function(data,
   interpretation <- paste0(
     "McNEMAR'S TEST\n",
     "==============\n\n",
-    "Variables: ", var1, " → ", var2, " (paired)\n",
+    "Variables: ", var1, " -> ", var2, " (paired)\n",
     "Pairs: n = ", sum(obs_table), "\n\n",
     "RESULTS:\n",
-    "χ²(1) = ", round(chisq_stat, 2),
+    "chi^2(1) = ", round(chisq_stat, 2),
     ", p ", if (p_value < 0.001) "< .001" else paste("=", round(p_value, 3)), "\n"
   )
 
@@ -481,7 +481,7 @@ mcnemar_test <- function(data,
     if (p_value < 0.05) {
       "Significant change detected (p < .05).\n"
     } else {
-      "No significant change (p ≥ .05).\n"
+      "No significant change (p >= .05).\n"
     }
   )
 
@@ -503,7 +503,7 @@ mcnemar_test <- function(data,
 #' Odds Ratio with Confidence Interval
 #'
 #' @description
-#' Calculates odds ratio with confidence interval for 2×2 contingency tables.
+#' Calculates odds ratio with confidence interval for 2x2 contingency tables.
 #' Common in case-control studies and binary outcome analysis.
 #'
 #' @param data Data frame (optional)
@@ -557,7 +557,7 @@ odds_ratio_table <- function(data = NULL,
   x_clean <- as.factor(x_var[valid_idx])
   y_clean <- as.factor(y_var[valid_idx])
 
-  # Check 2×2
+  # Check 2x2
   if (nlevels(x_clean) != 2 || nlevels(y_clean) != 2) {
     rlang::abort(c(
       "Both variables must have exactly 2 levels for odds ratio",
@@ -640,16 +640,16 @@ print.chisq_result <- function(x, ...) {
   cat("Chi-Square Test of Independence\n")
   cat("================================\n\n")
 
-  cat("χ²(", x$df, ") = ", round(x$chisq, 2),
+  cat("chi^2(", x$df, ") = ", round(x$chisq, 2),
       ", p ", if (x$p_value < 0.001) "< .001" else paste("=", round(x$p_value, 3)), "\n")
-  cat("Cramér's V = ", round(x$cramers_v, 3), " (", x$effect_interp, ")\n")
+  cat("Cramer's V = ", round(x$cramers_v, 3), " (", x$effect_interp, ")\n")
   cat("Sample size: N = ", x$n, "\n\n")
 
   cat("Observed frequencies:\n")
   print(x$observed)
 
   if (x$use_fisher) {
-    cat("\n⚠ WARNING: Consider using Fisher's exact test (low expected frequencies)\n")
+    cat("\nWARNING: WARNING: Consider using Fisher's exact test (low expected frequencies)\n")
   }
 
   cat("\n")

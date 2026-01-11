@@ -493,7 +493,7 @@ print.assumption_check <- function(x, verbose = TRUE, ...) {
   cat("Test Used:", x$test, "\n")
 
   if (!is.na(x$assumption_met)) {
-    cat("Result:", ifelse(x$assumption_met, "✓ ASSUMPTION MET", "✗ ASSUMPTION VIOLATED"), "\n")
+    cat("Result:", ifelse(x$assumption_met, "PASS ASSUMPTION MET", "FAIL ASSUMPTION VIOLATED"), "\n")
   }
 
   if (!is.null(x$p_value) && !is.na(x$p_value)) {

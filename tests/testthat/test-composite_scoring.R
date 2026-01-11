@@ -354,7 +354,7 @@ test_that("add_composite adds column correctly", {
   )
 
   # Should have new column
-  expect_true("satisfaction" in names(result))
+  expect_true("satisfaction" %in% names(result))
   expect_equal(ncol(result), ncol(df) + 1)
 
   # Values should be correct

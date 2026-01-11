@@ -9,7 +9,7 @@
 #' @param focal Character; name of the focal predictor (X variable)
 #' @param moderator Character; name of the moderator variable (W variable)
 #' @param mod_values Numeric vector of moderator values to probe. Default: NULL
-#'   (uses mean ± 1 SD for continuous moderators, or all levels for factors)
+#'   (uses mean +/- 1 SD for continuous moderators, or all levels for factors)
 #' @param conf_level Confidence level for intervals (default: 0.95)
 #' @param center_moderator Logical; center moderator before probing (default: TRUE)
 #'
@@ -126,7 +126,7 @@ simple_slopes <- function(model,
       mod_values <- levels(mod_var)
       mod_values_numeric <- seq_along(mod_values)
     } else {
-      # For continuous, use mean ± 1 SD
+      # For continuous, use mean +/- 1 SD
       mod_mean <- mean(mod_var, na.rm = TRUE)
       mod_sd <- stats::sd(mod_var, na.rm = TRUE)
       mod_values <- c(mod_mean - mod_sd, mod_mean, mod_mean + mod_sd)
@@ -155,7 +155,7 @@ simple_slopes <- function(model,
       newdata_high[[moderator]] <- mod_val
     }
 
-    # Get focal predictor values (mean ± 1 SD for slope calculation)
+    # Get focal predictor values (mean +/- 1 SD for slope calculation)
     focal_var <- data[[focal]]
     if (is.factor(focal_var)) {
       rlang::abort(
@@ -310,7 +310,7 @@ print.simple_slopes <- function(x, ...) {
 #'
 #' Identifies the range of moderator values where the effect of a focal predictor
 #' is statistically significant. This provides more nuanced interpretation than
-#' simple slopes at arbitrary values (e.g., ± 1 SD), showing exactly where the
+#' simple slopes at arbitrary values (e.g., +/- 1 SD), showing exactly where the
 #' effect "turns on" and "turns off" as a function of the moderator.
 #'
 #' @param model A fitted linear model (lm object) with an interaction term
@@ -318,7 +318,7 @@ print.simple_slopes <- function(x, ...) {
 #' @param moderator Character; name of the moderator variable (W variable)
 #' @param alpha Significance level (default: 0.05)
 #' @param mod_range Numeric vector of length 2 specifying range of moderator
-#'   values to search. Default: NULL (uses observed range ± 1 SD)
+#'   values to search. Default: NULL (uses observed range +/- 1 SD)
 #' @param n_points Number of points to evaluate (default: 1000)
 #'
 #' @return A list of class "johnson_neyman" containing:
@@ -336,9 +336,9 @@ print.simple_slopes <- function(x, ...) {
 #' points" between significant and non-significant effects.
 #'
 #' **Output Regions:**
-#' - Region 1: W < lower bound → effect significant/non-significant
-#' - Region 2: lower < W < upper → effect non-significant/significant
-#' - Region 3: W > upper bound → effect significant/non-significant
+#' - Region 1: W < lower bound -> effect significant/non-significant
+#' - Region 2: lower < W < upper -> effect non-significant/significant
+#' - Region 3: W > upper bound -> effect significant/non-significant
 #'
 #' **For JCP Publications:**
 #' - Use JN technique for continuous moderators
@@ -416,7 +416,7 @@ johnson_neyman <- function(model,
     mod_min <- min(mod_var, na.rm = TRUE)
     mod_max <- max(mod_var, na.rm = TRUE)
 
-    # Use observed range ± 1 SD, but don't go beyond data range
+    # Use observed range +/- 1 SD, but don't go beyond data range
     mod_range <- c(
       max(mod_min, mod_mean - 2 * mod_sd),
       min(mod_max, mod_mean + 2 * mod_sd)
@@ -544,7 +544,7 @@ johnson_neyman <- function(model,
 
         regions <- tibble::tibble(
           region = c(sprintf("%s < %.3f", moderator, trans_points[1]),
-                     sprintf("%s ≥ %.3f", moderator, trans_points[1])),
+                     sprintf("%s >= %.3f", moderator, trans_points[1])),
           moderator_range = c(sprintf("[%.2f, %.3f)", mod_range[1], trans_points[1]),
                               sprintf("[%.3f, %.2f]", trans_points[1], mod_range[2])),
           effect_status = c(status_below, status_above)
@@ -566,8 +566,8 @@ johnson_neyman <- function(model,
 
         regions <- tibble::tibble(
           region = c(sprintf("%s < %.3f", moderator, trans_points[1]),
-                     sprintf("%.3f ≤ %s < %.3f", trans_points[1], moderator, trans_points[2]),
-                     sprintf("%s ≥ %.3f", moderator, trans_points[2])),
+                     sprintf("%.3f <= %s < %.3f", trans_points[1], moderator, trans_points[2]),
+                     sprintf("%s >= %.3f", moderator, trans_points[2])),
           moderator_range = c(sprintf("[%.2f, %.3f)", mod_range[1], trans_points[1]),
                               sprintf("[%.3f, %.3f)", trans_points[1], trans_points[2]),
                               sprintf("[%.3f, %.2f]", trans_points[2], mod_range[2])),
@@ -575,7 +575,7 @@ johnson_neyman <- function(model,
         )
 
         interpretation <- sprintf(
-          "The effect of %s is %s when %s < %.3f, %s when %.3f ≤ %s < %.3f, and %s when %s ≥ %.3f.",
+          "The effect of %s is %s when %s < %.3f, %s when %.3f <= %s < %.3f, and %s when %s >= %.3f.",
           focal,
           tolower(status_low), moderator, trans_points[1],
           tolower(status_mid), trans_points[1], moderator, trans_points[2],
@@ -608,7 +608,7 @@ print.johnson_neyman <- function(x, ...) {
 
   cat(sprintf("Focal predictor: %s\n", x$focal))
   cat(sprintf("Moderator: %s\n", x$moderator))
-  cat(sprintf("Significance level: α = %.3f\n\n", x$alpha))
+  cat(sprintf("Significance level: \u03B1 = %.3f\n\n", x$alpha))
 
   if (nrow(x$critical_values) > 0) {
     cat("Transition Point(s):\n")

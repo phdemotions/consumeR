@@ -38,11 +38,11 @@
 #' supposed to measure the same thing actually correlate with each other.
 #'
 #' ## Interpreting Alpha:
-#' - **α ≥ 0.90**: Excellent reliability
-#' - **α ≥ 0.80**: Good reliability
-#' - **α ≥ 0.70**: Acceptable reliability
-#' - **α ≥ 0.60**: Questionable reliability
-#' - **α < 0.60**: Poor reliability
+#' - **\u03B1 >= 0.90**: Excellent reliability
+#' - **\u03B1 >= 0.80**: Good reliability
+#' - **\u03B1 >= 0.70**: Acceptable reliability
+#' - **\u03B1 >= 0.60**: Questionable reliability
+#' - **\u03B1 < 0.60**: Poor reliability
 #'
 #' ## How It's Calculated:
 #' Alpha = (k / (k-1)) * (1 - sum of item variances / total variance)
@@ -241,7 +241,7 @@ calculate_alpha <- function(data,
   total_variance <- var(total_score)
 
   # Cronbach's alpha formula:
-  # α = (k / (k-1)) * (1 - sum of item variances / total variance)
+  # \u03B1 = (k / (k-1)) * (1 - sum of item variances / total variance)
   alpha <- (k / (k - 1)) * (1 - sum(item_variances) / total_variance)
 
   message("  Alpha = ", round(alpha, 3))
@@ -277,23 +277,23 @@ calculate_alpha <- function(data,
   # Step 9: Interpret Alpha
   # ------------------------
   interpretation <- if (alpha >= 0.90) {
-    paste0("EXCELLENT reliability (α = ", round(alpha, 3), "). ",
+    paste0("EXCELLENT reliability (\u03B1 = ", round(alpha, 3), "). ",
            "The ", scale_name, " scale shows excellent internal consistency. ",
            "Items are highly inter-correlated and measure the same construct well.")
   } else if (alpha >= 0.80) {
-    paste0("GOOD reliability (α = ", round(alpha, 3), "). ",
+    paste0("GOOD reliability (\u03B1 = ", round(alpha, 3), "). ",
            "The ", scale_name, " scale shows good internal consistency. ",
            "Items correlate well with each other.")
   } else if (alpha >= 0.70) {
-    paste0("ACCEPTABLE reliability (α = ", round(alpha, 3), "). ",
+    paste0("ACCEPTABLE reliability (\u03B1 = ", round(alpha, 3), "). ",
            "The ", scale_name, " scale shows acceptable internal consistency. ",
            "This meets the minimum threshold for research purposes.")
   } else if (alpha >= 0.60) {
-    paste0("QUESTIONABLE reliability (α = ", round(alpha, 3), "). ",
+    paste0("QUESTIONABLE reliability (\u03B1 = ", round(alpha, 3), "). ",
            "The ", scale_name, " scale shows questionable internal consistency. ",
            "Consider revising items or removing poorly performing items.")
   } else {
-    paste0("POOR reliability (α = ", round(alpha, 3), "). ",
+    paste0("POOR reliability (\u03B1 = ", round(alpha, 3), "). ",
            "The ", scale_name, " scale shows poor internal consistency. ",
            "Items may not be measuring the same construct. ",
            "Substantial revision needed.")
@@ -311,7 +311,7 @@ calculate_alpha <- function(data,
     for (prob_item in problematic) {
       new_alpha <- item_stats$alpha_if_deleted[item_stats$item == prob_item]
       improvement <- new_alpha - alpha
-      message("  - ", prob_item, " (new α = ", round(new_alpha, 3),
+      message("  - ", prob_item, " (new \u03B1 = ", round(new_alpha, 3),
               ", improvement = +", round(improvement, 3), ")")
     }
     message("Consider whether these items truly belong in this scale.")
@@ -349,12 +349,12 @@ calculate_alpha <- function(data,
 #' @export
 print.alpha_analysis <- function(x, ...) {
   cat("\n")
-  cat("╔════════════════════════════════════════════════════════╗\n")
-  cat("║           CRONBACH'S ALPHA RELIABILITY ANALYSIS        ║\n")
-  cat("╚════════════════════════════════════════════════════════╝\n\n")
+  cat("==========================================================\n")
+  cat("|           CRONBACH'S ALPHA RELIABILITY ANALYSIS        |\n")
+  cat("==========================================================\n\n")
 
   cat("Scale:", x$scale_name, "\n")
-  cat("Cronbach's Alpha: α =", round(x$alpha, 3), "\n\n")
+  cat("Cronbach's Alpha: \u03B1 =", round(x$alpha, 3), "\n\n")
 
   cat(x$interpretation, "\n\n")
 

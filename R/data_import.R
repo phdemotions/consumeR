@@ -101,12 +101,9 @@ import_research_data <- function(file_path,
     stop("Package 'readr' required. Install with: install.packages('readr')")
   }
 
-  library(dplyr, warn.conflicts = FALSE)
-  library(readr, warn.conflicts = FALSE)
-
-  message("\n╔════════════════════════════════════════════════════════╗")
-  message("║        TRANSPARENT DATA IMPORT & TYPE CHECKING         ║")
-  message("╚════════════════════════════════════════════════════════╝\n")
+  message("\n==========================================================")
+  message("|        TRANSPARENT DATA IMPORT & TYPE CHECKING         |")
+  message("==========================================================\n")
 
   # Step 1: Check File Exists
   # --------------------------
@@ -128,7 +125,7 @@ import_research_data <- function(file_path,
   if (file_ext == "csv") {
     # Import CSV using readr
     data <- read_csv(file_path, show_col_types = FALSE)
-    message("  ✓ CSV file imported successfully")
+    message("  PASS CSV file imported successfully")
 
   } else if (file_ext == "sav") {
     # Import SPSS file using haven
@@ -138,8 +135,8 @@ import_research_data <- function(file_path,
     }
 
     data <- haven::read_sav(file_path)
-    message("  ✓ SPSS file imported successfully")
-    message("  ✓ Preserved variable labels and value labels")
+    message("  PASS SPSS file imported successfully")
+    message("  PASS Preserved variable labels and value labels")
 
   } else {
     stop("Error: Unsupported file type '.", file_ext, "'\n",
@@ -165,7 +162,7 @@ import_research_data <- function(file_path,
       n_changed <- sum(original_names != cleaned_names)
 
       if (n_changed > 0) {
-        message("  ✓ Cleaned ", n_changed, " column name",
+        message("  PASS Cleaned ", n_changed, " column name",
                 ifelse(n_changed > 1, "s", ""),
                 " (lowercase, no spaces, R-friendly)")
       }
@@ -175,7 +172,7 @@ import_research_data <- function(file_path,
   n_rows <- nrow(data)
   n_cols <- ncol(data)
 
-  message("  Dimensions: ", n_rows, " rows × ", n_cols, " columns")
+  message("  Dimensions: ", n_rows, " rows x ", n_cols, " columns")
 
   # Step 3: Analyze Variable Types
   # -------------------------------
@@ -237,9 +234,9 @@ import_research_data <- function(file_path,
 
     n_suggestions <- sum(var_summary$change_suggested)
     if (n_suggestions > 0) {
-      message("  ✓ Found ", n_suggestions, " suggested improvements")
+      message("  PASS Found ", n_suggestions, " suggested improvements")
     } else {
-      message("  ✓ All variables appear correctly typed")
+      message("  PASS All variables appear correctly typed")
     }
   }
 
@@ -247,9 +244,9 @@ import_research_data <- function(file_path,
   # -----------------------------------------
   if (interactive) {
     message("\n")
-    message("╔════════════════════════════════════════════════════════╗")
-    message("║              VARIABLE TYPE SUMMARY                     ║")
-    message("╚════════════════════════════════════════════════════════╝\n")
+    message("==========================================================")
+    message("|              VARIABLE TYPE SUMMARY                     |")
+    message("==========================================================\n")
 
     # Show current types
     type_counts <- table(var_summary$current_type)
@@ -264,7 +261,7 @@ import_research_data <- function(file_path,
     # Show suggested changes
     if (auto_convert && n_suggestions > 0) {
       message("SUGGESTED CHANGES:")
-      message("─────────────────────────────────────────────────────────")
+      message("---------------------------------------------------------")
 
       changes <- var_summary %>%
         filter(change_suggested) %>%
@@ -279,12 +276,12 @@ import_research_data <- function(file_path,
       }
 
       message("\n")
-      message("─────────────────────────────────────────────────────────")
+      message("---------------------------------------------------------")
     }
 
     # Show full variable list
     message("\nFULL VARIABLE LIST:")
-    message("─────────────────────────────────────────────────────────")
+    message("---------------------------------------------------------")
     print(var_summary %>%
             select(variable, current_type, n_unique, percent_missing) %>%
             as.data.frame(),
@@ -313,11 +310,11 @@ import_research_data <- function(file_path,
           if (inherits(data[[var_name]], "haven_labelled")) {
             # Use haven's as_factor to preserve labels
             data_converted[[var_name]] <- haven::as_factor(data[[var_name]])
-            message("  ✓ ", var_name, ": Converted to factor (preserved SPSS labels)")
+            message("  PASS ", var_name, ": Converted to factor (preserved SPSS labels)")
           } else {
             # Regular conversion
             data_converted[[var_name]] <- as.factor(data[[var_name]])
-            message("  ✓ ", var_name, ": Converted to factor")
+            message("  PASS ", var_name, ": Converted to factor")
           }
         }
       }
@@ -336,8 +333,6 @@ import_research_data <- function(file_path,
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
       warning("ggplot2 required for validation report. Skipping plot.")
     } else {
-      library(ggplot2, warn.conflicts = FALSE)
-
       # Create a summary plot showing variable types and missing data
       plot_data <- var_summary %>%
         mutate(
@@ -368,7 +363,7 @@ import_research_data <- function(file_path,
           panel.grid.major.y = element_blank()
         )
 
-      message("  ✓ Validation plot created")
+      message("  PASS Validation plot created")
     }
   }
 
@@ -388,16 +383,16 @@ import_research_data <- function(file_path,
 
   # Step 9: Return Results
   # ----------------------
-  message("\n╔════════════════════════════════════════════════════════╗")
-  message("║                   IMPORT COMPLETE                      ║")
-  message("╚════════════════════════════════════════════════════════╝\n")
+  message("\n==========================================================")
+  message("|                   IMPORT COMPLETE                      |")
+  message("==========================================================\n")
 
-  message("✓ Data imported: ", n_rows, " rows × ", n_cols, " columns")
+  message("PASS Data imported: ", n_rows, " rows x ", n_cols, " columns")
   if (auto_convert && n_suggestions > 0) {
-    message("✓ Applied ", n_suggestions, " type conversion",
+    message("PASS Applied ", n_suggestions, " type conversion",
             ifelse(n_suggestions > 1, "s", ""))
   }
-  message("✓ Data ready for analysis")
+  message("PASS Data ready for analysis")
 
   if (create_report && !is.null(validation_plot)) {
     message("\nTo view data quality report:")
@@ -447,15 +442,13 @@ import_research_data <- function(file_path,
 #' @export
 check_variable_types <- function(data, suggest_changes = TRUE) {
 
-  message("\n╔════════════════════════════════════════════════════════╗")
-  message("║         INTERACTIVE VARIABLE TYPE CHECKER              ║")
-  message("╚════════════════════════════════════════════════════════╝\n")
+  message("\n==========================================================")
+  message("|         INTERACTIVE VARIABLE TYPE CHECKER              |")
+  message("==========================================================\n")
 
   if (!is.data.frame(data)) {
     stop("Error: 'data' must be a data frame or tibble")
   }
-
-  library(dplyr, warn.conflicts = FALSE)
 
   # Create summary
   var_info <- tibble(
@@ -471,7 +464,7 @@ check_variable_types <- function(data, suggest_changes = TRUE) {
 
   message("Dataset has ", nrow(data), " rows and ", ncol(data), " variables\n")
   message("Variable types:")
-  message("───────────────────────────────────────────────────────────\n")
+  message("-----------------------------------------------------------\n")
 
   # Display each variable with details
   for (i in 1:nrow(var_info)) {
@@ -487,22 +480,22 @@ check_variable_types <- function(data, suggest_changes = TRUE) {
       n_unique <- var_info$n_unique[i]
 
       if (current_type %in% c("numeric", "double") && n_unique <= 10) {
-        message("   💡 SUGGESTION: Consider converting to factor (categorical)")
+        message("   TIP: SUGGESTION: Consider converting to factor (categorical)")
       } else if (current_type == "character" && n_unique <= 20) {
-        message("   💡 SUGGESTION: Convert to factor")
+        message("   TIP: SUGGESTION: Convert to factor")
       }
     }
 
     message("")
   }
 
-  message("───────────────────────────────────────────────────────────\n")
+  message("-----------------------------------------------------------\n")
 
   message("Variable types look correct? ")
   message("Use specific conversion functions to modify if needed:\n")
-  message("  • data$var <- as.factor(data$var)  # Convert to factor")
-  message("  • data$var <- as.numeric(data$var) # Convert to numeric")
-  message("  • data$var <- as.character(data$var) # Convert to character")
+  message("  - data$var <- as.factor(data$var)  # Convert to factor")
+  message("  - data$var <- as.numeric(data$var) # Convert to numeric")
+  message("  - data$var <- as.character(data$var) # Convert to character")
 
   return(list(
     data = data,
@@ -519,9 +512,9 @@ check_variable_types <- function(data, suggest_changes = TRUE) {
 print.imported_data <- function(x, ...) {
   cat("\n")
   cat("Imported Research Data\n")
-  cat("════════════════════════════════════════\n\n")
+  cat("========================================\n\n")
 
-  cat("Dimensions:", nrow(x$data), "rows ×", ncol(x$data), "columns\n")
+  cat("Dimensions:", nrow(x$data), "rows x", ncol(x$data), "columns\n")
   cat("Import time:", format(x$import_log$import_time), "\n")
 
   if (!is.null(x$import_log$changes_made)) {

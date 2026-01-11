@@ -100,9 +100,6 @@ perform_efa <- function(data,
     stop("Package 'ggplot2' is required. Install with: install.packages('ggplot2')")
   }
 
-  library(dplyr, warn.conflicts = FALSE)
-  library(ggplot2, warn.conflicts = FALSE)
-
   message("\n==== EXPLORATORY FACTOR ANALYSIS ====")
   message("Using tidyverse workflow for maximum clarity")
 
@@ -142,7 +139,7 @@ perform_efa <- function(data,
   # Check sample size adequacy
   if (n_complete < 50) {
     warning("Small sample size (n=", n_complete, "). ",
-            "Recommend n ≥ 100 for stable factor analysis.")
+            "Recommend n >= 100 for stable factor analysis.")
   }
 
   # Step 3: Check KMO and Bartlett's Test
@@ -225,7 +222,7 @@ perform_efa <- function(data,
       abs_loading = abs(loading),
       # Categorize loading strength
       strength = case_when(
-        abs_loading >= 0.70 ~ "Strong (≥0.70)",
+        abs_loading >= 0.70 ~ "Strong (>=0.70)",
         abs_loading >= 0.50 ~ "Moderate (0.50-0.69)",
         abs_loading >= 0.30 ~ "Weak (0.30-0.49)",
         TRUE ~ "Very Weak (<0.30)"
@@ -331,8 +328,8 @@ perform_efa <- function(data,
         panel.grid = element_blank()
       )
 
-    message("  ✓ Scree plot created")
-    message("  ✓ Loading heatmap created")
+    message("  PASS Scree plot created")
+    message("  PASS Loading heatmap created")
   }
 
   # Step 9: Generate Interpretation
@@ -396,7 +393,7 @@ perform_efa <- function(data,
 
   if (n_factors != n_suggested) {
     interpretation <- paste0(interpretation,
-      "• Consider using ", n_suggested, " factors based on eigenvalues\n"
+      "- Consider using ", n_suggested, " factors based on eigenvalues\n"
     )
   }
 
@@ -408,7 +405,7 @@ perform_efa <- function(data,
 
   if (nrow(weak_items) > 0) {
     interpretation <- paste0(interpretation,
-      "• Consider removing weak items (max loading < 0.50):\n"
+      "- Consider removing weak items (max loading < 0.50):\n"
     )
     for (i in 1:nrow(weak_items)) {
       interpretation <- paste0(interpretation,
@@ -420,7 +417,7 @@ perform_efa <- function(data,
 
   if (sum(variance_explained$percent_var) < 50) {
     interpretation <- paste0(interpretation,
-      "• Low total variance explained (< 50%). ",
+      "- Low total variance explained (< 50%). ",
       "Consider adding more items or revising existing ones.\n"
     )
   }

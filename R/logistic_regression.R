@@ -24,7 +24,7 @@
 #'
 #' For JCP publications, always report:
 #' - Odds ratios with 95% CIs
-#' - Model fit statistics (AIC, pseudo-R²)
+#' - Model fit statistics (AIC, pseudo-R^2)
 #' - Assumption checks (linearity of logit, multicollinearity)
 #' - Classification accuracy if relevant
 #'
@@ -153,7 +153,7 @@ run_logistic <- function(formula, data, family = stats::binomial(link = "logit")
 #'
 #' @references
 #' Norton, E. C., Dowd, B. E., & Maciejewski, M. L. (2019).
-#' Marginal Effects—Quantifying the Effect of Changes in Risk Factors in
+#' Marginal Effects--Quantifying the Effect of Changes in Risk Factors in
 #' Logistic Regression Models. JAMA, 321(13), 1304-1305.
 #'
 #' @export
@@ -364,7 +364,7 @@ logistic_assumptions <- function(model,
         remediation <- c(
           remediation,
           sprintf(
-            "Multicollinearity detected (VIF ≥ %.1f for: %s). Consider centering variables, removing redundant predictors, or using ridge regression.",
+            "Multicollinearity detected (VIF >= %.1f for: %s). Consider centering variables, removing redundant predictors, or using ridge regression.",
             vif_threshold,
             paste(high_vif, collapse = ", ")
           )
@@ -518,7 +518,7 @@ print.logistic_assumptions <- function(x, ...) {
   cat("1. Multicollinearity (VIF):\n")
   if (!is.null(x$vif$values) && !all(is.na(x$vif$values))) {
     cat(sprintf("   Max VIF: %.2f\n", x$vif$max_vif))
-    cat(sprintf("   Status: %s\n", if (x$vif$pass) "✓ PASS" else "✗ FAIL"))
+    cat(sprintf("   Status: %s\n", if (x$vif$pass) "PASS PASS" else "FAIL FAIL"))
   } else {
     cat("   Status: Not applicable (single predictor)\n")
   }
@@ -528,15 +528,15 @@ print.logistic_assumptions <- function(x, ...) {
   cat("2. Influential Cases (Cook's D):\n")
   cat(sprintf("   Number of influential cases: %d\n", x$influential$n_influential))
   cat(sprintf("   Threshold: %.4f\n", x$influential$threshold))
-  cat(sprintf("   Status: %s\n", if (x$influential$pass) "✓ PASS" else "✗ FAIL"))
+  cat(sprintf("   Status: %s\n", if (x$influential$pass) "PASS PASS" else "FAIL FAIL"))
   cat("\n")
 
   # Separation
   cat("3. Separation Check:\n")
   if (x$separation$pass) {
-    cat("   Status: ✓ PASS (no extreme coefficients)\n")
+    cat("   Status: PASS PASS (no extreme coefficients)\n")
   } else {
-    cat("   Status: ✗ FAIL (potential separation)\n")
+    cat("   Status: FAIL FAIL (potential separation)\n")
     cat(sprintf("   Large coefficients: %s\n", paste(x$separation$large_coefs, collapse = ", ")))
   }
   cat("\n")
@@ -548,7 +548,7 @@ print.logistic_assumptions <- function(x, ...) {
   } else {
     cat(sprintf("   Continuous predictors tested: %s\n",
                 paste(x$linearity$continuous_predictors, collapse = ", ")))
-    cat(sprintf("   Status: %s\n", if (x$linearity$pass) "✓ PASS" else "✗ FAIL"))
+    cat(sprintf("   Status: %s\n", if (x$linearity$pass) "PASS PASS" else "FAIL FAIL"))
     if (!x$linearity$pass) {
       cat(sprintf("   Non-linear: %s\n", paste(x$linearity$violations, collapse = ", ")))
     }
@@ -557,14 +557,14 @@ print.logistic_assumptions <- function(x, ...) {
 
   # Overall
   cat("Overall Status:\n")
-  cat(sprintf("   %s\n", if (x$all_pass) "✓ All assumptions met" else "✗ Some assumptions violated"))
+  cat(sprintf("   %s\n", if (x$all_pass) "PASS All assumptions met" else "FAIL Some assumptions violated"))
   cat("\n")
 
   # Remediation
   cat("Remediation:\n")
   if (is.character(x$remediation)) {
     for (rec in x$remediation) {
-      cat(sprintf("   • %s\n", rec))
+      cat(sprintf("   - %s\n", rec))
     }
   }
 
@@ -575,25 +575,25 @@ print.logistic_assumptions <- function(x, ...) {
 #' Calculate Pseudo R-squared for Logistic Regression
 #'
 #' Calculates multiple pseudo R-squared measures for logistic regression models.
-#' These are analogous to R² in linear regression but appropriate for binary outcomes.
+#' These are analogous to R^2 in linear regression but appropriate for binary outcomes.
 #'
 #' @param model A logistic regression model from \code{run_logistic()} or \code{glm()}
 #'
 #' @return A tibble with pseudo R-squared measures:
-#'   - mcfadden: McFadden's R² (most common)
-#'   - cox_snell: Cox & Snell R²
-#'   - nagelkerke: Nagelkerke R² (normalized Cox & Snell)
-#'   - tjur: Tjur's R² (coefficient of discrimination)
+#'   - mcfadden: McFadden's R^2 (most common)
+#'   - cox_snell: Cox & Snell R^2
+#'   - nagelkerke: Nagelkerke R^2 (normalized Cox & Snell)
+#'   - tjur: Tjur's R^2 (coefficient of discrimination)
 #'   - aic: Akaike Information Criterion
 #'   - bic: Bayesian Information Criterion
 #'
 #' @details
-#' Interpretation (McFadden's R²):
+#' Interpretation (McFadden's R^2):
 #' - 0.2-0.4: Excellent fit
 #' - 0.1-0.2: Good fit
 #' - < 0.1: Weak fit
 #'
-#' For JCP publications, report McFadden's R² and AIC/BIC for model comparison.
+#' For JCP publications, report McFadden's R^2 and AIC/BIC for model comparison.
 #'
 #' @references
 #' McFadden, D. (1977). Quantitative Methods for Analyzing Travel Behaviour of
@@ -627,16 +627,16 @@ pseudo_r2 <- function(model) {
 
   n <- nrow(model$model)
 
-  # McFadden's R²
+  # McFadden's R^2
   mcfadden <- 1 - (ll_model / ll_null)
 
-  # Cox & Snell R²
+  # Cox & Snell R^2
   cox_snell <- 1 - exp(-2 * (ll_model - ll_null) / n)
 
-  # Nagelkerke R²
+  # Nagelkerke R^2
   nagelkerke <- cox_snell / (1 - exp(2 * ll_null / n))
 
-  # Tjur's R² (coefficient of discrimination)
+  # Tjur's R^2 (coefficient of discrimination)
   fitted_probs <- stats::fitted(model)
   outcome <- model$model[[1]]
   if (is.factor(outcome)) {

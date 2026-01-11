@@ -270,7 +270,7 @@
 #'   - `exclusion_summary`: Table of exclusions (for your manuscript)
 #'   - `publication_text`: Copy-paste into your Methods section
 #'   - `flags`: Which participants were excluded for which reasons
-#'   - `renamed_vars`: Which variables were renamed (old → new)
+#'   - `renamed_vars`: Which variables were renamed (old -> new)
 #'   - `recoded_vars`: Which variables had values recoded
 #'
 #' @section For Novice Researchers:
@@ -489,11 +489,11 @@
 #'
 #'   # Rename Qualtrics' random names to meaningful names
 #'   rename_vars = list(
-#'     brand_attitude = "Q1",          # Q1 → brand_attitude
-#'     purchase_intent = "Q2",         # Q2 → purchase_intent
-#'     satisfaction = "Q3",            # Q3 → satisfaction
-#'     age = "Q17",                    # Q17 → age
-#'     condition = "FL_16_DO"          # Flow field → condition
+#'     brand_attitude = "Q1",          # Q1 -> brand_attitude
+#'     purchase_intent = "Q2",         # Q2 -> purchase_intent
+#'     satisfaction = "Q3",            # Q3 -> satisfaction
+#'     age = "Q17",                    # Q17 -> age
+#'     condition = "FL_16_DO"          # Flow field -> condition
 #'   ),
 #'
 #'   # Recode numeric codes to meaningful labels
@@ -597,10 +597,10 @@ clean_survey_data <- function(data,
       if (old_name %in% names(data)) {
         # Rename the column
         names(data)[names(data) == old_name] <- new_name
-        renamed_vars <- c(renamed_vars, paste0(old_name, " → ", new_name))
+        renamed_vars <- c(renamed_vars, paste0(old_name, " -> ", new_name))
 
         if (verbose) {
-          message("  Renamed: '", old_name, "' → '", new_name, "'")
+          message("  Renamed: '", old_name, "' -> '", new_name, "'")
         }
 
         # Update references in other parameters if needed
@@ -619,7 +619,7 @@ clean_survey_data <- function(data,
       } else {
         warning("Cannot rename '", old_name, "' - column not found in data")
         if (verbose) {
-          message("  ✗ Column '", old_name, "' not found")
+          message("  FAIL Column '", old_name, "' not found")
           message("    Available columns: ", paste(names(data)[1:min(10, length(names(data)))], collapse = ", "), "...")
         }
       }
@@ -660,7 +660,7 @@ clean_survey_data <- function(data,
           if (verbose) {
             message("  Recoded '", var_name, "': ", n_recoded, " value",
                     ifelse(n_recoded > 1, "s", ""), " changed")
-            message("    Mapping: ", paste(names(recode_map), "→", recode_map, collapse = ", "))
+            message("    Mapping: ", paste(names(recode_map), "->", recode_map, collapse = ", "))
           }
         } else if (verbose) {
           message("  '", var_name, "': No matching values found to recode")
@@ -668,7 +668,7 @@ clean_survey_data <- function(data,
       } else {
         warning("Cannot recode '", var_name, "' - column not found in data")
         if (verbose) {
-          message("  ✗ Column '", var_name, "' not found")
+          message("  FAIL Column '", var_name, "' not found")
         }
       }
     }
@@ -957,7 +957,7 @@ clean_survey_data <- function(data,
                   ifelse(n_fails > 1, "s", ""))
         }
       } else if (verbose) {
-        message("  '", criterion_name, "': all passed ✓")
+        message("  '", criterion_name, "': all passed PASS")
       }
     }
 
@@ -1040,7 +1040,7 @@ clean_survey_data <- function(data,
       if (verbose && n_failed_this > 0) {
         message("  '", check_name, "': ", n_failed_this, " failed")
       } else if (verbose) {
-        message("  '", check_name, "': all passed ✓")
+        message("  '", check_name, "': all passed PASS")
       }
     }
 
@@ -1110,7 +1110,7 @@ clean_survey_data <- function(data,
       # Update current sample
       current_indices <- setdiff(current_indices, attention_indices)
     } else if (verbose) {
-      message("\n  No failures - all passed the required attention checks ✓\n")
+      message("\n  No failures - all passed the required attention checks PASS\n")
     }
   }
 
@@ -1173,7 +1173,7 @@ clean_survey_data <- function(data,
         # Update current sample
         current_indices <- setdiff(current_indices, additional_indices)
       } else if (verbose) {
-        message("  No additional exclusions needed ✓\n")
+        message("  No additional exclusions needed PASS\n")
       }
     }
   }
@@ -1520,7 +1520,7 @@ generate_cleaning_publication_text <- function(n_initial,
   if (n_pretest > 0) {
     consort_text <- paste0(consort_text,
       "PRE-TEST RESPONSES (excluded before counting): n = ", n_pretest, "\n",
-      "  ↓\n"
+      "  v\n"
     )
   }
 
@@ -1532,7 +1532,7 @@ generate_cleaning_publication_text <- function(n_initial,
 
   if (!is.null(exclusion_log$inclusion)) {
     consort_text <- paste0(consort_text,
-      "  ↓ Excluded (inclusion criteria): n = ", exclusion_log$inclusion$n, "\n",
+      "  v Excluded (inclusion criteria): n = ", exclusion_log$inclusion$n, "\n",
       "After inclusion screening: n = ", current_n - exclusion_log$inclusion$n, "\n"
     )
     current_n <- current_n - exclusion_log$inclusion$n
@@ -1540,7 +1540,7 @@ generate_cleaning_publication_text <- function(n_initial,
 
   if (!is.null(exclusion_log$attention)) {
     consort_text <- paste0(consort_text,
-      "  ↓ Excluded (attention checks): n = ", exclusion_log$attention$n, "\n",
+      "  v Excluded (attention checks): n = ", exclusion_log$attention$n, "\n",
       "After attention screening: n = ", current_n - exclusion_log$attention$n, "\n"
     )
     current_n <- current_n - exclusion_log$attention$n
@@ -1548,7 +1548,7 @@ generate_cleaning_publication_text <- function(n_initial,
 
   if (!is.null(exclusion_log$additional)) {
     consort_text <- paste0(consort_text,
-      "  ↓ Excluded (", exclusion_log$additional$reason, "): n = ",
+      "  v Excluded (", exclusion_log$additional$reason, "): n = ",
       exclusion_log$additional$n, "\n",
       "After additional exclusions: n = ", current_n - exclusion_log$additional$n, "\n"
     )
@@ -1557,9 +1557,9 @@ generate_cleaning_publication_text <- function(n_initial,
 
   consort_text <- paste0(consort_text,
     "\n",
-    "═══════════════════════════════\n",
+    "===============================\n",
     "FINAL ANALYTICAL SAMPLE: n = ", n_final, "\n",
-    "═══════════════════════════════"
+    "==============================="
   )
 
   list(
@@ -1582,10 +1582,10 @@ generate_cleaning_publication_text <- function(n_initial,
 print.cleaning_result <- function(x, show_flow = TRUE, show_details = FALSE,
                                    show_publication = FALSE, ...) {
   cat("\n")
-  cat("═" %+% rep("═", 68) %+% "═\n", sep = "")
+  cat("=" %+% rep("=", 68) %+% "=\n", sep = "")
   cat("DATA CLEANING RESULTS\n")
   cat("Journal of Consumer Psychology Standards\n")
-  cat("═" %+% rep("═", 68) %+% "═\n", sep = "")
+  cat("=" %+% rep("=", 68) %+% "=\n", sep = "")
   cat("\n")
 
   cat("SAMPLE SUMMARY:\n")
@@ -1618,9 +1618,9 @@ print.cleaning_result <- function(x, show_flow = TRUE, show_details = FALSE,
   }
 
   if (show_publication) {
-    cat("═" %+% rep("═", 68) %+% "═\n", sep = "")
+    cat("=" %+% rep("=", 68) %+% "=\n", sep = "")
     cat("PUBLICATION-READY TEXT\n")
-    cat("═" %+% rep("═", 68) %+% "═\n", sep = "")
+    cat("=" %+% rep("=", 68) %+% "=\n", sep = "")
     cat("\nCONCISE VERSION (for brief Methods section):\n")
     cat(strwrap(x$publication_text$concise, width = 68, prefix = "  "), sep = "\n")
     cat("\n\nVERBOSE VERSION (with all details):\n")

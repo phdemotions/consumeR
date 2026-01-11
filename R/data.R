@@ -48,7 +48,7 @@
 #'
 #' ## Expected Results
 #'
-#' The treatment effect represents a small-to-medium effect size (Cohen's d ≈ 0.5),
+#' The treatment effect represents a small-to-medium effect size (Cohen's d ~= 0.5),
 #' typical of marketing interventions. This allows for demonstrating both
 #' significant effects and the importance of effect size interpretation.
 #'

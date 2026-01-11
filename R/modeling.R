@@ -163,7 +163,7 @@ emmeans_contrasts <- function(model,
     "REPORTING FOR PUBLICATION:\n",
     "Estimated marginal means were computed using the emmeans package (Lenth, 2023).\n",
     "Multiple comparisons were adjusted using the ", adjust, " method.\n",
-    "All tests were two-tailed with \u03B1 = .05.\n"
+    "All tests were two-tailed with alpha = .05.\n"
   )
 
   # Return structured result
@@ -215,7 +215,7 @@ emmeans_contrasts <- function(model,
 #'   - Use when: Significant interactions present, want to test simple effects
 #'   - Required for unbalanced designs with interactions
 #'
-#' **Partial Eta-Squared (\u03B7^2p):**
+#' **Partial Eta-Squared (eta-squaredp):**
 #' - Effect size: proportion of variance explained by each term
 #' - Guidelines: 0.01 = small, 0.06 = medium, 0.14 = large
 #' - More appropriate than eta-squared for factorial designs
@@ -283,7 +283,7 @@ run_anova <- function(model,
   rownames(anova_df) <- NULL
 
   # Calculate partial eta-squared
-  # \u03B7^2p = SS_effect / (SS_effect + SS_error)
+  # eta-squaredp = SS_effect / (SS_effect + SS_error)
   ss_error <- anova_df$`Sum Sq`[anova_df$term == "Residuals"]
 
   if (length(ss_error) == 0) {

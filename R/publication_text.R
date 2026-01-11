@@ -385,7 +385,7 @@ generate_anova_results <- function(results, effect_sizes = NULL) {
     eta_sq <- effect_sizes$eta_squared
     result_text <- paste0(
       result_text,
-      ", \u03B7^2 = ", round(eta_sq, 3)
+      ", eta-squared = ", round(eta_sq, 3)
     )
   }
 

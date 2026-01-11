@@ -197,14 +197,14 @@ print.mann_whitney <- function(x, ...) {
 #'   - statistic: H statistic (chi-square approximation)
 #'   - df: Degrees of freedom
 #'   - p_value: p-value
-#'   - epsilon_squared: Effect size (\u03B7^2 analog for ranks)
+#'   - epsilon_squared: Effect size (eta-squared analog for ranks)
 #'   - group_medians: Tibble with medians for each group
 #'   - interpretation: Publication-ready text
 #'
 #' @details
 #' **Effect Size (Epsilon-squared):**
 #' - epsilon^2 = H / (n^2 - 1) / (n + 1)
-#' - Interpretation: Similar to \u03B7^2, < 0.01 negligible, 0.01-0.06 small,
+#' - Interpretation: Similar to eta-squared, < 0.01 negligible, 0.01-0.06 small,
 #'   0.06-0.14 medium, > 0.14 large
 #'
 #' **Post-hoc Tests:**

@@ -123,7 +123,7 @@ The following are explicitly **not planned** as they fall outside the package's 
 - Spatial statistics (use `sf` or `spatstat`)
 - Network analysis (use `igraph` or `tidygraph`)
 
-**Design philosophy
+**Design philosophy**: consumeR focuses on transparent, assumption-based inference common in experimental and survey-based consumer research.
 
 ## Key Features
 

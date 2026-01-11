@@ -23,18 +23,15 @@ For example, spending amounts for treatment group consumers.}
 For example, spending amounts for control group consumers.}
 
 \item{test_type}{Character string specifying which test to use.
-Options are:
-\itemize{
-  \item "t.test" - Student's t-test (assumes normal distribution)
-  \item "wilcoxon" - Wilcoxon rank-sum test (non-parametric)
-  \item "auto" - Automatically chooses based on sample size (default)
-}}
+Options are: "t.test" for Student's t-test (assumes normal distribution),
+"wilcoxon" for Wilcoxon rank-sum test (non-parametric), or
+"auto" to automatically choose based on sample size (default).}
 
 \item{alternative}{Character string specifying the alternative hypothesis.
 Options are "two.sided" (default), "greater", or "less".}
 
 \item{conf_level}{Numeric. Confidence level for the interval. Default is 0.95
-(95% confidence).}
+(95\% confidence).}
 
 \item{paired}{Logical. Are the observations paired? Default is FALSE.}
 
@@ -46,46 +43,31 @@ and results are included in output.}
 When TRUE, includes verbose explanations suitable for learning.}
 }
 \value{
-A list containing:
-  \itemize{
-    \item \code{test_used}: Name of the statistical test performed
-    \item \code{p_value}: P-value from the test
-    \item \code{significant}: Logical, TRUE if p < 0.05
-    \item \code{group1_mean}: Mean of group 1
-    \item \code{group2_mean}: Mean of group 2
-    \item \code{group1_sd}: Standard deviation of group 1
-    \item \code{group2_sd}: Standard deviation of group 2
-    \item \code{difference}: Difference between group means
-    \item \code{effect_size}: Cohen's d effect size
-    \item \code{interpretation}: Plain English interpretation of results
-    \item \code{assumptions}: List of assumption check results (if check_assumptions = TRUE)
-    \item \code{publication_text}: Publication-ready text block
-    \item \code{full_test_output}: Complete test results object
-  }
+A list containing: test_used (name of the statistical test performed),
+p_value (P-value from the test), significant (logical, TRUE if p < 0.05),
+group1_mean, group2_mean, group1_sd, group2_sd, difference (difference between group means),
+ci_lower, ci_upper (confidence interval bounds), effect_size (Cohen's d),
+effect_interpretation, group1_n, group2_n, interpretation (plain English interpretation),
+assumptions (list of assumption check results if check_assumptions = TRUE),
+publication_text (publication-ready text block), and full_test_output (complete test results object).
 }
 \description{
 This function compares two groups of consumers to determine if they
 are statistically different. It is designed for maximum transparency
 during peer review, with clear documentation of every step and assumption.
-}
-\details{
+
 The function performs either a t-test (for normally distributed data)
 or a Wilcoxon test (for non-normal data). All steps are documented
 and assumptions are clearly stated.
-
-
-## How the Test Selection Works:
-When test_type = "auto" (default), the function chooses:
-\itemize{
-  \item t-test if both groups have n >= 30 (Central Limit Theorem applies)
-  \item Wilcoxon test if either group has n < 30 (safer for small samples)
 }
+\details{
+When test_type = "auto" (default), the function chooses t-test if both groups
+have n >= 30 (Central Limit Theorem applies) or Wilcoxon test if either group
+has n < 30 (safer for small samples).
 
-## Interpreting Results:
-\itemize{
-  \item p_value < 0.05: Groups are significantly different (reject null hypothesis)
-  \item p_value >= 0.05: No significant difference detected (fail to reject null)
-}
+For interpreting results: p_value < 0.05 indicates groups are significantly
+different (reject null hypothesis); p_value >= 0.05 indicates no significant
+difference detected (fail to reject null).
 }
 \examples{
 # Example 1: Compare spending between two groups
@@ -102,5 +84,4 @@ test_group_differences(satisfaction_a, satisfaction_b, alternative = "greater")
 before <- c(65, 72, 68, 71, 69, 70)
 after <- c(62, 68, 65, 69, 66, 67)
 test_group_differences(before, after, paired = TRUE)
-
 }

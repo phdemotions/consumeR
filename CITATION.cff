@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "consumeR: Transparent and Reproducible Consumer Research Analysis"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Josh
+    family-names: Gonzales
+    orcid: "https://orcid.org/0000-0001-8633-3380"
+repository-code: "https://github.com/phdemotions/consumeR"
+url: "https://github.com/phdemotions/consumeR"
+license: MIT
+version: "0.1.0"
+date-released: "2026-01-10"
+keywords:
+  - R
+  - statistics
+  - consumer research
+  - reproducibility
+  - data analysis
+preferred-citation:
+  type: software
+  authors:
+    - given-names: Josh
+      family-names: Gonzales
+      orcid: "https://orcid.org/0000-0001-8633-3380"
+  title: "consumeR: Transparent and Reproducible Consumer Research Analysis"
+  version: "0.1.0"
+  publisher: "Zenodo"
+  doi: "10.5281/zenodo.XXXXXXX"
+  year: 2026

@@ -128,7 +128,7 @@ calculate_composite_reliability <- function(data,
   item_variances <- sapply(item_data_complete, var)
   total_variance <- var(rowSums(item_data_complete))
   alpha <- (k / (k - 1)) * (1 - sum(item_variances) / total_variance)
-  message("  Cronbach's \u03B1 = ", round(alpha, 3))
+  message("  Cronbach's alpha = ", round(alpha, 3))
 
   # Step 4: Standardize Items (mean=0, sd=1)
   message("\nStandardizing items for factor analysis...")
@@ -163,8 +163,8 @@ calculate_composite_reliability <- function(data,
   # Sum of error variances (1 - loading^2)
   sum_error_variances <- sum(1 - loadings^2)
 
-  # CR formula: (Sum\u03BB)^2 / [(Sum\u03BB)^2 + Sum(1-\u03BB^2)]
-  # where \u03BB = factor loading
+  # CR formula: (Sumlambda)^2 / [(Sumlambda)^2 + Sum(1-lambda^2)]
+  # where lambda = factor loading
   composite_reliability <- (sum_loadings^2) / ((sum_loadings^2) + sum_error_variances)
 
   message("  Composite Reliability (CR) = ", round(composite_reliability, 3))
@@ -216,7 +216,7 @@ calculate_composite_reliability <- function(data,
   # Step 10: Generate Interpretation
   interpretation <- paste0(
     "COMPOSITE RELIABILITY ANALYSIS for ", scale_name, ":\n\n",
-    "Cronbach's Alpha: \u03B1 = ", round(alpha, 3), "\n",
+    "Cronbach's Alpha: alpha = ", round(alpha, 3), "\n",
     "Composite Reliability: CR = ", round(composite_reliability, 3),
     ifelse(cr_pass, " PASS (Good)", " FAIL (Below threshold)"), "\n",
     "Average Variance Extracted: AVE = ", round(ave, 3),

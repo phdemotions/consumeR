@@ -608,7 +608,7 @@ print.johnson_neyman <- function(x, ...) {
 
   cat(sprintf("Focal predictor: %s\n", x$focal))
   cat(sprintf("Moderator: %s\n", x$moderator))
-  cat(sprintf("Significance level: \u03B1 = %.3f\n\n", x$alpha))
+  cat(sprintf("Significance level: alpha = %.3f\n\n", x$alpha))
 
   if (nrow(x$critical_values) > 0) {
     cat("Transition Point(s):\n")

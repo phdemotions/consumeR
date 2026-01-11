@@ -35,7 +35,7 @@
 #' - Sphericity assumption only applies to within-subjects factors
 #'
 #' **Effect Sizes:**
-#' - Partial eta-squared (\u03B7p^2): Proportion of variance explained
+#' - Partial eta-squared (etap^2): Proportion of variance explained
 #' - Small: 0.01, Medium: 0.06, Large: 0.14
 #'
 #' **For JCP Publications:**
@@ -169,7 +169,7 @@ run_rm_anova <- function(data,
   )
 
   # Calculate partial eta-squared for each effect
-  # \u03B7p^2 = SS_effect / (SS_effect + SS_error)
+  # etap^2 = SS_effect / (SS_effect + SS_error)
   # Need to identify error terms for each effect
 
   anova_tidy <- anova_tidy |>
@@ -178,7 +178,7 @@ run_rm_anova <- function(data,
       interpretation = NA_character_
     )
 
-  # For within-subjects effects, calculate \u03B7p^2
+  # For within-subjects effects, calculate etap^2
   # This is complex because error terms vary by effect
   # For now, calculate based on available SS
   for (i in seq_len(nrow(anova_tidy))) {

@@ -16,7 +16,7 @@
 #' @return A list containing:
 #'   \itemize{
 #'     \item \code{method}: Correlation method used
-#'     \item \code{correlation}: Correlation coefficient (r or \u03C1)
+#'     \item \code{correlation}: Correlation coefficient (r or rho)
 #'     \item \code{p_value}: Statistical significance
 #'     \item \code{significant}: Is correlation significant?
 #'     \item \code{n}: Sample size
@@ -279,7 +279,7 @@ analyze_correlation <- function(data,
   if (is_significant) {
     interpretation <- paste0(
       interpretation,
-      "This correlation is statistically significant at \u03B1 = ", alpha, ". "
+      "This correlation is statistically significant at alpha = ", alpha, ". "
     )
 
     if (abs_r < 0.30) {
@@ -297,7 +297,7 @@ analyze_correlation <- function(data,
   } else {
     interpretation <- paste0(
       interpretation,
-      "This correlation is NOT statistically significant at \u03B1 = ", alpha, ". ",
+      "This correlation is NOT statistically significant at alpha = ", alpha, ". ",
       "There is insufficient evidence of a linear relationship."
     )
   }

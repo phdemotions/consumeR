@@ -5,8 +5,9 @@ type: software
 authors:
   - given-names: Josh
     family-names: Gonzales
-    email: phdemotions@users.noreply.github.com
+    email: joshgonzalesphd@gmail.com
     orcid: "https://orcid.org/0000-0001-8633-3380"
+    website: "https://joshgonzales.ca"
 repository-code: "https://github.com/phdemotions/consumeR"
 url: "https://github.com/phdemotions/consumeR"
 license: MIT
@@ -23,8 +24,9 @@ preferred-citation:
   authors:
     - given-names: Josh
       family-names: Gonzales
-      email: phdemotions@users.noreply.github.com
+      email: joshgonzalesphd@gmail.com
       orcid: "https://orcid.org/0000-0001-8633-3380"
+      website: "https://joshgonzales.ca"
   title: "consumeR: Transparent and Reproducible Consumer Research Analysis"
   version: "0.1.0"
   publisher: "Zenodo"

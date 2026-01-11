@@ -4,7 +4,7 @@ Title: Transparent and Reproducible Consumer Research Analysis
 Version: 0.1.0
 Authors@R: c(
     person("Josh", "Gonzales",
-           email = "phdemotions@users.noreply.github.com",
+           email = "joshgonzalesphd@gmail.com",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8633-3380"))
     )

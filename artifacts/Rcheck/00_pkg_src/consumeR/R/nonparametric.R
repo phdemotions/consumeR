@@ -279,7 +279,7 @@ kruskal_wallis_test <- function(data, outcome, group) {
 
   result <- list(
     statistic = as.numeric(H),
-    df = test_result$parameter,
+    df = as.numeric(test_result$parameter),
     p_value = test_result$p.value,
     epsilon_squared = as.numeric(epsilon_sq),
     group_medians = group_medians,
@@ -356,6 +356,15 @@ wilcoxon_signed_rank_test <- function(data = NULL,
   if (!is.null(data)) {
     if (is.null(before) || is.null(after)) {
       rlang::abort("If `data` provided, both `before` and `after` must be specified", class = "invalid_input")
+    }
+
+    # Check variables exist
+    missing_vars <- setdiff(c(before, after), names(data))
+    if (length(missing_vars) > 0) {
+      rlang::abort(
+        sprintf("Variables not found in data: %s", paste(missing_vars, collapse = ", ")),
+        class = "variable_not_found"
+      )
     }
 
     x <- data[[before]]
@@ -545,7 +554,7 @@ friedman_test <- function(data, outcome, time, subject) {
 
   result <- list(
     statistic = as.numeric(chi_sq),
-    df = test_result$parameter,
+    df = as.numeric(test_result$parameter),
     p_value = test_result$p.value,
     kendall_w = as.numeric(kendall_w),
     time_medians = time_medians,

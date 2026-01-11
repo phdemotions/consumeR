@@ -587,13 +587,18 @@ compare_cfa_models <- function(fit_small, fit_large, test = "default") {
 
   # Print interpretation
   message("\nChi-square difference test:")
-  message("  Deltachi^2(", df_diff, ") = ", round(chisq_diff, 2), ", p ",
-          if (p_diff < 0.001) "< .001" else paste("=", round(p_diff, 3)))
-
-  if (p_diff < 0.05) {
-    message("  Result: Larger model fits significantly better (p < .05)")
+  if (is.na(p_diff)) {
+    message("  Deltachi^2(", df_diff, ") = ", round(chisq_diff, 2), ", p = NA")
+    message("  Result: Unable to compute chi-square difference test")
   } else {
-    message("  Result: No significant difference. Prefer smaller (more parsimonious) model.")
+    message("  Deltachi^2(", df_diff, ") = ", round(chisq_diff, 2), ", p ",
+            if (p_diff < 0.001) "< .001" else paste("=", round(p_diff, 3)))
+
+    if (p_diff < 0.05) {
+      message("  Result: Larger model fits significantly better (p < .05)")
+    } else {
+      message("  Result: No significant difference. Prefer smaller (more parsimonious) model.")
+    }
   }
 
   message("\nAIC difference: ", round(aic_diff, 2), " (negative = large model better)")

@@ -543,6 +543,16 @@ compare_sem_models <- function(..., model_names = NULL) {
     )
   }
 
+  # Validate model_names length BEFORE calling lavaan::anova
+  if (!is.null(model_names)) {
+    if (length(model_names) != length(models)) {
+      rlang::abort(
+        "`model_names` must have same length as number of models",
+        class = "invalid_input"
+      )
+    }
+  }
+
   # Extract lavaan fits
   fits <- lapply(models, function(x) x$lavaan_fit)
 
@@ -554,12 +564,6 @@ compare_sem_models <- function(..., model_names = NULL) {
 
   # Add model names if provided
   if (!is.null(model_names)) {
-    if (length(model_names) != length(models)) {
-      rlang::abort(
-        "`model_names` must have same length as number of models",
-        class = "invalid_input"
-      )
-    }
     comp_tbl$model_name <- model_names
   }
 

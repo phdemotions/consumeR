@@ -1,4 +1,4 @@
-* using log directory '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp3YZAgw/file1621074166224/consumeR.Rcheck'
+* using log directory '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpE0egZq/file6536ac8ed9b/consumeR.Rcheck'
 * using R version 4.3.1 (2023-06-16)
 * using platform: aarch64-apple-darwin20 (64-bit)
 * R was compiled by
@@ -43,7 +43,7 @@ Warning: test_group_differences.Rd:71: unexpected section header '\details'
 Warning: test_group_differences.Rd:89: unexpected section header '\examples'
 Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
 '
- [6s/22s] NOTE
+ [6s/18s] NOTE
 Maintainer: 'Josh Gonzales <joshgonzalesphd@gmail.com>'
 
 New submission
@@ -80,7 +80,7 @@ File 'LICENSE':
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
-* checking whether package 'consumeR' can be installed ... [7s/12s] WARNING
+* checking whether package 'consumeR' can be installed ... [8s/11s] WARNING
 Found the following significant warnings:
   Warning: score_composite.Rd:39: unknown macro '\item'
   Warning: score_composite.Rd:41: unexpected section header '\value'
@@ -96,11 +96,10 @@ Found the following significant warnings:
   Warning: test_group_differences.Rd:71: unexpected section header '\details'
   Warning: test_group_differences.Rd:89: unexpected section header '\examples'
   Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
-See '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp3YZAgw/file1621074166224/consumeR.Rcheck/00install.out' for details.
+See '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpE0egZq/file6536ac8ed9b/consumeR.Rcheck/00install.out' for details.
 * checking installed package size ... OK
 * checking package directory ... OK
-* checking for future file timestamps ... NOTE
-unable to verify current time
+* checking for future file timestamps ... OK
 * checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... OK
@@ -123,7 +122,7 @@ Missing or unexported objects:
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... [14s/19s] OK
+* checking R code for possible problems ... [15s/22s] OK
 * checking Rd files ... WARNING
 prepare_Rd: score_composite.Rd:39: unknown macro '\item'
 prepare_Rd: score_composite.Rd:41: unexpected section header '\value'
@@ -167,26 +166,26 @@ Extensions' manual.
 * checking data for ASCII and uncompressed saves ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
-* checking examples ... [7s/12s] OK
+* checking examples ... [8s/10s] OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ...
-  Running 'testthat.R' [267s/407s]
- [267s/408s] ERROR
+  Running 'testthat.R' [294s/472s]
+ [294s/472s] ERROR
 Running the tests in 'tests/testthat.R' failed.
 Last 13 lines of output:
-       x
-    1. +-testthat::expect_error(...) at test-sem.R:404:3
-    2. | \-testthat:::quasi_capture(...)
-    3. |   +-testthat (local) .capture(...)
-    4. |   | \-base::withCallingHandlers(...)
-    5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-    6. \-consumeR::compare_sem_models(result, result2, model_names = "Only one name")
-    7.   +-base::do.call(lavaan::anova, fits)
-    8.   +-stats (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
-    9.   \-lavaan (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
-   10.     \-lavaan::lavTestLRT(object = object, ..., model.names = tmp.names)
   
-  [ FAIL 81 | WARN 41 | SKIP 1 | PASS 772 ]
+  `actual`:   FALSE
+  `expected`: TRUE 
+  -- Failure ('test-multiple_mediators.R:340:3'): mediation_serial calculates pathway-specific effects --
+  any(...) is not TRUE
+  
+  `actual`:   FALSE
+  `expected`: TRUE 
+  -- Failure ('test-multiple_mediators.R:614:3'): mediation_serial total equals sum of pathway effects --
+  `sum_pathways` not equal to `total`.
+  names for current but not for target
+  
+  [ FAIL 60 | WARN 38 | SKIP 2 | PASS 778 ]
   Error: Test failures
   Execution halted
 * checking for unstated dependencies in vignettes ... OK
@@ -196,9 +195,9 @@ Last 13 lines of output:
 * checking for detritus in the temp directory ... OK
 * DONE
 
-Status: 1 ERROR, 4 WARNINGs, 2 NOTEs
+Status: 1 ERROR, 4 WARNINGs, 1 NOTE
 See
-  '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp3YZAgw/file1621074166224/consumeR.Rcheck/00check.log'
+  '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpE0egZq/file6536ac8ed9b/consumeR.Rcheck/00check.log'
 for details.
 
 

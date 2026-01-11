@@ -494,10 +494,10 @@ rm_pairwise <- function(rm_anova_result,
   emm <- emmeans::emmeans(model, specs = factor)
 
   # Pairwise comparisons
-  pairs <- emmeans::pairs(emm, adjust = p_adjust)
+  pairs_result <- pairs(emm, adjust = p_adjust)
 
   # Convert to tibble
-  pairs_tidy <- tibble::as_tibble(summary(pairs))
+  pairs_tidy <- tibble::as_tibble(summary(pairs_result))
 
   # Add effect sizes (Cohen's d for paired comparisons)
   # d = mean_diff / sd_diff

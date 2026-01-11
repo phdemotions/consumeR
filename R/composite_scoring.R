@@ -202,6 +202,7 @@ row_sd <- function(data, items = NULL, na.rm = TRUE) {
 
 #' Score Composite Scale with Metadata
 #'
+#' @description
 #' Calculates composite scores from multiple items with optional reverse scoring
 #' and flexible NA handling. Returns a structured object with scores and metadata.
 #'

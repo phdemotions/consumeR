@@ -179,46 +179,46 @@ quick_test_help <- function(data, outcome, predictor) {
   # Print formatted recommendation
   if (!is.null(recommendation)) {
     cat("\n")
-    cat("════════════════════════════════════════════════════════════\n")
+    cat("============================================================\n")
     cat("  RECOMMENDED TEST FOR YOUR DATA\n")
-    cat("════════════════════════════════════════════════════════════\n\n")
+    cat("============================================================\n\n")
 
-    cat("📊 YOUR SITUATION:\n")
+    cat("YOUR SITUATION:\n")
     cat("  ", recommendation$scenario, "\n\n")
 
-    cat("✓ RECOMMENDED TEST:\n")
+    cat("RECOMMENDED TEST:\n")
     cat("  ", recommendation$test_name, "\n\n")
 
-    cat("📦 USE THIS FUNCTION:\n")
+    cat("USE THIS FUNCTION:\n")
     cat("  ", recommendation$function_to_use, "\n\n")
 
-    cat("💡 WHY THIS TEST?\n")
+    cat("WHY THIS TEST?\n")
     wrapped <- strwrap(recommendation$why, width = 58, prefix = "   ")
     cat(paste(wrapped, collapse = "\n"), "\n\n")
 
-    cat("💻 COPY AND RUN THIS CODE:\n\n")
+    cat("COPY AND RUN THIS CODE:\n\n")
     code_lines <- strsplit(recommendation$example_code, "\n")[[1]]
     for (line in code_lines) {
       cat("   ", line, "\n")
     }
     cat("\n")
 
-    cat("📝 NEXT STEPS:\n")
+    cat("NEXT STEPS:\n")
     for (step in recommendation$next_steps) {
       cat("  ", step, "\n")
     }
     cat("\n")
 
-    cat("════════════════════════════════════════════════════════════\n")
+    cat("============================================================\n")
     cat("Need more help? Type: ?", recommendation$function_to_use, "\n")
-    cat("════════════════════════════════════════════════════════════\n\n")
+    cat("============================================================\n\n")
 
     invisible(recommendation)
   } else {
     cat("\n")
-    cat("════════════════════════════════════════════════════════════\n")
+    cat("============================================================\n")
     cat("  HELP NEEDED\n")
-    cat("════════════════════════════════════════════════════════════\n\n")
+    cat("============================================================\n\n")
 
     cat("I'm not sure which test to recommend for this combination.\n\n")
 
@@ -233,7 +233,7 @@ quick_test_help <- function(data, outcome, predictor) {
     cat("  2. Email: joshgonzalesphd@gmail.com\n")
     cat("  3. Open an issue at: https://github.com/phdemotions/consumeR/issues\n\n")
 
-    cat("════════════════════════════════════════════════════════════\n\n")
+    cat("============================================================\n\n")
 
     invisible(NULL)
   }

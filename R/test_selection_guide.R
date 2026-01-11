@@ -436,39 +436,41 @@ determine_test_recommendation <- function(research_goal,
 
 
 #' Print Method for Test Recommendations
+#' @param x A test_recommendation object
+#' @param ... Additional arguments (unused)
 #' @export
 print.test_recommendation <- function(x, ...) {
   cat("\n")
-  cat("╔══════════════════════════════════════════════════════════════╗\n")
-  cat("║          RECOMMENDED STATISTICAL TEST                       ║\n")
-  cat("╚══════════════════════════════════════════════════════════════╝\n\n")
+  cat("===============================================================\n")
+  cat("         RECOMMENDED STATISTICAL TEST                         \n")
+  cat("===============================================================\n\n")
 
-  cat("📊 TEST:", x$recommended_test, "\n\n")
+  cat("TEST:", x$recommended_test, "\n\n")
 
-  cat("📦 FUNCTION TO USE:", x$function_name, "\n\n")
+  cat("FUNCTION TO USE:", x$function_name, "\n\n")
 
-  cat("💡 WHY THIS TEST?\n")
+  cat("WHY THIS TEST?\n")
   cat("  ", gsub("\n", "\n   ", x$explanation), "\n\n")
 
-  cat("✓ ASSUMPTIONS TO CHECK:\n")
+  cat("ASSUMPTIONS TO CHECK:\n")
   for (assumption in x$assumptions) {
-    cat("  •", assumption, "\n")
+    cat("  -", assumption, "\n")
   }
   cat("\n")
 
-  cat("💻 EXAMPLE CODE:\n")
+  cat("EXAMPLE CODE:\n")
   cat("  ", x$example_code, "\n\n")
 
   if (length(x$alternative_tests) > 0) {
-    cat("🔄 ALTERNATIVES TO CONSIDER:\n")
+    cat("ALTERNATIVES TO CONSIDER:\n")
     for (alt in x$alternative_tests) {
-      cat("  •", alt, "\n")
+      cat("  -", alt, "\n")
     }
     cat("\n")
   }
 
-  cat("───────────────────────────────────────────────────────────────\n")
-  cat("💭 NEXT STEPS:\n")
+  cat("---------------------------------------------------------------\n")
+  cat("NEXT STEPS:\n")
   cat("  1. Make sure your data meets the assumptions listed above\n")
   cat("  2. Run the example code (modify variable names as needed)\n")
   cat("  3. Look at the output - it explains the results in plain English\n")

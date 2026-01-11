@@ -123,7 +123,11 @@ run_mlm <- function(formula,
 
   # Fit model
   fit <- tryCatch(
-    lme4::lmer(formula = formula, data = data, REML = REML, control = control, ...),
+    if (is.null(control)) {
+      lme4::lmer(formula = formula, data = data, REML = REML, ...)
+    } else {
+      lme4::lmer(formula = formula, data = data, REML = REML, control = control, ...)
+    },
     error = function(e) {
       rlang::abort(
         sprintf("MLM model failed to converge: %s", e$message),

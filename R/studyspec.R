@@ -304,7 +304,7 @@ standardize_vars <- function(data, spec) {
       data,
       dplyr::across(
         dplyr::all_of(vars),
-        ~ as.numeric(stats::scale(.x))
+        ~ as.numeric(scale(.x))
       )
     ),
     rlang::abort(paste0("Unsupported standardization method: ", method))

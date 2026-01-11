@@ -6,6 +6,11 @@
 \usage{
 \method{print}{test_recommendation}(x, ...)
 }
+\arguments{
+\item{x}{A test_recommendation object}
+
+\item{...}{Additional arguments (unused)}
+}
 \description{
 Print Method for Test Recommendations
 }

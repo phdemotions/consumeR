@@ -46,6 +46,7 @@ Suggests:
     lmtest (>= 0.9.0),
     effectsize (>= 0.7.0),
     correlation (>= 0.8.0),
+    haven (>= 2.0.0),
     jsonlite,
     lme4,
     lmerTest,

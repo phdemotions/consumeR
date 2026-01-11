@@ -369,6 +369,7 @@ fisher_exact_test <- function(data = NULL,
     odds_ratio = or,
     or_ci_lower = or_ci_lower,
     or_ci_upper = or_ci_upper,
+    alternative = alternative,
     n = sum(obs_table),
     interpretation = interpretation
   )

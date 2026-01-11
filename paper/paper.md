@@ -10,6 +10,7 @@ authors:
   - name: Josh Gonzales
     orcid: 0000-0001-8633-3380
     affiliation: 1
+    corresponding: true
 affiliations:
   - name: Independent Researcher
     index: 1

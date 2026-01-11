@@ -25,11 +25,13 @@
 #'   \item Complete documentation with multiple examples
 #' }
 #'
-#' @docType package
-#' @name consumeR-package
-#' @aliases consumeR
+#' @keywords internal
 #' @import graphics
 #' @import grDevices
 #' @import utils
 #' @import methods
+"_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
 NULL

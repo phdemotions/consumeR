@@ -22,17 +22,19 @@ chisq_test(data = NULL, x, y, correct = TRUE, simulate_p = FALSE, B = 2000)
 \value{
 A list with class "chisq_result" containing:
 \itemize{
-  \item \code{chisq}: Chi-square statistic
+  \item \code{statistic}: Chi-square statistic
   \item \code{df}: Degrees of freedom
   \item \code{p_value}: P-value
   \item \code{cramers_v}: Cramer's V effect size
   \item \code{effect_interp}: Effect size interpretation
+  \item \code{n}: Total sample size
   \item \code{observed}: Observed frequencies table
   \item \code{expected}: Expected frequencies table
   \item \code{residuals}: Standardized residuals
   \item \code{cells_low_expected}: Cells with expected count < 5
   \item \code{use_fisher}: Recommendation to use Fisher's exact if needed
   \item \code{interpretation}: Publication-ready text
+  \item \code{publication_text}: APA-style results statement
 }
 }
 \description{

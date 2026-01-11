@@ -24,17 +24,19 @@ NULL
 #'
 #' @return A list with class "chisq_result" containing:
 #' \itemize{
-#'   \item \code{chisq}: Chi-square statistic
+#'   \item \code{statistic}: Chi-square statistic
 #'   \item \code{df}: Degrees of freedom
 #'   \item \code{p_value}: P-value
 #'   \item \code{cramers_v}: Cramer's V effect size
 #'   \item \code{effect_interp}: Effect size interpretation
+#'   \item \code{n}: Total sample size
 #'   \item \code{observed}: Observed frequencies table
 #'   \item \code{expected}: Expected frequencies table
 #'   \item \code{residuals}: Standardized residuals
 #'   \item \code{cells_low_expected}: Cells with expected count < 5
 #'   \item \code{use_fisher}: Recommendation to use Fisher's exact if needed
 #'   \item \code{interpretation}: Publication-ready text
+#'   \item \code{publication_text}: APA-style results statement
 #' }
 #'
 #' @details
@@ -234,8 +236,8 @@ chisq_test <- function(data = NULL,
   # Return structured result
   structure(
     list(
-      chisq = chisq_stat,
-      df = df,
+      statistic = as.numeric(chisq_stat),
+      df = as.numeric(df),
       p_value = p_value,
       cramers_v = cramers_v,
       effect_interp = effect_interp,
@@ -488,7 +490,7 @@ mcnemar_test <- function(data,
   message("\n", interpretation)
 
   tibble::tibble(
-    chisq = chisq_stat,
+    statistic = as.numeric(chisq_stat),
     df = 1,
     p_value = p_value,
     n_pairs = sum(obs_table),
@@ -628,7 +630,11 @@ odds_ratio_table <- function(data = NULL,
   message("\nOdds Ratio: OR = ", round(or, 3),
           ", 95% CI [", round(or_ci_lower, 3), ", ", round(or_ci_upper, 3), "]")
   message("Interpretation: ", result$interpretation)
-  message("p-value = ", if (p_value < 0.001) "< .001" else round(p_value, 3))
+  if (!is.na(p_value)) {
+    message("p-value = ", if (p_value < 0.001) "< .001" else round(p_value, 3))
+  } else {
+    message("p-value = NA")
+  }
 
   result
 }
@@ -640,7 +646,7 @@ print.chisq_result <- function(x, ...) {
   cat("Chi-Square Test of Independence\n")
   cat("================================\n\n")
 
-  cat("chi^2(", x$df, ") = ", round(x$chisq, 2),
+  cat("chi^2(", x$df, ") = ", round(x$statistic, 2),
       ", p ", if (x$p_value < 0.001) "< .001" else paste("=", round(x$p_value, 3)), "\n")
   cat("Cramer's V = ", round(x$cramers_v, 3), " (", x$effect_interp, ")\n")
   cat("Sample size: N = ", x$n, "\n\n")
@@ -649,7 +655,7 @@ print.chisq_result <- function(x, ...) {
   print(x$observed)
 
   if (x$use_fisher) {
-    cat("\nWARNING: WARNING: Consider using Fisher's exact test (low expected frequencies)\n")
+    cat("\nWARNING: Consider using Fisher's exact test (low expected frequencies)\n")
   }
 
   cat("\n")

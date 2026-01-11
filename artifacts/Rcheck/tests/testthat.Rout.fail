@@ -148,7 +148,7 @@ Satisfaction	7.23	1.46
 ---
 Then paste into Excel, Google Sheets, or other spreadsheet software.
 
-[ FAIL 60 | WARN 38 | SKIP 2 | PASS 778 ]
+[ FAIL 54 | WARN 35 | SKIP 2 | PASS 785 ]
 
 == Skipped tests (2) ===========================================================
 * Manual test: unload knitr and verify error (1):
@@ -166,18 +166,7 @@ Backtrace:
  2.   \-testthat::expect_match(...)
  3.     \-testthat:::expect_match_(...)
 -- Failure ('test-categorical_tests.R:16:3'): chisq_test works with 2x2 table --
-Names of `result` ('chisq', 'df', 'p_value', 'cramers_v', 'effect_interp', 'n', 'observed', 'expected', 'residuals', 'cells_low_expected', 'use_fisher', 'interpretation', 'publication_text') don't match 'statistic', 'df', 'p_value', 'cramers_v', 'observed', 'expected', 'residuals', 'interpretation'
--- Failure ('test-categorical_tests.R:18:3'): chisq_test works with 2x2 table --
-result$statistic > 0 is not TRUE
-
-`actual`:       
-`expected`: TRUE
--- Failure ('test-categorical_tests.R:19:3'): chisq_test works with 2x2 table --
-result$df not equal to 1.
-names for target but not for current
--- Failure ('test-categorical_tests.R:35:3'): chisq_test works with 3x3 table --
-result$df not equal to 4.
-names for target but not for current
+Names of `result` ('statistic', 'df', 'p_value', 'cramers_v', 'effect_interp', 'n', 'observed', 'expected', 'residuals', 'cells_low_expected', 'use_fisher', 'interpretation', 'publication_text') don't match 'statistic', 'df', 'p_value', 'cramers_v', 'observed', 'expected', 'residuals', 'interpretation'
 -- Failure ('test-categorical_tests.R:37:3'): chisq_test works with 3x3 table --
 result$expected is not an S3 object
 -- Failure ('test-categorical_tests.R:47:3'): chisq_test warns about low expected frequencies --
@@ -186,13 +175,6 @@ Expected match: expected frequencies less than 5
 Actual values:
 * Chi-squared approximation may be incorrect
 * Expected frequency < 5 in some cells. Consider using fisher_exact_test() instead.
--- Error ('test-categorical_tests.R:64:3'): chisq_test handles continuity correction --
-Error in `expect_compare("<=", act, exp)`: Result of comparison must be a single logical value
-Backtrace:
-    x
- 1. \-testthat::expect_lte(result_corrected$statistic, result_uncorrected$statistic) at test-categorical_tests.R:64:3
- 2.   \-testthat:::expect_compare("<=", act, exp)
- 3.     \-rlang::abort("Result of comparison must be a single logical value")
 -- Failure ('test-categorical_tests.R:70:3'): chisq_test validates inputs ------
 `chisq_test(df, x = "missing", y = "y")` threw an error with unexpected message.
 Expected match: "not found"
@@ -271,24 +253,12 @@ Backtrace:
  7.   \-consumeR::assert_vars_present(data, c(x, y), "Fisher's exact test")
  8.     \-rlang::abort(...)
 -- Failure ('test-categorical_tests.R:156:3'): mcnemar_test works with paired data --
-Names of `result` ('chisq', 'df', 'p_value', 'n_pairs', 'n_changed', 'pct_changed', 'odds_ratio_change', 'interpretation') don't match 'statistic', 'p_value', 'n_discordant', 'pct_changed', 'odds_ratio_change', 'interpretation'
--- Failure ('test-categorical_tests.R:158:3'): mcnemar_test works with paired data --
-result$statistic >= 0 is not TRUE
-
-`actual`:       
-`expected`: TRUE
+Names of `result` ('statistic', 'df', 'p_value', 'n_pairs', 'n_changed', 'pct_changed', 'odds_ratio_change', 'interpretation') don't match 'statistic', 'p_value', 'n_discordant', 'pct_changed', 'odds_ratio_change', 'interpretation'
 -- Failure ('test-categorical_tests.R:160:3'): mcnemar_test works with paired data --
 result$n_discordant >= 0 is not TRUE
 
 `actual`:       
 `expected`: TRUE
--- Error ('test-categorical_tests.R:176:3'): mcnemar_test handles continuity correction --
-Error in `expect_compare("<=", act, exp)`: Result of comparison must be a single logical value
-Backtrace:
-    x
- 1. \-testthat::expect_lte(result_corrected$statistic, result_uncorrected$statistic) at test-categorical_tests.R:176:3
- 2.   \-testthat:::expect_compare("<=", act, exp)
- 3.     \-rlang::abort("Result of comparison must be a single logical value")
 -- Failure ('test-categorical_tests.R:182:3'): mcnemar_test validates inputs ---
 `mcnemar_test(df, var1 = "missing", var2 = "y")` threw an error with unexpected message.
 Expected match: "not found"
@@ -360,19 +330,8 @@ Backtrace:
  6. \-consumeR::odds_ratio_table(df, x = "x", y = "missing")
  7.   \-consumeR::assert_vars_present(data, c(x, y), "odds ratio")
  8.     \-rlang::abort(...)
--- Error ('test-categorical_tests.R:281:3'): odds_ratio_table handles zero cells gracefully --
-Error in `if (p_value < 0.001) "< .001" else round(p_value, 3)`: missing value where TRUE/FALSE needed
-Backtrace:
-    x
- 1. +-testthat::expect_warning(...) at test-categorical_tests.R:281:3
- 2. | \-testthat:::quasi_capture(...)
- 3. |   +-testthat (local) .capture(...)
- 4. |   | \-base::withCallingHandlers(...)
- 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
- 6. \-consumeR::odds_ratio_table(df, x = "x", y = "y")
- 7.   \-base::message(...)
- 8.     \-base::.makeMessage(..., domain = domain, appendLF = appendLF)
- 9.       \-base::lapply(list(...), as.character)
+-- Failure ('test-categorical_tests.R:281:3'): odds_ratio_table handles zero cells gracefully --
+`result <- odds_ratio_table(df, x = "x", y = "y")` did not produce any warnings.
 -- Failure ('test-categorical_tests.R:295:3'): categorical test functions handle NA values appropriately --
 `chisq_test(df, x = "x", y = "y")` produced unexpected warnings.
 Expected match: NA|missing
@@ -631,6 +590,6 @@ any(...) is not TRUE
 `sum_pathways` not equal to `total`.
 names for current but not for target
 
-[ FAIL 60 | WARN 38 | SKIP 2 | PASS 778 ]
+[ FAIL 54 | WARN 35 | SKIP 2 | PASS 785 ]
 Error: Test failures
 Execution halted

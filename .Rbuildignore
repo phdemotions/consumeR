@@ -14,4 +14,8 @@
 ^CITATION\.cff$
 ^cran-comments\.md$
 ^data-raw$
-^paper$
+^CONTRIBUTING\.md$
+^CRAN_READINESS_STATUS\.md$
+^JOSS_READINESS\.md$
+^NOVICE_TESTING_SUMMARY\.md$
+^DESCRIPTION\.bak$

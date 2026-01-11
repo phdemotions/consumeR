@@ -3,9 +3,9 @@ Type: Package
 Title: Transparent and Reproducible Consumer Research Analysis
 Version: 0.1.0
 Authors@R: c(
-    person("Your", "Name", email = "your.email@example.com",
+    person("Josh", "Gonzales",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0000-0000-0000"))
+           comment = c(ORCID = "0000-0001-8633-3380"))
     )
 Description: Provides transparent, well-documented functions for consumer research
     analysis that facilitate reproducibility during peer review. All functions are

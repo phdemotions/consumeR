@@ -1,0 +1,832 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+Warning message:
+package 'testthat' was built under R version 4.3.3 
+> library(consumeR)
+> 
+> test_check("consumeR")
+=============================
+Consumer Data Analysis Report
+=============================
+Generated on: 2026-01-11
+
+SECTION 1: DATA OVERVIEW
+--------------------------------------------------
+Variable analyzed: Variable
+Total observations: 5
+Valid observations: 5
+Missing values: 0 (0.0%)
+
+SECTION 2: DESCRIPTIVE STATISTICS
+--------------------------------------------------
+Sample size (n): 5
+
+Central Tendency Measures:
+  Mean: 3
+  Median: 3
+
+Variability Measures:
+  Standard Deviation: 1.58
+  Variance: 2.5
+  Interquartile Range (IQR): 2
+
+Range:
+  Minimum: 1
+  Maximum: 5
+  Range: 4
+
+Quartiles:
+  25th percentile (Q1): 2
+  50th percentile (Q2/Median): 3
+  75th percentile (Q3): 4
+
+SECTION 4: METHODOLOGICAL NOTES
+--------------------------------------------------
+For complete transparency and reproducibility, note the following:
+
+1. Missing Value Handling:
+   - Missing values (NA) were removed before all calculations
+   - 0 out of 5 observations were missing (0.0%)
+
+2. Statistical Methods:
+   - Descriptive statistics calculated using base R functions
+   - Standard deviation uses n-1 denominator (sample SD)
+
+3. Software:
+   - R version: R version 4.3.1 (2023-06-16)
+   - Package: consumeR
+
+==================================================
+END OF REPORT
+================================================== 
+=============================
+Consumer Data Analysis Report
+=============================
+Generated on: 2026-01-11
+
+SECTION 1: DATA OVERVIEW
+--------------------------------------------------
+Variable analyzed: Variable
+Total observations: 5
+Valid observations: 5
+Missing values: 0 (0.0%)
+
+SECTION 2: DESCRIPTIVE STATISTICS
+--------------------------------------------------
+Sample size (n): 5
+
+Central Tendency Measures:
+  Mean: 3
+  Median: 3
+
+Variability Measures:
+  Standard Deviation: 1.58
+  Variance: 2.5
+  Interquartile Range (IQR): 2
+
+Range:
+  Minimum: 1
+  Maximum: 5
+  Range: 4
+
+Quartiles:
+  25th percentile (Q1): 2
+  50th percentile (Q2/Median): 3
+  75th percentile (Q3): 4
+
+SECTION 4: METHODOLOGICAL NOTES
+--------------------------------------------------
+For complete transparency and reproducibility, note the following:
+
+1. Missing Value Handling:
+   - Missing values (NA) were removed before all calculations
+   - 0 out of 5 observations were missing (0.0%)
+
+2. Statistical Methods:
+   - Descriptive statistics calculated using base R functions
+   - Standard deviation uses n-1 denominator (sample SD)
+
+3. Software:
+   - R version: R version 4.3.1 (2023-06-16)
+   - Package: consumeR
+
+==================================================
+END OF REPORT
+================================================== 
+Parallel analysis suggests that the number of factors =  2  and the number of components =  2 
+Parallel analysis suggests that the number of factors =  2  and the number of components =  2 
+Parallel analysis suggests that the number of factors =  1  and the number of components =  1 
+|Variable     |     Mean|       SD|
+|:------------|--------:|--------:|
+|Age          |    34.57|     8.32|
+|Income       | 65432.10| 15234.70|
+|Satisfaction |     7.23|     1.46|
+
+=== TSV TABLE (Copy-Paste Ready) ===
+Select the text below and copy (Ctrl+C or Cmd+C):
+---
+Variable	Mean	SD
+Age	34.57	8.32
+Income	65432.1	15234.7
+Satisfaction	7.23	1.46 
+---
+Then paste into Excel, Google Sheets, or other spreadsheet software.
+
+[ FAIL 81 | WARN 41 | SKIP 1 | PASS 772 ]
+
+== Skipped tests (1) ===========================================================
+* Manual test: unload knitr and verify error (1):
+  'test-table_formatting.R:48:3'
+
+== Failed tests ================================================================
+-- Failure ('test-analysis_report.R:8:3'): create_analysis_report works with vector input --
+`result <- create_analysis_report\(data, title = "Test Report"\)` does not match "Consumer Data Analysis".
+Actual value: "===========\\nTest Report\\n===========\\nGenerated on: 2026-01-11\\n\\nSECTION 1: DATA OVERVIEW\\n--------------------------------------------------\\nVariable analyzed: Variable\\nTotal observations: 10\\nValid observations: 10\\nMissing values: 0 \(0\.0%\)\\n\\nSECTION 2: DESCRIPTIVE STATISTICS\\n--------------------------------------------------\\nSample size \(n\): 10\\n\\nCentral Tendency Measures:\\n  Mean: 5\.5\\n  Median: 5\.5\\n\\nVariability Measures:\\n  Standard Deviation: 3\.03\\n  Variance: 9\.17\\n  Interquartile Range \(IQR\): 4\.5\\n\\nRange:\\n  Minimum: 1\\n  Maximum: 10\\n  Range: 9\\n\\nQuartiles:\\n  25th percentile \(Q1\): 3\.25\\n  50th percentile \(Q2/Median\): 5\.5\\n  75th percentile \(Q3\): 7\.75\\n\\nSECTION 4: METHODOLOGICAL NOTES\\n--------------------------------------------------\\nFor complete transparency and reproducibility, note the following:\\n\\n1\. Missing Value Handling:\\n   - Missing values \(NA\) were removed before all calculations\\n   - 0 out of 10 observations were missing \(0\.0%\)\\n\\n2\. Statistical Methods:\\n   - Descriptive statistics calculated using base R functions\\n   - Standard deviation uses n-1 denominator \(sample SD\)\\n\\n3\. Software:\\n   - R version: R version 4\.3\.1 \(2023-06-16\)\\n   - Package: consumeR\\n\\n==================================================\\nEND OF REPORT\\n================================================== "
+Backtrace:
+    x
+ 1. \-testthat::expect_output(...) at test-analysis_report.R:8:3
+ 2.   \-testthat::expect_match(...)
+ 3.     \-testthat:::expect_match_(...)
+-- Failure ('test-categorical_tests.R:16:3'): chisq_test works with 2x2 table --
+Names of `result` ('chisq', 'df', 'p_value', 'cramers_v', 'effect_interp', 'n', 'observed', 'expected', 'residuals', 'cells_low_expected', 'use_fisher', 'interpretation', 'publication_text') don't match 'statistic', 'df', 'p_value', 'cramers_v', 'observed', 'expected', 'residuals', 'interpretation'
+-- Failure ('test-categorical_tests.R:18:3'): chisq_test works with 2x2 table --
+result$statistic > 0 is not TRUE
+
+`actual`:       
+`expected`: TRUE
+-- Failure ('test-categorical_tests.R:19:3'): chisq_test works with 2x2 table --
+result$df not equal to 1.
+names for target but not for current
+-- Failure ('test-categorical_tests.R:35:3'): chisq_test works with 3x3 table --
+result$df not equal to 4.
+names for target but not for current
+-- Failure ('test-categorical_tests.R:37:3'): chisq_test works with 3x3 table --
+result$expected is not an S3 object
+-- Failure ('test-categorical_tests.R:47:3'): chisq_test warns about low expected frequencies --
+`chisq_test(df, x = "x", y = "y")` produced unexpected warnings.
+Expected match: expected frequencies less than 5
+Actual values:
+* Chi-squared approximation may be incorrect
+* Expected frequency < 5 in some cells. Consider using fisher_exact_test() instead.
+-- Error ('test-categorical_tests.R:64:3'): chisq_test handles continuity correction --
+Error in `expect_compare("<=", act, exp)`: Result of comparison must be a single logical value
+Backtrace:
+    x
+ 1. \-testthat::expect_lte(result_corrected$statistic, result_uncorrected$statistic) at test-categorical_tests.R:64:3
+ 2.   \-testthat:::expect_compare("<=", act, exp)
+ 3.     \-rlang::abort("Result of comparison must be a single logical value")
+-- Failure ('test-categorical_tests.R:70:3'): chisq_test validates inputs ------
+`chisq_test(df, x = "missing", y = "y")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for chi-square test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:70:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::chisq_test(df, x = "missing", y = "y")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "chi-square test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:71:3'): chisq_test validates inputs ------
+`chisq_test(df, x = "x", y = "missing")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for chi-square test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:71:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::chisq_test(df, x = "x", y = "missing")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "chi-square test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:85:3'): chisq_test print method works ----
+any(grepl("<U+03C7><U+00B2>", output)) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+-- Failure ('test-categorical_tests.R:86:3'): chisq_test print method works ----
+any(grepl("Cram<U+00E9>r's V", output)) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+-- Failure ('test-categorical_tests.R:101:3'): fisher_exact_test works with 2x2 table --
+Names of `result` ('p_value', 'odds_ratio', 'or_ci_lower', 'or_ci_upper', 'n', 'interpretation') don't match 'p_value', 'odds_ratio', 'or_ci_lower', 'or_ci_upper', 'alternative', 'interpretation'
+-- Failure ('test-categorical_tests.R:118:3'): fisher_exact_test handles alternative hypotheses --
+result_two$alternative not equal to "two.sided".
+target is NULL, current is character
+-- Failure ('test-categorical_tests.R:119:3'): fisher_exact_test handles alternative hypotheses --
+result_greater$alternative not equal to "greater".
+target is NULL, current is character
+-- Failure ('test-categorical_tests.R:120:3'): fisher_exact_test handles alternative hypotheses --
+result_less$alternative not equal to "less".
+target is NULL, current is character
+-- Failure ('test-categorical_tests.R:141:3'): fisher_exact_test validates inputs --
+`fisher_exact_test(df, x = "missing", y = "y")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for Fisher's exact test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:141:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::fisher_exact_test(df, x = "missing", y = "y")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "Fisher's exact test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:142:3'): fisher_exact_test validates inputs --
+`fisher_exact_test(df, x = "x", y = "missing")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for Fisher's exact test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:142:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::fisher_exact_test(df, x = "x", y = "missing")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "Fisher's exact test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:156:3'): mcnemar_test works with paired data --
+Names of `result` ('chisq', 'df', 'p_value', 'n_pairs', 'n_changed', 'pct_changed', 'odds_ratio_change', 'interpretation') don't match 'statistic', 'p_value', 'n_discordant', 'pct_changed', 'odds_ratio_change', 'interpretation'
+-- Failure ('test-categorical_tests.R:158:3'): mcnemar_test works with paired data --
+result$statistic >= 0 is not TRUE
+
+`actual`:       
+`expected`: TRUE
+-- Failure ('test-categorical_tests.R:160:3'): mcnemar_test works with paired data --
+result$n_discordant >= 0 is not TRUE
+
+`actual`:       
+`expected`: TRUE
+-- Error ('test-categorical_tests.R:176:3'): mcnemar_test handles continuity correction --
+Error in `expect_compare("<=", act, exp)`: Result of comparison must be a single logical value
+Backtrace:
+    x
+ 1. \-testthat::expect_lte(result_corrected$statistic, result_uncorrected$statistic) at test-categorical_tests.R:176:3
+ 2.   \-testthat:::expect_compare("<=", act, exp)
+ 3.     \-rlang::abort("Result of comparison must be a single logical value")
+-- Failure ('test-categorical_tests.R:182:3'): mcnemar_test validates inputs ---
+`mcnemar_test(df, var1 = "missing", var2 = "y")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for McNemar's test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:182:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::mcnemar_test(df, var1 = "missing", var2 = "y")
+ 7.   \-consumeR::assert_vars_present(data, c(var1, var2), "McNemar's test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:183:3'): mcnemar_test validates inputs ---
+`mcnemar_test(df, var1 = "x", var2 = "missing")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for McNemar's test: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:183:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::mcnemar_test(df, var1 = "x", var2 = "missing")
+ 7.   \-consumeR::assert_vars_present(data, c(var1, var2), "McNemar's test")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:209:3'): odds_ratio_table works with 2x2 table --
+Names of `result` ('exposure', 'outcome', 'odds_ratio', 'or_ci_lower', 'or_ci_upper', 'conf_level', 'p_value', 'interpretation') don't match 'odds_ratio', 'or_ci_lower', 'or_ci_upper', 'p_value', 'interpretation'
+-- Failure ('test-categorical_tests.R:263:3'): odds_ratio_table validates 2x2 requirement --
+`odds_ratio_table(df, x = "x", y = "y")` threw an error with unexpected message.
+Expected match: "2x2"
+Actual message: "Both variables must have exactly 2 levels for odds ratio\nx {x_name} has {nlevels(x_clean)} levels\nx {y_name} has {nlevels(y_clean)} levels"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:263:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::odds_ratio_table(df, x = "x", y = "y")
+ 7.   \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:269:3'): odds_ratio_table validates inputs --
+`odds_ratio_table(df, x = "missing", y = "y")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for odds ratio: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:269:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::odds_ratio_table(df, x = "missing", y = "y")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "odds ratio")
+ 8.     \-rlang::abort(...)
+-- Failure ('test-categorical_tests.R:270:3'): odds_ratio_table validates inputs --
+`odds_ratio_table(df, x = "x", y = "missing")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "Missing variables for odds ratio: missing\ni Available variables: x, y"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-categorical_tests.R:270:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::odds_ratio_table(df, x = "x", y = "missing")
+ 7.   \-consumeR::assert_vars_present(data, c(x, y), "odds ratio")
+ 8.     \-rlang::abort(...)
+-- Error ('test-categorical_tests.R:281:3'): odds_ratio_table handles zero cells gracefully --
+Error in `if (p_value < 0.001) "< .001" else round(p_value, 3)`: missing value where TRUE/FALSE needed
+Backtrace:
+    x
+ 1. +-testthat::expect_warning(...) at test-categorical_tests.R:281:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::odds_ratio_table(df, x = "x", y = "y")
+ 7.   \-base::message(...)
+ 8.     \-base::.makeMessage(..., domain = domain, appendLF = appendLF)
+ 9.       \-base::lapply(list(...), as.character)
+-- Failure ('test-categorical_tests.R:295:3'): categorical test functions handle NA values appropriately --
+`chisq_test(df, x = "x", y = "y")` produced unexpected warnings.
+Expected match: NA|missing
+Actual values:
+* Chi-squared approximation may be incorrect
+* Expected frequency < 5 in some cells. Consider using fisher_exact_test() instead.
+-- Failure ('test-categorical_tests.R:296:3'): categorical test functions handle NA values appropriately --
+`fisher_exact_test(df, x = "x", y = "y")` did not produce any warnings.
+-- Failure ('test-composite_scoring.R:40:3'): reverse_score_likert non-strict mode warns and preserves --
+`result <- reverse_score_likert(x, strict = FALSE)` produced unexpected warnings.
+Expected match: out of range
+Actual values:
+* 1 value(s) outside [1, 7] range. These will not be reverse scored: 8
+-- Failure ('test-composite_scoring.R:361:3'): add_composite adds column correctly --
+result$satisfaction not equal to c(6, 7, 8).
+Attributes: < Modes: list, NULL >
+Attributes: < Lengths: 1, 0 >
+Attributes: < names for target but not for current >
+Attributes: < current is not list-like >
+-- Failure ('test-composite_scoring.R:394:3'): add_composite passes arguments to score_composite --
+result$attitude not equal to c(21, 18).
+Attributes: < Modes: list, NULL >
+Attributes: < Lengths: 1, 0 >
+Attributes: < names for target but not for current >
+Attributes: < current is not list-like >
+-- Failure ('test-group_tests.R:114:3'): test_group_differences auto-selects appropriate test --
+`... <- NULL` produced unexpected messages.
+Expected match: Wilcoxon
+Actual values:
+* 
+Checking statistical assumptions...
+
+* Assumption checks complete. See 'assumptions' element in results for details.
+
+
+* Auto-selection: Using t-test (assumptions met)
+
+-- Failure ('test-interactions.R:194:3'): johnson_neyman rejects categorical moderator --
+`johnson_neyman(model, focal = "x", moderator = "w")` threw an error with unexpected message.
+Expected match: "requires continuous moderator"
+Actual message: "Model does not contain interaction between 'x' and 'w'"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-interactions.R:194:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::johnson_neyman(model, focal = "x", moderator = "w")
+ 7.   \-rlang::abort(...)
+-- Failure ('test-logistic_regression.R:223:3'): logistic_assumptions detects influential cases --
+checks$influential$n_influential is not strictly more than 0. Difference: 0
+-- Failure ('test-logistic_regression.R:256:3'): logistic_assumptions checks separation --
+checks$separation$pass is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+-- Failure ('test-logistic_regression.R:257:3'): logistic_assumptions checks separation --
+length(checks$separation$large_coefs) is not strictly more than 0. Difference: 0
+-- Failure ('test-mediation.R:440:3'): mediation_simple handles categorical independent variable --
+Expected `... <- NULL` to run without any errors.
+i Actually got a <subscriptOutOfBoundsError> with text:
+  subscript out of bounds
+-- Error ('test-mlm.R:21:3'): run_mlm works with random intercept model --------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df) at test-mlm.R:21:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:56:3'): run_mlm works with random slope model ------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (x | group), data = df) at test-mlm.R:56:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:102:3'): run_mlm calculates ICC correctly ----------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | group), data = df) at test-mlm.R:102:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:129:3'): run_mlm works with crossed random effects -------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(...) at test-mlm.R:129:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:148:3'): run_mlm extracts fixed effects correctly --------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df) at test-mlm.R:148:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:173:3'): run_mlm extracts random effects correctly -------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | group), data = df) at test-mlm.R:173:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:198:3'): run_mlm supports REML and ML estimation ---------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df, REML = TRUE) at test-mlm.R:198:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:220:3'): run_mlm generates interpretation ----------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df) at test-mlm.R:220:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:262:3'): icc_calculate works with mlm_result -------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | group), data = df) at test-mlm.R:262:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:313:3'): tidy_mlm extracts results correctly -------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df) at test-mlm.R:313:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:341:3'): tidy_mlm respects component selection -----------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | group), data = df) at test-mlm.R:341:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:361:3'): mlm_assumptions checks residuals normality ------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | group), data = df) at test-mlm.R:361:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:390:3'): print.mlm_result works --------------------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x + (1 | group), data = df) at test-mlm.R:390:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:417:3'): run_mlm handles multiple predictors -------------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x1 + x2 + x3 + (1 | group), data = df) at test-mlm.R:417:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:448:3'): run_mlm works with nested random effects --------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ 1 + (1 | region/store), data = df) at test-mlm.R:448:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Error ('test-mlm.R:470:3'): run_mlm significance flags are correct ----------
+<convergence_error/rlang_error/error/condition>
+Error in `value[[3L]](cond)`: MLM model failed to converge: 'control' is not a list; use lmerControl()
+Backtrace:
+    x
+ 1. \-consumeR::run_mlm(y ~ x1 + x2 + (1 | group), data = df) at test-mlm.R:470:3
+ 2.   \-base::tryCatch(...)
+ 3.     \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 4.       \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 5.         \-value[[3L]](cond)
+ 6.           \-rlang::abort(...)
+-- Failure ('test-multiple_mediators.R:338:3'): mediation_serial calculates pathway-specific effects --
+any(grepl("m1.*<U+2192>.*y", specific$pathway, ignore.case = TRUE)) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+-- Failure ('test-multiple_mediators.R:339:3'): mediation_serial calculates pathway-specific effects --
+any(grepl("m2.*<U+2192>.*y", specific$pathway, ignore.case = TRUE)) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+-- Failure ('test-multiple_mediators.R:340:3'): mediation_serial calculates pathway-specific effects --
+any(...) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+-- Failure ('test-multiple_mediators.R:614:3'): mediation_serial total equals sum of pathway effects --
+`sum_pathways` not equal to `total`.
+names for current but not for target
+-- Failure ('test-nonparametric.R:96:3'): kruskal_wallis_test works with 3+ groups --
+result$df not equal to 2.
+names for target but not for current
+-- Failure ('test-nonparametric.R:180:3'): wilcoxon_signed_rank_test validates inputs --
+`wilcoxon_signed_rank_test(df, before = "missing", after = "post")` threw an error with unexpected message.
+Expected match: "not found"
+Actual message: "'x' must be numeric"
+Backtrace:
+    x
+ 1. +-testthat::expect_error(...) at test-nonparametric.R:180:3
+ 2. | \-testthat:::quasi_capture(...)
+ 3. |   +-testthat (local) .capture(...)
+ 4. |   | \-base::withCallingHandlers(...)
+ 5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. \-consumeR::wilcoxon_signed_rank_test(df, before = "missing", after = "post")
+ 7.   +-stats::wilcox.test(x, y, paired = TRUE, alternative = alternative)
+ 8.   \-stats:::wilcox.test.default(x, y, paired = TRUE, alternative = alternative)
+-- Failure ('test-nonparametric.R:254:3'): friedman_test works with long format data --
+result$df not equal to 2.
+names for target but not for current
+-- Error ('test-psychometrics.R:179:3'): compare_cfa_models compares nested models --
+Error in `if (p_diff < 0.001) "< .001" else paste("=", round(p_diff, 3))`: missing value where TRUE/FALSE needed
+Backtrace:
+    x
+ 1. \-consumeR::compare_cfa_models(fit1, fit2) at test-psychometrics.R:179:3
+ 2.   \-base::message(...)
+ 3.     \-base::.makeMessage(..., domain = domain, appendLF = appendLF)
+ 4.       \-base::lapply(list(...), as.character)
+-- Error ('test-rm_anova.R:9:3'): run_rm_anova works with simple within-subjects design --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:9:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:37:3'): run_rm_anova works with mixed design --------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:37:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:84:3'): run_rm_anova handles missing data -----------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+     x
+  1. +-testthat::expect_message(...) at test-rm_anova.R:84:3
+  2. | \-testthat:::quasi_capture(enquo(object), label, capture_messages)
+  3. |   +-testthat (local) .capture(...)
+  4. |   | \-base::withCallingHandlers(...)
+  5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  6. \-consumeR::run_rm_anova(...)
+  7.   +-car::Anova(aov_model, type = "III")
+  8.   \-car:::Anova.default(aov_model, type = "III")
+  9.     +-car:::getVcov(vcov., mod)
+ 10.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:103:3'): run_rm_anova warns about unbalanced designs --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+     x
+  1. +-testthat::expect_warning(...) at test-rm_anova.R:103:3
+  2. | \-testthat:::quasi_capture(...)
+  3. |   +-testthat (local) .capture(...)
+  4. |   | \-base::withCallingHandlers(...)
+  5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  6. \-consumeR::run_rm_anova(...)
+  7.   +-car::Anova(aov_model, type = "III")
+  8.   \-car:::Anova.default(aov_model, type = "III")
+  9.     +-car:::getVcov(vcov., mod)
+ 10.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:117:3'): run_rm_anova calculates partial eta-squared --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:117:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:145:3'): run_rm_anova applies sphericity corrections --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:145:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:176:3'): run_rm_anova generates descriptives --------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:176:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:197:3'): run_rm_anova print method works ------------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:197:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:219:3'): rm_pairwise works after significant RM ANOVA --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:219:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:253:3'): rm_pairwise requires factor specification for multiple within factors --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:253:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:281:3'): rm_pairwise applies multiple comparison corrections --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:281:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:301:3'): rm_pairwise includes effect sizes ----------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:301:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:321:3'): rm_pairwise print method works -------------
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:321:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:338:3'): run_rm_anova handles Type II vs Type III SS --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:338:3
+ 2.   +-car::Anova(aov_model, type = "II")
+ 3.   \-car:::Anova.default(aov_model, type = "II")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:373:3'): run_rm_anova interpretation mentions significant effects --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:373:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Error ('test-rm_anova.R:389:3'): run_rm_anova works with two within-subjects factors --
+Error in `UseMethod("vcov")`: no applicable method for 'vcov' applied to an object of class "c('aovlist', 'listof')"
+Backtrace:
+    x
+ 1. \-consumeR::run_rm_anova(...) at test-rm_anova.R:389:3
+ 2.   +-car::Anova(aov_model, type = "III")
+ 3.   \-car:::Anova.default(aov_model, type = "III")
+ 4.     +-car:::getVcov(vcov., mod)
+ 5.     \-stats::vcov(mod, complete = FALSE)
+-- Failure ('test-sem.R:404:3'): compare_sem_models validates inputs -----------
+`compare_sem_models(result, result2, model_names = "Only one name")` threw an error with unexpected message.
+Expected match: "same length as number of models"
+Actual message: "'names' attribute [772] must be the same length as the vector [2]"
+Backtrace:
+     x
+  1. +-testthat::expect_error(...) at test-sem.R:404:3
+  2. | \-testthat:::quasi_capture(...)
+  3. |   +-testthat (local) .capture(...)
+  4. |   | \-base::withCallingHandlers(...)
+  5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+  6. \-consumeR::compare_sem_models(result, result2, model_names = "Only one name")
+  7.   +-base::do.call(lavaan::anova, fits)
+  8.   +-stats (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
+  9.   \-lavaan (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
+ 10.     \-lavaan::lavTestLRT(object = object, ..., model.names = tmp.names)
+
+[ FAIL 81 | WARN 41 | SKIP 1 | PASS 772 ]
+Error: Test failures
+Execution halted

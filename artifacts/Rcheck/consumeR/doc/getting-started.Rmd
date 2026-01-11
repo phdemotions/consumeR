@@ -1,0 +1,469 @@
+---
+title: "Getting Started with consumeR"
+author: "consumeR Package Authors"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with consumeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(consumeR)
+```
+
+## Introduction
+
+The **consumeR** package is designed to make consumer research analysis transparent and easily reproducible for peer review. Every function includes:
+
+- Clear, step-by-step documentation
+- Plain English explanations
+- Extensive inline comments
+- Informative error messages
+- Comprehensive examples
+
+This vignette provides a complete walkthrough of the package's main features.
+
+## Philosophy: Transparency in Research
+
+When conducting consumer research for publication, transparency is critical. Reviewers need to understand:
+
+1. **What analysis was performed** - Which statistical tests were used?
+2. **How it was performed** - What were the exact steps?
+3. **Why it was performed that way** - What assumptions were made?
+4. **How to replicate it** - Can another researcher reproduce the results?
+
+The consumeR package addresses all four questions through extensively documented code.
+
+## Basic Workflow
+
+A typical analysis with consumeR follows this workflow:
+
+1. Load and prepare your data
+2. Calculate descriptive statistics
+3. (Optional) Compare groups statistically
+4. Generate a comprehensive report
+
+Let's walk through each step with examples.
+
+## Step 1: Descriptive Statistics
+
+The foundation of any analysis is understanding your data through descriptive statistics.
+
+### Example: Analyzing Consumer Spending
+
+```{r descriptive-example}
+# Sample data: Consumer spending amounts in dollars
+consumer_spending <- c(45.20, 67.80, 23.40, 89.10, 34.50,
+                       56.70, 78.90, 12.30, 91.20, 43.50)
+
+# Calculate summary statistics
+stats <- calculate_summary_stats(consumer_spending)
+
+# View results
+print(stats)
+```
+
+### Understanding the Output
+
+Each statistic has a clear interpretation:
+
+- **n**: Sample size (how many consumers)
+- **mean**: Average spending
+- **median**: Middle value (50% spent less, 50% spent more)
+- **sd**: Standard deviation (how spread out the data is)
+- **min/max**: Range boundaries
+- **q25/q75**: First and third quartiles
+
+### Handling Missing Data
+
+The function automatically handles missing values:
+
+```{r missing-data}
+# Data with missing values (common in real research)
+satisfaction_scores <- c(7, 8, NA, 6, 9, 7, NA, 8, 7, 9)
+
+# The function removes NAs and reports how many
+stats_with_missing <- calculate_summary_stats(satisfaction_scores)
+```
+
+Notice the message: the function tells you exactly how many missing values were removed. This transparency is crucial for peer review.
+
+### Customizing the Output
+
+You can control the level of detail:
+
+```{r customize-stats}
+# Fewer statistics, more decimal places
+calculate_summary_stats(
+  consumer_spending,
+  include_all = FALSE,  # Skip variance, range, IQR
+  round_digits = 3      # More precision
+)
+```
+
+## Step 2: Comparing Groups
+
+Consumer research often involves comparing groups (e.g., treatment vs. control).
+
+### Example: A/B Test Analysis
+
+```{r group-comparison}
+# Simulated A/B test data
+# Treatment group: Received promotional email
+treatment_purchases <- c(45.20, 67.80, 23.40, 89.10, 34.50,
+                        56.70, 78.90, 12.30, 91.20, 43.50)
+
+# Control group: No promotional email
+control_purchases <- c(34.10, 45.20, 28.90, 56.30, 41.20,
+                      38.70, 49.10, 31.40, 52.80, 38.90)
+
+# Test if groups are different
+comparison <- test_group_differences(treatment_purchases, control_purchases)
+
+# View results
+print(comparison$interpretation)
+```
+
+### Understanding the Test
+
+The function automatically:
+
+1. Checks your data for validity
+2. Chooses an appropriate statistical test
+3. Performs the test
+4. Provides plain English interpretation
+
+### Test Selection: Automatic vs. Manual
+
+By default, the function auto-selects the test:
+
+```{r test-selection}
+# Automatic selection based on sample size
+result_auto <- test_group_differences(treatment_purchases, control_purchases,
+                                      test_type = "auto")
+
+# Manual selection: Force t-test
+result_ttest <- test_group_differences(treatment_purchases, control_purchases,
+                                       test_type = "t.test")
+
+# Manual selection: Force Wilcoxon (non-parametric)
+result_wilcox <- test_group_differences(treatment_purchases, control_purchases,
+                                        test_type = "wilcoxon")
+```
+
+**When to use which test:**
+
+- **Auto** (recommended): Let the function choose based on sample size
+- **t.test**: When you know data is normally distributed or n ≥ 30
+- **wilcoxon**: For small samples or non-normal distributions
+
+### One-Sided vs. Two-Sided Tests
+
+```{r one-sided}
+# Two-sided: Is there ANY difference? (default)
+test_group_differences(treatment_purchases, control_purchases,
+                      alternative = "two.sided")
+
+# One-sided: Is treatment GREATER than control?
+test_group_differences(treatment_purchases, control_purchases,
+                      alternative = "greater")
+
+# One-sided: Is treatment LESS than control?
+test_group_differences(treatment_purchases, control_purchases,
+                      alternative = "less")
+```
+
+### Paired Observations
+
+For before/after or matched-pairs designs:
+
+```{r paired}
+# Weight before diet program
+before <- c(180, 195, 210, 175, 188, 202)
+
+# Weight after diet program (same individuals)
+after <- c(175, 190, 205, 172, 185, 198)
+
+# Paired test accounts for individual differences
+test_group_differences(before, after, paired = TRUE)
+```
+
+## Step 3: Comprehensive Reports
+
+For peer review, you often need a complete report documenting your entire analysis.
+
+### Example: Full Analysis Report
+
+```{r full-report}
+# Create a comprehensive report
+create_analysis_report(
+  consumer_spending,
+  title = "Consumer Spending Analysis - Study 1"
+)
+```
+
+### Report with Group Comparison
+
+```{r report-groups}
+# Combine data into a data frame (common format)
+study_data <- data.frame(
+  purchase_amount = c(treatment_purchases, control_purchases),
+  condition = c(rep("Treatment", length(treatment_purchases)),
+               rep("Control", length(control_purchases)))
+)
+
+# Generate report with group comparison
+create_analysis_report(
+  data = study_data,
+  variable = "purchase_amount",
+  group_var = "condition",
+  title = "Promotional Email Effectiveness Study"
+)
+```
+
+### Saving Reports to Files
+
+```{r save-report, eval=FALSE}
+# Save report to a text file for sharing with reviewers
+create_analysis_report(
+  data = study_data,
+  variable = "purchase_amount",
+  group_var = "condition",
+  title = "Promotional Email Effectiveness Study",
+  report_file = "analysis_report.txt"
+)
+```
+
+## Complete Workflow Example
+
+Here's a start-to-finish example of a typical consumer research analysis:
+
+```{r complete-workflow}
+# SCENARIO: Testing if a new store layout increases spending
+
+# Step 1: Prepare data
+old_layout_spending <- c(42.50, 38.20, 51.30, 45.80, 39.90,
+                        47.60, 44.20, 41.30, 48.70, 43.50)
+
+new_layout_spending <- c(48.30, 52.10, 61.20, 55.40, 58.70,
+                        54.20, 59.80, 51.90, 63.40, 56.30)
+
+# Step 2: Examine each group separately
+cat("OLD LAYOUT STATISTICS:\n")
+old_stats <- calculate_summary_stats(old_layout_spending)
+print(old_stats)
+
+cat("\n\nNEW LAYOUT STATISTICS:\n")
+new_stats <- calculate_summary_stats(new_layout_spending)
+print(new_stats)
+
+# Step 3: Statistical comparison
+cat("\n\nGROUP COMPARISON:\n")
+comparison <- test_group_differences(old_layout_spending, new_layout_spending)
+cat(comparison$interpretation, "\n")
+
+# Step 4: Generate full report for reviewers
+cat("\n\n")
+cat(rep("=", 60), "\n", sep = "")
+cat("FULL REPORT FOR PEER REVIEW\n")
+cat(rep("=", 60), "\n\n", sep = "")
+
+layout_data <- data.frame(
+  spending = c(old_layout_spending, new_layout_spending),
+  layout = c(rep("Old Layout", 10), rep("New Layout", 10))
+)
+
+create_analysis_report(
+  data = layout_data,
+  variable = "spending",
+  group_var = "layout",
+  title = "Store Layout Experiment Analysis"
+)
+```
+
+## Best Practices for Peer Review
+
+### 1. Always Report Missing Values
+
+```{r report-missing, eval=FALSE}
+# Good practice: Let the function report missing values
+calculate_summary_stats(data_with_nas)
+
+# The automatic message tells reviewers exactly what was excluded
+```
+
+### 2. Document Your Decisions
+
+```{r document-decisions, eval=FALSE}
+# Good: Explain why you chose a specific test
+result <- test_group_differences(
+  group1, group2,
+  test_type = "wilcoxon",  # Using non-parametric test because...
+  alternative = "greater"   # One-sided based on hypothesis that...
+)
+```
+
+### 3. Include Complete Reports
+
+```{r complete-reports, eval=FALSE}
+# Good: Generate a report that includes everything
+create_analysis_report(
+  data = my_data,
+  variable = "outcome",
+  group_var = "treatment",
+  title = "Complete Analysis for Reviewers",
+  report_file = "reviewer_report.txt"
+)
+```
+
+### 4. Show Your Work
+
+All functions in consumeR are designed to be readable. Reviewers can:
+
+1. See the exact code you used (your script)
+2. Understand what each function does (inline comments)
+3. Verify the statistical methods (documented in help files)
+4. Reproduce your results (deterministic calculations)
+
+## Interpreting Statistical Results
+
+### P-values Explained
+
+The `test_group_differences()` function reports a p-value. Here's how to interpret it:
+
+- **p < 0.05**: Groups are significantly different (typical threshold)
+- **p ≥ 0.05**: No significant difference detected
+- **p < 0.01**: Highly significant difference
+- **p < 0.001**: Very highly significant difference
+
+**Important**: Statistical significance doesn't mean practical significance. Always consider:
+
+- Effect size (how big is the difference?)
+- Practical importance (does it matter in the real world?)
+- Study context (what does this mean for your research question?)
+
+### Effect Sizes
+
+The mean difference tells you the practical effect:
+
+```{r effect-size}
+result <- test_group_differences(treatment_purchases, control_purchases)
+
+cat("Mean difference:", result$difference, "\n")
+cat("This means Treatment group spent $", result$difference,
+    " more on average\n", sep = "")
+```
+
+## Common Use Cases
+
+### Use Case 1: Customer Satisfaction Survey
+
+```{r satisfaction-survey}
+# Satisfaction ratings (1-10 scale)
+satisfaction <- c(8, 7, 9, 6, 8, 7, 9, 8, 7, 6, 9, 8, 7, 8, 9)
+
+stats <- calculate_summary_stats(satisfaction)
+cat("Average satisfaction:", stats$mean, "out of 10\n")
+cat("Median satisfaction:", stats$median, "out of 10\n")
+cat("Standard deviation:", stats$sd, "\n")
+```
+
+### Use Case 2: Price Sensitivity Test
+
+```{r price-sensitivity}
+# Purchases at low price point
+low_price_purchases <- c(12, 15, 11, 14, 13, 16, 12, 14, 15, 13)
+
+# Purchases at high price point
+high_price_purchases <- c(8, 6, 9, 7, 8, 6, 7, 9, 8, 7)
+
+test_group_differences(low_price_purchases, high_price_purchases,
+                      alternative = "greater")
+```
+
+### Use Case 3: Longitudinal Study
+
+```{r longitudinal}
+# Customer engagement before campaign
+engagement_before <- c(45, 52, 48, 51, 49, 53, 47, 50, 46, 54)
+
+# Same customers after campaign
+engagement_after <- c(52, 58, 54, 57, 55, 60, 53, 56, 52, 61)
+
+test_group_differences(engagement_before, engagement_after,
+                      paired = TRUE,
+                      alternative = "less")  # Testing if AFTER is greater
+```
+
+## Troubleshooting
+
+### Error: "Both group1 and group2 must be numeric"
+
+```{r troubleshoot-1, error=TRUE, eval=FALSE}
+# Problem: Data is not numeric
+test_group_differences(c("high", "low"), c("medium", "low"))
+
+# Solution: Use numeric data
+test_group_differences(c(10, 5), c(7, 5))
+```
+
+### Error: "Each group must have at least 2 valid observations"
+
+```{r troubleshoot-2, error=TRUE, eval=FALSE}
+# Problem: Too few data points
+test_group_differences(c(5), c(3, 4))
+
+# Solution: Collect more data or use different analysis
+```
+
+### Warning: "Removed X missing values"
+
+This is informational, not an error. The function is being transparent about data cleaning:
+
+```{r troubleshoot-3}
+# Data with NAs - function handles automatically
+data_with_gaps <- c(5, NA, 7, 8, NA, 6, 9)
+calculate_summary_stats(data_with_gaps)
+# Note the message about removed values
+```
+
+## Next Steps
+
+Now that you understand the basics:
+
+1. Try the functions with your own data
+2. Read the help files (`?calculate_summary_stats`, etc.)
+3. Examine the source code (it's extensively commented!)
+4. Generate reports for your analyses
+
+## Getting Help
+
+- Function documentation: `?function_name`
+- Package overview: `?consumeR`
+- View source code: Just type the function name without parentheses
+
+## Citation
+
+If you use consumeR in your research, please cite it in your publications. This helps reviewers understand exactly what tools were used.
+
+```{r citation, eval=FALSE}
+citation("consumeR")
+```
+
+## Summary
+
+The consumeR package provides:
+
+- **Transparent calculations**: Every step is documented
+- **Clear outputs**: Plain English interpretations
+- **Reproducible results**: Reviewers can verify everything
+- **Best practices**: Automatic missing value handling, appropriate tests
+- **Complete documentation**: Help files, examples, and this vignette
+
+By using consumeR, you make your research more transparent, reproducible, and reviewer-friendly.

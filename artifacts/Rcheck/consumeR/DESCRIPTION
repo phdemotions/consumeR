@@ -1,0 +1,39 @@
+Package: consumeR
+Type: Package
+Title: Transparent and Reproducible Consumer Research Analysis
+Version: 0.1.0
+Authors@R: c(
+    person("Josh", "Gonzales",
+           email = "joshgonzalesphd@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8633-3380"))
+    )
+Description: Provides transparent, well-documented functions for consumer research
+    analysis that facilitate reproducibility during peer review. All functions are
+    designed with clarity and readability in mind using tidyverse principles, making
+    code easy to understand for reviewers with varying levels of programming experience.
+    Includes descriptive statistics, group comparisons, reliability analysis (Cronbach's
+    alpha, composite reliability, AVE), and factor analysis (EFA/CFA) with beautiful
+    ggplot2 visualizations. Functions include clear documentation, sensible defaults,
+    and extensive examples.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 7.3.2
+Depends: R (>= 3.5.0)
+Imports: methods, stats, dplyr (>= 1.0.0), tidyr (>= 1.0.0), ggplot2
+        (>= 3.3.0), tibble (>= 3.0.0), readr (>= 2.0.0), rlang (>=
+        1.0.0), purrr (>= 1.0.0)
+Suggests: testthat (>= 3.0.0), knitr, rmarkdown, janitor (>= 2.0.0),
+        lavaan (>= 0.6.0), psych (>= 2.0.0), broom (>= 1.0.0), car (>=
+        3.0.0), emmeans (>= 1.7.0), sandwich (>= 3.0.0), lmtest (>=
+        0.9.0), effectsize (>= 0.7.0), correlation (>= 0.8.0),
+        jsonlite, lme4, lmerTest, performance, yaml
+VignetteBuilder: knitr
+URL: https://github.com/phdemotions/consumeR
+BugReports: https://github.com/phdemotions/consumeR/issues
+NeedsCompilation: no
+Packaged: 2026-01-11 18:11:04 UTC; josh
+Author: Josh Gonzales [aut, cre] (<https://orcid.org/0000-0001-8633-3380>)
+Maintainer: Josh Gonzales <joshgonzalesphd@gmail.com>
+Built: R 4.3.1; ; 2026-01-11 18:11:31 UTC; unix

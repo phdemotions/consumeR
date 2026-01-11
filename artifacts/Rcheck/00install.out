@@ -1,0 +1,30 @@
+* installing *source* package 'consumeR' ...
+** using staged installation
+** R
+** data
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+Warning: score_composite.Rd:39: unknown macro '\item'
+Warning: score_composite.Rd:41: unexpected section header '\value'
+Warning: score_composite.Rd:59: unexpected section header '\description'
+Warning: score_composite.Rd:63: unexpected section header '\details'
+Warning: score_composite.Rd:73: unexpected section header '\examples'
+Warning: score_composite.Rd:116: unexpected END_OF_INPUT '
+'
+Warning: test_group_differences.Rd:39: unknown macro '\item'
+Warning: test_group_differences.Rd:41: unknown macro '\item'
+Warning: test_group_differences.Rd:45: unknown macro '\item'
+Warning: test_group_differences.Rd:48: unexpected section header '\value'
+Warning: test_group_differences.Rd:66: unexpected section header '\description'
+Warning: test_group_differences.Rd:71: unexpected section header '\details'
+Warning: test_group_differences.Rd:89: unexpected section header '\examples'
+Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+'
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (consumeR)

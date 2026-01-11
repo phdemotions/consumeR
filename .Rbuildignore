@@ -8,3 +8,10 @@
 ^pkgdown$
 ^\.git$
 ^\.gitignore$
+^artifacts$
+^tools$
+^\.claude$
+^CITATION\.cff$
+^cran-comments\.md$
+^data-raw$
+^paper$

@@ -1,0 +1,131 @@
+add_composite           Add Composite Score to Data Frame
+alpha_table             Batch Calculate Cronbach's Alpha for Multiple
+                        Scales
+analyze_correlation     Perform Correlation Analysis with Comprehensive
+                        Diagnostics
+analyze_regression      Perform Linear Regression with Comprehensive
+                        Diagnostics
+assert_vars_present     Assert Required Variables are Present
+assumption_checks       Assumption Checks with Remediation
+                        Recommendations
+assumptions             Check Statistical Assumptions
+calculate_alpha         Calculate Cronbach's Alpha for Scale
+                        Reliability
+calculate_composite_reliability
+                        Calculate Composite Reliability and Validity
+                        Measures
+calculate_summary_stats
+                        Calculate Summary Statistics for Consumer Data
+categorical_tests       Categorical Data Analysis Functions
+check_homogeneity_of_variance
+                        Check Homogeneity of Variance
+                        (Homoscedasticity)
+check_independence      Check Independence of Observations
+check_normality         Check Normality Assumption
+check_variable_types    Review and Modify Variable Types Interactively
+chisq_test              Chi-Square Test of Independence with Effect
+                        Size
+clean_names_safe        Clean Variable Names Safely
+clean_survey_data       Clean and Prepare Survey Data with
+                        Publication-Ready Exclusion Reporting
+cohens_d_table          Cohen's d Effect Size with Confidence Intervals
+compare_cfa_models      Compare Nested CFA Models
+compare_groups_anova    Perform One-Way ANOVA with Comprehensive
+                        Diagnostics
+compare_ols_robust      Compare OLS and Robust Standard Errors
+compare_sem_models      Compare SEM Models
+composite_scoring       Composite Scoring Functions
+consumer_survey         Consumer Survey Example Dataset
+correlation_table       Correlation Table with Confidence Intervals
+create_analysis_report
+                        Create a Transparent Analysis Report
+efa_diagnostics         EFA Diagnostics: KMO, Bartlett's Test, Parallel
+                        Analysis
+emmeans_contrasts       Planned Contrasts and Simple Effects via
+                        emmeans
+fisher_exact_test       Fisher's Exact Test for Small Samples
+format_est_ci           Format Estimates with Confidence Intervals
+format_n                Format Sample Sizes for Publication
+format_p                Format P-Values for Publication
+friedman_test           Friedman Test
+generate_publication_block
+                        Generate Complete Publication Text Block
+icc_calculate           Calculate Intraclass Correlation Coefficient
+import_research_data    Import Data from CSV or SPSS with Interactive
+                        Variable Type Checking
+johnson_neyman          Johnson-Neyman Technique for Regions of
+                        Significance
+kruskal_wallis_test     Kruskal-Wallis Test
+logistic_assumptions    Check Logistic Regression Assumptions
+make_table_md           Create Markdown Table
+make_table_tsv          Create TSV Table for Copy-Paste
+mann_whitney_test       Mann-Whitney U Test (Wilcoxon Rank-Sum Test)
+mcnemar_test            McNemar's Test for Paired Categorical Data
+mediation_parallel      Parallel Mediation Analysis
+mediation_serial        Serial Mediation Analysis
+mediation_simple        Simple Mediation Analysis with Bootstrap
+                        Confidence Intervals
+mlm_assumptions         Check MLM Assumptions
+modeling                Statistical Modeling and Inference Functions
+moderated_mediation     Moderated Mediation Analysis (Hayes PROCESS
+                        Models 7, 8, 14)
+odds_ratio_table        Odds Ratio with Confidence Interval
+perform_efa             Perform Exploratory Factor Analysis with
+                        Beautiful Visualizations
+print.alpha_analysis    Print Method for Alpha Analysis
+print.anova_result      Print Method for ANOVA Results
+print.assumption_check
+                        Print Method for Assumption Checks
+print.cleaning_result   Print Method for Cleaning Results
+print.composite_reliability
+                        Print Method for Composite Reliability
+print.correlation_result
+                        Print Method for Correlation Results
+print.efa_results       Print Method for EFA Results
+print.group_comparison
+                        Print Method for Group Comparison Results
+print.imported_data     Print Method for Imported Data
+print.mlm_result        Print Method for MLM Results
+print.parallel_mediation
+                        Print Method for Parallel Mediation
+print.publication_block
+                        Print Method for Publication Blocks
+print.regression_result
+                        Print Method for Regression Results
+print.sem_result        Print Method for SEM Results
+print.serial_mediation
+                        Print Method for Serial Mediation
+pseudo_r2               Calculate Pseudo R-squared for Logistic
+                        Regression
+psychometrics           Psychometric Analysis Functions
+publication_text        Generate Publication-Ready Text for Statistical
+                        Results
+reverse_score_likert    Reverse Score Likert-Type Items
+rm_pairwise             Pairwise Comparisons for Repeated Measures
+                        ANOVA
+robust                  Robust Inference for Regression Models
+row_sd                  Calculate Row-Wise Standard Deviation
+run_anova               Run ANOVA with Type II or Type III Sums of
+                        Squares
+run_cfa                 Run Confirmatory Factor Analysis (CFA)
+run_logistic            Run Logistic Regression for Binary Outcomes
+run_mlm                 Multi-Level Modeling (MLM/HLM)
+run_rm_anova            Repeated Measures ANOVA
+run_sem                 Structural Equation Modeling (SEM) Path
+                        Analysis
+score_composite         Score Composite Scale with Metadata
+simple_slopes           Simple Slopes Analysis for Interaction Effects
+table_formatting        Table Formatting and Export Functions
+test_group_differences
+                        Test for Differences Between Consumer Groups
+tidy_cfa_fit            Extract Tidy CFA Fit Indices
+tidy_lm_robust          Tidy Regression Results with Robust Standard
+                        Errors
+tidy_logistic           Tidy Logistic Regression Results with Odds
+                        Ratios
+tidy_mlm                Extract Publication-Ready MLM Results
+tidy_sem                Extract Publication-Ready SEM Results
+utilities               Utility Functions for consumeR Package
+wilcoxon_signed_rank_test
+                        Wilcoxon Signed-Rank Test
+write_table             Write Table to File

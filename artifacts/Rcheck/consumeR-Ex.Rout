@@ -1,0 +1,5023 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "consumeR"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "consumeR-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('consumeR')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("add_composite")
+> ### * add_composite
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: add_composite
+> ### Title: Add Composite Score to Data Frame
+> ### Aliases: add_composite
+> 
+> ### ** Examples
+> 
+> df <- data.frame(
++   q1 = c(7, 6, 5),
++   q2 = c(6, 7, 4),
++   q3 = c(7, 6, 5)
++ )
+> 
+> # Add composite column
+> df_with_composite <- add_composite(
++   df,
++   col_name = "satisfaction",
++   items = c("q1", "q2", "q3")
++ )
+> 
+> # Result has new "satisfaction" column
+> df_with_composite$satisfaction
+[1] 6.666667 6.333333 4.666667
+attr(,"composite_meta")
+attr(,"composite_meta")$name
+NULL
+
+attr(,"composite_meta")$items
+[1] "q1" "q2" "q3"
+
+attr(,"composite_meta")$reverse_items
+NULL
+
+attr(,"composite_meta")$k
+[1] 3
+
+attr(,"composite_meta")$method
+[1] "mean"
+
+attr(,"composite_meta")$na_rule
+[1] "preserve"
+
+attr(,"composite_meta")$threshold
+NULL
+
+attr(,"composite_meta")$n_missing
+[1] 0 0 0
+
+attr(,"composite_meta")$below_threshold
+[1] FALSE FALSE FALSE
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("add_composite", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("alpha_table")
+> ### * alpha_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: alpha_table
+> ### Title: Batch Calculate Cronbach's Alpha for Multiple Scales
+> ### Aliases: alpha_table
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D scales <- list(
+> ##D   satisfaction = c("sat1", "sat2", "sat3", "sat4"),
+> ##D   loyalty = c("loy1", "loy2", "loy3"),
+> ##D   value = c("val1", "val2", "val3", "val4", "val5")
+> ##D )
+> ##D 
+> ##D alpha_results <- alpha_table(customer_data, scales)
+> ##D print(alpha_results)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("alpha_table", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("analyze_correlation")
+> ### * analyze_correlation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: analyze_correlation
+> ### Title: Perform Correlation Analysis with Comprehensive Diagnostics
+> ### Aliases: analyze_correlation
+> 
+> ### ** Examples
+> 
+> # Example 1: Data frame with variable names
+> data <- data.frame(
++   customer_satisfaction = c(7, 8, 6, 9, 5, 8, 7, 6, 9, 8),
++   purchase_intention = c(8, 9, 7, 9, 6, 8, 7, 7, 9, 8)
++ )
+> result <- analyze_correlation(data, "customer_satisfaction", "purchase_intention")
+
+Checking assumptions for correlation analysis...
+Assumption checks complete.
+
+Auto-selection: Using Pearson correlation (assumptions met)
+Computing pearson correlation...
+
+Correlation analysis complete!
+
+> 
+> # Example 2: Two numeric vectors
+> x <- c(23, 45, 67, 34, 56, 78, 89, 12, 45, 67)
+> y <- c(34, 56, 78, 45, 67, 89, 90, 23, 56, 78)
+> result <- analyze_correlation(x, var2 = y)
+
+Checking assumptions for correlation analysis...
+Assumption checks complete.
+
+Auto-selection: Using Pearson correlation (assumptions met)
+Computing pearson correlation...
+
+Correlation analysis complete!
+
+> 
+> # Example 3: Force Spearman (non-parametric)
+> result <- analyze_correlation(data, "customer_satisfaction",
++                                "purchase_intention", method = "spearman")
+
+Checking assumptions for correlation analysis...
+Assumption checks complete.
+
+Computing spearman correlation...
+
+Warning in cor.test.default(x_clean, y_clean, method = method) :
+  Cannot compute exact p-value with ties
+Correlation analysis complete!
+
+> 
+> # View publication text
+> print(result, show_publication = TRUE)
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+SPEARMAN CORRELATION RESULTS
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+VARIABLES:
+  Variable 1: customer_satisfaction 
+  Variable 2: purchase_intention 
+  Sample size: 10 
+
+CORRELATION:
+  r = 0.9262 
+  r^2 = 0.8578 ( 85.8 % shared variance)
+  p-value: 0.000119 
+  Significant: YES (p < .05) 
+
+INTERPRETATION:
+  Strength: very strong 
+  Direction: positive 
+
+DETAILED INTERPRETATION:
+  The Spearman correlation between customer_satisfaction and
+  purchase_intention is very strong and positive (r = 0.926, n = 10, p =
+  1e-04). This correlation is statistically significant at alpha = 0.05.
+  The very strong relationship suggests meaningful covariation between the
+  variables. Approximately 85.8% of variance in one variable is associated
+  with variance in the other.
+
+
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+PUBLICATION-READY TEXT
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+ASSUMPTIONS:
+  Data normality was assessed using the Shapiro-Wilk test. The
+  customer_satisfaction variable met the normality assumption (W = 0.9319, p =
+  0.4664). Data normality was assessed using the Shapiro-Wilk test. The
+  purchase_intention variable met the normality assumption (W = 0.8946, p =
+  0.191). NULL
+
+
+METHODS:
+  Correlation analysis was conducted to examine relationships between
+  variables.
+
+
+RESULTS:
+  Spearman's correlation analysis revealed a statistically significant
+  relationship (r = 0.93, n = 10, p = < .001).
+
+
+INTERPRETATION:
+  These results provide evidence of a statistically significant effect.
+
+
+ADDITIONAL NOTES:
+  Correlation strength was interpreted using Cohen's (1988) guidelines. The
+  correlation coefficient of 0.926 indicates that the variables share
+  approximately 85.8% common variance (r^2 = 0.858).
+
+
+
+USAGE NOTE:
+  Copy the sections above into your manuscript. Modify as needed for your
+  specific journal's requirements and integrate with your narrative.
+
+
+Tip: Use print(result, show_assumptions = TRUE) to see assumption checks
+Tip: Create a scatterplot to visualize the relationship:
+      plot(customer_satisfaction, purchase_intention)
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("analyze_correlation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("analyze_regression")
+> ### * analyze_regression
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: analyze_regression
+> ### Title: Perform Linear Regression with Comprehensive Diagnostics
+> ### Aliases: analyze_regression
+> 
+> ### ** Examples
+> 
+> # Example 1: Simple regression
+> data <- data.frame(
++   ad_spending = c(100, 200, 150, 300, 250, 400, 350, 500),
++   sales = c(20, 35, 28, 48, 42, 65, 58, 80)
++ )
+> result <- analyze_regression(data, sales ~ ad_spending)
+
+Fitting linear regression model...
+Model fitted successfully (n = 8, predictors = 1)
+
+Checking regression assumptions...
+Assumption checks complete.
+
+Creating diagnostic plots...
+Regression analysis complete!
+
+> 
+> # Example 2: Multiple regression
+> data <- data.frame(
++   satisfaction = c(7, 8, 6, 9, 5, 8, 7, 6, 9, 8),
++   price = c(10, 8, 12, 7, 15, 9, 11, 13, 8, 10),
++   quality = c(8, 9, 7, 9, 6, 8, 7, 6, 9, 8),
++   service = c(7, 8, 6, 9, 5, 8, 7, 7, 9, 8)
++ )
+> result <- analyze_regression(data, satisfaction ~ price + quality + service)
+
+Fitting linear regression model...
+Model fitted successfully (n = 10, predictors = 3)
+
+Checking regression assumptions...
+Assumption checks complete.
+
+Creating diagnostic plots...
+Regression analysis complete!
+
+> 
+> # View publication text
+> print(result, show_publication = TRUE)
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+MULTIPLE LINEAR REGRESSION RESULTS
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+MODEL SUMMARY:
+  Observations: 10 
+  Predictors: 3 
+  R^2 = 0.9802 (explains 98 % of variance)
+  Adjusted R^2 = 0.9703 
+  RMSE = 0.179 
+
+MODEL SIGNIFICANCE:
+  F(3, 6) = 98.96
+  p-value: 1.7e-05 
+  Significant: YES (p < .05) 
+
+COEFFICIENTS:
+    variable estimate std_error t_value p_value sig
+ (Intercept)  -0.5748     4.517  -0.127 0.90290    
+       price  -0.0199     0.169  -0.118 0.91022    
+     quality   0.3821     0.267   1.429 0.20288    
+     service   0.6944     0.169   4.097 0.00638  **
+---
+Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+INTERPRETATION:
+  The multiple linear regression model was statistically significant (F(3,
+  6) = 98.96, p = 0, R^2 = 0.98). The model explains 98% of variance in
+  the outcome. Significant predictor(s): service. See coefficients table
+  for details.
+
+
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+PUBLICATION-READY TEXT
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+ASSUMPTIONS:
+  The data were collected using a cross-sectional regression design, ensuring
+  independence of observations. Data normality was assessed using the
+  Shapiro-Wilk test. The regression residuals variable met the normality
+  assumption (W = 0.9458, p = 0.6188). Homoscedasticity was assessed using the
+  Breusch-Pagan test. The assumption was met (chi^2 = 0.33, p = 0.5638),
+  indicating constant error variance. Multicollinearity was assessed using
+  Variance Inflation Factors (VIF). Some VIF values exceeded 5, indicating
+  moderate to high multicollinearity. Interpretation of individual coefficients
+  should be made with caution.
+
+
+METHODS:
+  Linear regression analysis was conducted to examine the relationship between
+  the predictor variable(s) and the outcome variable. Regression assumes
+  linearity, independence of residuals, homoscedasticity of residuals, and
+  normality of residuals.
+
+
+RESULTS:
+  The overall regression model was statistically significant (F = 98.96, p = <
+  .001, R^2 = 0.98).
+
+
+INTERPRETATION:
+  These results provide evidence of a statistically significant effect.
+
+
+ADDITIONAL NOTES:
+  The regression model included 3 predictor(s) and was based on 10
+  observations. RMSE = 0.179.
+
+
+
+USAGE NOTE:
+  Copy the sections above into your manuscript. Modify as needed for your
+  specific journal's requirements and integrate with your narrative.
+
+
+Tip: Use print(result, show_assumptions = TRUE) to see assumption checks
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("analyze_regression", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("assert_vars_present")
+> ### * assert_vars_present
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: assert_vars_present
+> ### Title: Assert Required Variables are Present
+> ### Aliases: assert_vars_present
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D df <- data.frame(x = 1:5, y = 6:10)
+> ##D 
+> ##D # Success - no error
+> ##D assert_vars_present(df, c("x", "y"), "my analysis")
+> ##D 
+> ##D # Error - missing variable
+> ##D assert_vars_present(df, c("x", "z"), "my analysis")
+> ##D # Error: Missing variables for my analysis: z
+> ##D #   Available variables: x, y
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("assert_vars_present", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("assumption_checks")
+> ### * assumption_checks
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: assumption_checks
+> ### Title: Assumption Checks with Remediation Recommendations
+> ### Aliases: assumption_checks
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D model <- lm(satisfaction ~ condition, data = df)
+> ##D checks <- assumption_checks(model)
+> ##D print(checks)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("assumption_checks", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calculate_alpha")
+> ### * calculate_alpha
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calculate_alpha
+> ### Title: Calculate Cronbach's Alpha for Scale Reliability
+> ### Aliases: calculate_alpha
+> 
+> ### ** Examples
+> 
+> # Example 1: Customer satisfaction scale
+> # Imagine we asked Cloud 9 customers three satisfaction questions
+> satisfaction_data <- data.frame(
++   customer_id = 1:20,
++   sat_overall = c(7,8,6,9,7,8,9,7,6,8,7,9,8,7,8,9,7,8,7,8),
++   sat_recommend = c(8,9,7,9,8,9,9,8,7,9,8,9,9,8,9,9,8,9,8,9),
++   sat_return = c(7,8,6,8,7,8,8,7,6,8,7,8,8,7,8,8,7,8,7,8)
++ )
+> 
+> # Calculate reliability
+> reliability <- calculate_alpha(
++   data = satisfaction_data,
++   items = c("sat_overall", "sat_recommend", "sat_return"),
++   scale_name = "Customer Satisfaction"
++ )
+
+==== CRONBACH'S ALPHA ANALYSIS ====
+Scale: Customer Satisfaction
+Number of items: 3
+
+Calculating item statistics...
+
+Calculating Cronbach's alpha...
+  Alpha = 0.967
+
+EXCELLENT reliability (alpha = 0.967). The Customer Satisfaction scale shows excellent internal consistency. Items are highly inter-correlated and measure the same construct well.
+
+Note: Removing these items would INCREASE alpha:
+  - sat_overall (new alpha = 1, improvement = +0.033)
+Consider whether these items truly belong in this scale.
+
+==== ANALYSIS COMPLETE ====
+
+> 
+> # View results
+> cat(reliability$interpretation)
+EXCELLENT reliability (alpha = 0.967). The Customer Satisfaction scale shows excellent internal consistency. Items are highly inter-correlated and measure the same construct well.> print(reliability$alpha)
+[1] 0.9669933
+> 
+> # Example 2: With item labels for clarity
+> reliability <- calculate_alpha(
++   data = satisfaction_data,
++   items = c("sat_overall", "sat_recommend", "sat_return"),
++   scale_name = "Customer Satisfaction",
++   item_labels = c(
++     sat_overall = "Overall satisfaction with Cloud 9",
++     sat_recommend = "Would recommend to friends",
++     sat_return = "Likelihood to return"
++   )
++ )
+
+==== CRONBACH'S ALPHA ANALYSIS ====
+Scale: Customer Satisfaction
+Number of items: 3
+
+Calculating item statistics...
+
+Calculating Cronbach's alpha...
+  Alpha = 0.967
+
+EXCELLENT reliability (alpha = 0.967). The Customer Satisfaction scale shows excellent internal consistency. Items are highly inter-correlated and measure the same construct well.
+
+Note: Removing these items would INCREASE alpha:
+  - sat_overall (new alpha = 1, improvement = +0.033)
+Consider whether these items truly belong in this scale.
+
+==== ANALYSIS COMPLETE ====
+
+> 
+> # Example 3: With reverse-coded items
+> # Some items might be worded negatively (e.g., "I was dissatisfied")
+> mixed_data <- data.frame(
++   happy_1 = c(7,8,9,7,8),      # Positive wording
++   unhappy_2 = c(3,2,1,3,2),    # Negative wording (needs reversing)
++   happy_3 = c(8,9,9,8,9)       # Positive wording
++ )
+> 
+> reliability <- calculate_alpha(
++   data = mixed_data,
++   items = c("happy_1", "unhappy_2", "happy_3"),
++   scale_name = "Happiness",
++   reverse_items = c("unhappy_2")  # Reverse the negative item
++ )
+
+==== CRONBACH'S ALPHA ANALYSIS ====
+Scale: Happiness
+Number of items: 3
+
+Reverse-coding items: unhappy_2
+  - Reversed unhappy_2 (scale: 1-3)
+
+Calculating item statistics...
+
+Calculating Cronbach's alpha...
+  Alpha = 0.957
+
+EXCELLENT reliability (alpha = 0.957). The Happiness scale shows excellent internal consistency. Items are highly inter-correlated and measure the same construct well.
+
+Note: Removing these items would INCREASE alpha:
+  - happy_3 (new alpha = 1, improvement = +0.043)
+Consider whether these items truly belong in this scale.
+
+==== ANALYSIS COMPLETE ====
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calculate_alpha", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calculate_composite_reliability")
+> ### * calculate_composite_reliability
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calculate_composite_reliability
+> ### Title: Calculate Composite Reliability and Validity Measures
+> ### Aliases: calculate_composite_reliability
+> 
+> ### ** Examples
+> 
+> # Example: Employee engagement scale
+> engagement_data <- data.frame(
++   engaged_1 = c(7,8,6,9,7,8,9,7,6,8,7,9,8,7,8,9,7,8,7,8),
++   engaged_2 = c(8,9,7,9,8,9,9,8,7,9,8,9,9,8,9,9,8,9,8,9),
++   engaged_3 = c(7,8,6,8,7,8,8,7,6,8,7,8,8,7,8,8,7,8,7,8),
++   engaged_4 = c(8,8,7,9,8,9,9,8,7,9,8,9,9,8,9,9,8,9,8,9)
++ )
+> 
+> # Calculate comprehensive reliability
+> reliability <- calculate_composite_reliability(
++   data = engagement_data,
++   items = c("engaged_1", "engaged_2", "engaged_3", "engaged_4"),
++   scale_name = "Employee Engagement"
++ )
+
+==== COMPOSITE RELIABILITY & VALIDITY ANALYSIS ====
+Scale: Employee Engagement
+
+Calculating Cronbach's Alpha...
+  Cronbach's alpha = 0.975
+
+Standardizing items for factor analysis...
+Running principal component analysis...
+  Factor loadings calculated for 4 items
+
+Calculating Composite Reliability...
+  Composite Reliability (CR) = 0.571
+
+Calculating Average Variance Extracted...
+  AVE = 0.25 (25% of variance explained)
+  sqrtAVE = 0.5
+
+Checking quality thresholds...
+  CR >= 0.70? FAIL FAIL
+  AVE >= 0.50? FAIL FAIL
+
+COMPOSITE RELIABILITY ANALYSIS for Employee Engagement:
+
+Cronbach's Alpha: alpha = 0.975
+Composite Reliability: CR = 0.571 FAIL (Below threshold)
+Average Variance Extracted: AVE = 0.25 FAIL (Below threshold)
+sqrtAVE = 0.5
+
+INTERPRETATION: This scale has RELIABILITY or VALIDITY ISSUES.
+- CR < 0.70: Items do not consistently measure the same construct
+- AVE < 0.50: More variance due to measurement error than true construct
+- Consider removing low-loading items or revising the scale
+
+RECOMMENDATION: Revise scale or remove problematic items before publication.
+
+WEAK ITEMS (loading < 0.70):
+  -  engaged_1  (loading =  0.489 )
+  -  engaged_2  (loading =  0.507 )
+  -  engaged_3  (loading =  0.507 )
+  -  engaged_4  (loading =  0.497 )
+Consider removing these items to improve CR and AVE.
+
+==== ANALYSIS COMPLETE ====
+
+> 
+> # View results
+> print(reliability)
+
+==========================================================
+|       COMPOSITE RELIABILITY & VALIDITY ANALYSIS        |
+==========================================================
+
+Scale: Employee Engagement 
+Number of items: 4 
+Sample size: 20 
+
+RELIABILITY MEASURES:
+  Cronbach's Alpha: 0.975 
+  Composite Reliability (CR): 0.571 FAIL 
+
+VALIDITY MEASURES:
+  Average Variance Extracted (AVE): 0.25 FAIL 
+  Square Root of AVE (sqrtAVE): 0.5 
+  Variance explained by construct: 25 %
+
+QUALITY ASSESSMENT:
+  Status: FAIL FAILED quality thresholds
+  Consider revising scale before publication
+
+ITEM LOADINGS:
+     label   loading variance_explained
+ engaged_1 0.4887205               23.9
+ engaged_2 0.5070078               25.7
+ engaged_3 0.5070078               25.7
+ engaged_4 0.4970297               24.7
+
+Note: Loadings >= 0.70 are considered strong
+
+> cat(reliability$interpretation)
+COMPOSITE RELIABILITY ANALYSIS for Employee Engagement:
+
+Cronbach's Alpha: alpha = 0.975
+Composite Reliability: CR = 0.571 FAIL (Below threshold)
+Average Variance Extracted: AVE = 0.25 FAIL (Below threshold)
+sqrtAVE = 0.5
+
+INTERPRETATION: This scale has RELIABILITY or VALIDITY ISSUES.
+- CR < 0.70: Items do not consistently measure the same construct
+- AVE < 0.50: More variance due to measurement error than true construct
+- Consider removing low-loading items or revising the scale
+
+RECOMMENDATION: Revise scale or remove problematic items before publication.
+
+WEAK ITEMS (loading < 0.70):
+  -  engaged_1  (loading =  0.489 )
+  -  engaged_2  (loading =  0.507 )
+  -  engaged_3  (loading =  0.507 )
+  -  engaged_4  (loading =  0.497 )
+Consider removing these items to improve CR and AVE.> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calculate_composite_reliability", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calculate_summary_stats")
+> ### * calculate_summary_stats
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calculate_summary_stats
+> ### Title: Calculate Summary Statistics for Consumer Data
+> ### Aliases: calculate_summary_stats
+> 
+> ### ** Examples
+> 
+> # Example 1: Basic usage with sample consumer spending data
+> spending <- c(45.2, 67.8, 23.4, 89.1, 34.5, 56.7, 78.9, 12.3)
+> calculate_summary_stats(spending)
+$n
+[1] 8
+
+$mean
+[1] 50.99
+
+$median
+[1] 50.95
+
+$sd
+[1] 27.02
+
+$min
+[1] 12.3
+
+$max
+[1] 89.1
+
+$q25
+[1] 31.73
+
+$q75
+[1] 70.57
+
+$variance
+[1] 730.01
+
+$range
+[1] 76.8
+
+$iqr
+[1] 38.85
+
+> 
+> # Example 2: Data with missing values (automatically handled)
+> satisfaction <- c(7, 8, NA, 6, 9, 7, NA, 8, 7)
+> calculate_summary_stats(satisfaction)
+Note: 2 missing value(s) removed from calculations.
+$n
+[1] 7
+
+$mean
+[1] 7.43
+
+$median
+[1] 7
+
+$sd
+[1] 0.98
+
+$min
+[1] 6
+
+$max
+[1] 9
+
+$q25
+[1] 7
+
+$q75
+[1] 8
+
+$variance
+[1] 0.95
+
+$range
+[1] 3
+
+$iqr
+[1] 1
+
+> 
+> # Example 3: With fewer statistics and more decimal places
+> prices <- c(19.99, 24.99, 29.99, 34.99, 39.99)
+> calculate_summary_stats(prices, include_all = FALSE, round_digits = 3)
+$n
+[1] 5
+
+$mean
+[1] 29.99
+
+$median
+[1] 29.99
+
+$sd
+[1] 7.906
+
+$min
+[1] 19.99
+
+$max
+[1] 39.99
+
+$q25
+[1] 24.99
+
+$q75
+[1] 34.99
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calculate_summary_stats", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("check_homogeneity_of_variance")
+> ### * check_homogeneity_of_variance
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: check_homogeneity_of_variance
+> ### Title: Check Homogeneity of Variance (Homoscedasticity)
+> ### Aliases: check_homogeneity_of_variance
+> 
+> ### ** Examples
+> 
+> check_homogeneity_of_variance(c(rnorm(50, 5, 1), rnorm(50, 6, 1)),
++                                rep(c("A", "B"), each = 50))
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+STATISTICAL ASSUMPTION CHECK: Homogeneity of Variance
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+Test Used: Levene's Test 
+Result: PASS ASSUMPTION MET 
+p-value: 0.2938 
+
+INTERPRETATION:
+  The homogeneity of variance assumption is MET (Levene's test: F(1, 98) =
+  1.114, p = 0.2938).
+
+
+RECOMMENDATION:
+  The groups have similar variances. Standard t-test or ANOVA procedures are
+  appropriate. The variance ratio (largest/smallest) is 1.36, which is
+  acceptable.
+
+
+PUBLICATION-READY TEXT:
+  Homogeneity of variance was assessed using Levene's test. The assumption was
+  met (F(1, 98) = 1.114, p = 0.2938), indicating equal variances across groups.
+
+
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+DETAILED EXPLANATION (for learning and context):
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+
+  Homogeneity of variance (also called homoscedasticity) is a critical
+  assumption for t-tests and ANOVA. It means that the variability (spread) of
+  scores should be roughly the same across all groups being compared. Levene's
+  test evaluates this assumption.
+  
+  The null hypothesis of Levene's test states that all groups have equal
+  variances. With a p-value of 0.2938 (greater than alpha = 0.05), we fail to
+  reject the null hypothesis. This is good news! It means the variances across
+  your groups are statistically similar.
+  
+  In practical terms: The spread of scores is similar across all 2 groups. This
+  means you can use standard statistical procedures (regular t-test or ANOVA)
+  without modification. If this assumption had been violated, you would need to
+  use Welch's t-test or Welch's ANOVA, which don't assume equal variances.
+  
+  Technical details: The variance ratio (largest group variance divided by
+  smallest) is 1.36. A rule of thumb is that ratios less than 3:1 are generally
+  acceptable, and yours meets this criterion. The F-statistic from Levene's
+  test is 1.114 with 1 and 98 degrees of freedom.
+
+
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("check_homogeneity_of_variance", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("check_normality")
+> ### * check_normality
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: check_normality
+> ### Title: Check Normality Assumption
+> ### Aliases: check_normality
+> 
+> ### ** Examples
+> 
+> check_normality(rnorm(100), "satisfaction_scores")
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+STATISTICAL ASSUMPTION CHECK: Normality
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+Test Used: Shapiro-Wilk 
+Result: PASS ASSUMPTION MET 
+p-value: 0.9876 
+Sample size: 100 
+
+INTERPRETATION:
+  The normality assumption is MET for satisfaction_scores (Shapiro-Wilk W =
+  0.9956, p = 0.9876, p > 0.05).
+
+
+RECOMMENDATION:
+  Parametric tests (e.g., t-tests, ANOVA, linear regression) are appropriate.
+  The data distribution does not significantly deviate from normality.
+
+
+PUBLICATION-READY TEXT:
+  Data normality was assessed using the Shapiro-Wilk test. The
+  satisfaction_scores variable met the normality assumption (W = 0.9956, p =
+  0.9876).
+
+
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+DETAILED EXPLANATION (for learning and context):
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+
+  The Shapiro-Wilk test evaluates whether a sample comes from a normally
+  distributed population. The null hypothesis states that the data are normally
+  distributed. With a p-value of 0.9876 (which is greater than our alpha level
+  of 0.05), we fail to reject the null hypothesis. This means we do not have
+  sufficient evidence to conclude that the data significantly deviate from a
+  normal distribution.
+  
+  In practical terms: Your data for satisfaction_scores appears to follow a
+  bell-shaped (normal) distribution, which is excellent news. This means you
+  can proceed with parametric statistical tests that assume normality (such as
+  t-tests, ANOVA, and linear regression) with confidence. These tests tend to
+  be more powerful than their non-parametric alternatives when assumptions are
+  met.
+  
+  Technical details: The Shapiro-Wilk W statistic ranges from 0 to 1, with
+  values closer to 1 indicating better fit to normality. Your W value of 0.9956
+  suggests a good fit. Skewness = -0.071 (values near 0 indicate symmetry), and
+  excess kurtosis = -0.052 (values near 0 indicate normal tail behavior).
+
+
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("check_normality", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("check_variable_types")
+> ### * check_variable_types
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: check_variable_types
+> ### Title: Review and Modify Variable Types Interactively
+> ### Aliases: check_variable_types
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # After importing data, review variable types
+> ##D checked_data <- check_variable_types(my_data)
+> ##D 
+> ##D # Access the corrected data
+> ##D final_data <- checked_data$data
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("check_variable_types", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("chisq_test")
+> ### * chisq_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: chisq_test
+> ### Title: Chi-Square Test of Independence with Effect Size
+> ### Aliases: chisq_test
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # From data frame
+> ##D result <- chisq_test(
+> ##D   data = customer_data,
+> ##D   x = "condition",
+> ##D   y = "purchased"
+> ##D )
+> ##D 
+> ##D # From vectors
+> ##D condition <- c(rep("A", 50), rep("B", 50))
+> ##D purchased <- c(rep(c("yes", "no"), each = 25),
+> ##D                rep(c("yes", "no"), c(35, 15)))
+> ##D result <- chisq_test(x = condition, y = purchased)
+> ##D 
+> ##D print(result)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("chisq_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("clean_names_safe")
+> ### * clean_names_safe
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: clean_names_safe
+> ### Title: Clean Variable Names Safely
+> ### Aliases: clean_names_safe
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D df <- data.frame(`First Name` = "John", `Last Name` = "Doe")
+> ##D clean_names_safe(df)  # first_name, last_name (if janitor installed)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("clean_names_safe", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("clean_survey_data")
+> ### * clean_survey_data
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: clean_survey_data
+> ### Title: Clean and Prepare Survey Data with Publication-Ready Exclusion
+> ###   Reporting
+> ### Aliases: clean_survey_data
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # ========================================================================
+> ##D # EXAMPLE 1: Minimal - Just exclude incomplete responses
+> ##D # ========================================================================
+> ##D 
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1
+> ##D   )
+> ##D )
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 2: Typical Qualtrics study with attention checks
+> ##D # ========================================================================
+> ##D 
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D 
+> ##D   # Qualtrics marks preview responses in the Status column
+> ##D   pretest_var = "Status",
+> ##D   pretest_values = "Survey Preview",
+> ##D 
+> ##D   # Requirements to be included
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1,        # Completed survey
+> ##D     adult = raw_data$age >= 18,                 # 18 or older
+> ##D     consented = raw_data$consent == "I agree"   # Gave consent
+> ##D   ),
+> ##D 
+> ##D   # Attention checks (replace Q5, Q12 with your question numbers)
+> ##D   attention_checks = list(
+> ##D     ac1 = list(var = "Q5", correct = 7),       # Told them to select 7
+> ##D     ac2 = list(var = "Q12", correct = 1)       # Told them to select 1
+> ##D   ),
+> ##D   attention_check_rule = "all",  # Must pass both
+> ##D 
+> ##D   id_var = "ResponseId"  # Qualtrics ID column
+> ##D )
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 2B: Date-based pre-test removal
+> ##D # ========================================================================
+> ##D 
+> ##D # If you ran pre-tests in February and started real data collection March 1
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D 
+> ##D   # Remove anything collected before March 1, 2024
+> ##D   date_var = "StartDate",                       # Qualtrics start date column
+> ##D   pretest_before_date = "2024-03-01",           # Cutoff date
+> ##D 
+> ##D   # Rest of your criteria
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1,
+> ##D     adult = raw_data$age >= 18
+> ##D   ),
+> ##D 
+> ##D   attention_checks = list(
+> ##D     ac1 = list(var = "Q5", correct = 7)
+> ##D   ),
+> ##D 
+> ##D   id_var = "ResponseId"
+> ##D )
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 2C: Combine column-based AND date-based pre-test removal
+> ##D # ========================================================================
+> ##D 
+> ##D # Remove BOTH "Survey Preview" responses AND anything before March 1
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D 
+> ##D   # Column-based: Qualtrics preview responses
+> ##D   pretest_var = "Status",
+> ##D   pretest_values = "Survey Preview",
+> ##D 
+> ##D   # Date-based: Anything before March 1
+> ##D   date_var = "StartDate",
+> ##D   pretest_before_date = "2024-03-01",
+> ##D 
+> ##D   # Other criteria...
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1
+> ##D   ),
+> ##D 
+> ##D   id_var = "ResponseId"
+> ##D )
+> ##D 
+> ##D # Get your cleaned data
+> ##D clean_df <- result$clean_data
+> ##D 
+> ##D # Copy this into your Methods section
+> ##D cat(result$publication_text$concise)
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 3: MTurk study
+> ##D # ========================================================================
+> ##D 
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D 
+> ##D   # Mark your own test responses
+> ##D   pretest_var = "WorkerId",
+> ##D   pretest_values = "YOUR_WORKER_ID_HERE",
+> ##D 
+> ##D   # MTurk quality criteria
+> ##D   inclusion_criteria = list(
+> ##D     submitted = raw_data$AssignmentStatus == "Submitted",
+> ##D     approval = raw_data$ApprovalRate >= 95,
+> ##D     min_hits = raw_data$TotalHITS >= 100,
+> ##D     us_location = raw_data$CountryOfResidence == "US"
+> ##D   ),
+> ##D 
+> ##D   # Your attention checks
+> ##D   attention_checks = list(
+> ##D     ac1 = list(var = "attention_1", correct = "blue"),
+> ##D     ac2 = list(var = "attention_2", correct = 4)
+> ##D   ),
+> ##D 
+> ##D   # Also exclude duplicates and speeders
+> ##D   additional_exclusions = duplicated(raw_data$WorkerId) |
+> ##D                          raw_data$duration_sec < 120,
+> ##D   additional_exclusion_reason = "Duplicate worker IDs or completed too quickly",
+> ##D 
+> ##D   id_var = "WorkerId"
+> ##D )
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 4: No attention checks, just basic cleaning
+> ##D # ========================================================================
+> ##D 
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1,
+> ##D     consented = raw_data$consent_given == TRUE
+> ##D   )
+> ##D )
+> ##D # That's it! No attention checks needed.
+> ##D 
+> ##D # ========================================================================
+> ##D # EXAMPLE 5: Rename variables and recode values (VERY USEFUL!)
+> ##D # ========================================================================
+> ##D 
+> ##D # First, check what Qualtrics named your columns
+> ##D names(raw_data)
+> ##D # [1] "ResponseId" "Q1" "Q2" "Q3" "Q17" "FL_16_DO" "Finished" ...
+> ##D 
+> ##D result <- clean_survey_data(
+> ##D   data = raw_data,
+> ##D 
+> ##D   # Rename Qualtrics' random names to meaningful names
+> ##D   rename_vars = list(
+> ##D     brand_attitude = "Q1",          # Q1 -> brand_attitude
+> ##D     purchase_intent = "Q2",         # Q2 -> purchase_intent
+> ##D     satisfaction = "Q3",            # Q3 -> satisfaction
+> ##D     age = "Q17",                    # Q17 -> age
+> ##D     condition = "FL_16_DO"          # Flow field -> condition
+> ##D   ),
+> ##D 
+> ##D   # Recode numeric codes to meaningful labels
+> ##D   # IMPORTANT: Use the NEW names (after renaming)
+> ##D   recode_vars = list(
+> ##D     condition = c("1" = "control", "2" = "treatment_A", "3" = "treatment_B"),
+> ##D     age = c("1" = "18-24", "2" = "25-34", "3" = "35-44", "4" = "45-54", "5" = "55+")
+> ##D   ),
+> ##D 
+> ##D   # Now use the NEW names in your inclusion criteria
+> ##D   inclusion_criteria = list(
+> ##D     completed = raw_data$Finished == 1
+> ##D   ),
+> ##D 
+> ##D   id_var = "ResponseId"
+> ##D )
+> ##D 
+> ##D # Your clean data now has meaningful variable names and labels!
+> ##D names(result$clean_data)
+> ##D # [1] "ResponseId" "brand_attitude" "purchase_intent" "satisfaction" "age" "condition" ...
+> ##D 
+> ##D table(result$clean_data$condition)
+> ##D # control  treatment_A  treatment_B
+> ##D #     150          145          143
+> ##D 
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("clean_survey_data", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("cohens_d_table")
+> ### * cohens_d_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: cohens_d_table
+> ### Title: Cohen's d Effect Size with Confidence Intervals
+> ### Aliases: cohens_d_table
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D df <- data.frame(
+> ##D   satisfaction = c(5, 6, 7, 8, 3, 4, 5, 6),
+> ##D   condition = rep(c("treatment", "control"), each = 4)
+> ##D )
+> ##D 
+> ##D effect_size <- cohens_d_table(df, "satisfaction", "condition")
+> ##D print(effect_size)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("cohens_d_table", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("compare_cfa_models")
+> ### * compare_cfa_models
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compare_cfa_models
+> ### Title: Compare Nested CFA Models
+> ### Aliases: compare_cfa_models
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Fit nested models
+> ##D model_1factor <- "general =~ q1 + q2 + q3 + q4"
+> ##D model_2factor <- "
+> ##D   factor1 =~ q1 + q2
+> ##D   factor2 =~ q3 + q4
+> ##D "
+> ##D 
+> ##D fit1 <- run_cfa(model_1factor, data = df)
+> ##D fit2 <- run_cfa(model_2factor, data = df)
+> ##D 
+> ##D # Compare
+> ##D comparison <- compare_cfa_models(fit1, fit2)
+> ##D print(comparison)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compare_cfa_models", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("compare_groups_anova")
+> ### * compare_groups_anova
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compare_groups_anova
+> ### Title: Perform One-Way ANOVA with Comprehensive Diagnostics
+> ### Aliases: compare_groups_anova
+> 
+> ### ** Examples
+> 
+> # Example 1: Vector input
+> satisfaction <- c(5, 6, 7, 8, 7, 6,    # Group A
++                   3, 4, 5, 4, 3, 4,    # Group B
++                   7, 8, 9, 8, 9, 8)    # Group C
+> condition <- factor(rep(c("A", "B", "C"), each = 6))
+> result <- compare_groups_anova(satisfaction, condition)
+
+Calculating descriptive statistics for 3 groups...
+
+Checking ANOVA assumptions...
+Assumption checks complete.
+
+Performing standard one-way ANOVA...
+Performing post-hoc tests (tukey)...
+ANOVA complete!
+
+> 
+> # Example 2: Data frame with formula
+> data <- data.frame(
++   score = c(45, 67, 54, 78, 56, 34, 56, 78, 89, 67),
++   group = factor(rep(c("Control", "Treatment A", "Treatment B"), c(3, 4, 3)))
++ )
+> result <- compare_groups_anova(data, formula = score ~ group)
+
+Calculating descriptive statistics for 3 groups...
+
+Checking ANOVA assumptions...
+Assumption checks complete.
+
+Performing standard one-way ANOVA...
+ANOVA complete!
+
+> 
+> # View publication text
+> print(result, show_publication = TRUE)
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+ONE-WAY ANOVA RESULTS
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+OVERVIEW:
+  Number of groups: 3 
+  Total sample size: 10 
+
+DESCRIPTIVE STATISTICS BY GROUP:
+       group n     mean       sd min max
+     Control 3 55.33333 11.06044  45  67
+ Treatment A 4 56.00000 17.96292  34  78
+ Treatment B 3 78.00000 11.00000  67  89
+
+ANOVA RESULTS:
+  F(2, 7) = 2.511
+  p-value: 0.150611 
+  Significant: NO (p >= .05) 
+
+EFFECT SIZE:
+  eta-squared = 0.418 ( large )
+  Interpretation: This effect accounts for 41.8 % of variance
+
+INTERPRETATION:
+  The One-Way ANOVA did not reveal a statistically significant difference
+  among groups (F(2, 7) = 2.51, p = 0.1506). The effect size is large
+  (eta-squared = 0.418).
+
+
+
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+PUBLICATION-READY TEXT
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+===
+
+ASSUMPTIONS:
+  The data were collected using a independent groups ANOVA design design,
+  ensuring independence of observations. Data normality was assessed using the
+  Shapiro-Wilk test. The ANOVA residuals variable met the normality assumption
+  (W = 0.9635, p = 0.8244). Homogeneity of variance was assessed using Levene's
+  test. The assumption was met (F(2, 7) = 0.173, p = 0.8447), indicating equal
+  variances across groups.
+
+
+METHODS:
+  An analysis of variance (ANOVA) was conducted to examine group differences.
+
+
+RESULTS:
+  The ANOVA did not reveal a statistically significant effect (F(2, 7) = 2.51,
+  p = 0.15), eta-squared = 0.418.
+
+
+INTERPRETATION:
+  These results do not provide evidence of a statistically significant effect.
+  However, absence of evidence is not evidence of absence; the study may be
+  underpowered to detect smaller effects.
+
+
+
+USAGE NOTE:
+  Copy the sections above into your manuscript. Modify as needed for your
+  specific journal's requirements and integrate with your narrative.
+
+
+Tip: Use print(result, show_assumptions = TRUE) to see assumption checks
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compare_groups_anova", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("compare_ols_robust")
+> ### * compare_ols_robust
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compare_ols_robust
+> ### Title: Compare OLS and Robust Standard Errors
+> ### Aliases: compare_ols_robust
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D model <- lm(y ~ x1 + x2, data = df)
+> ##D comparison <- compare_ols_robust(model)
+> ##D print(comparison)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compare_ols_robust", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("compare_sem_models")
+> ### * compare_sem_models
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: compare_sem_models
+> ### Title: Compare SEM Models
+> ### Aliases: compare_sem_models
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D model1 <- run_sem(syntax1, data = mydata)
+> ##D model2 <- run_sem(syntax2, data = mydata)
+> ##D 
+> ##D compare_sem_models(model1, model2,
+> ##D                    model_names = c("Partial mediation", "Full mediation"))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("compare_sem_models", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("consumer_survey")
+> ### * consumer_survey
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: consumer_survey
+> ### Title: Consumer Survey Example Dataset
+> ### Aliases: consumer_survey
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # Load the dataset
+> data(consumer_survey)
+> 
+> # View structure
+> str(consumer_survey)
+'data.frame':	100 obs. of  6 variables:
+ $ customer_id  : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ customer_name: chr  "Amy Sosa" "Jonah Simms" "Garrett McNeill" "Dina Fox" ...
+ $ flyer_group  : chr  "Got Flyer" "Got Flyer" "Got Flyer" "Got Flyer" ...
+ $ spending     : num  99.3 50.9 74.1 80.8 75.1 ...
+ $ satisfaction : num  8 7 10 9 8 8 9 8 3 8 ...
+ $ loyalty_score: num  89.6 86.8 49.9 100 56 69.9 60.4 65.8 71.4 70.1 ...
+> 
+> # Basic summary
+> summary(consumer_survey)
+  customer_id     customer_name      flyer_group           spending     
+ Min.   :  1.00   Length:100         Length:100         Min.   :  0.00  
+ 1st Qu.: 25.75   Class :character   Class :character   1st Qu.: 43.55  
+ Median : 50.50   Mode  :character   Mode  :character   Median : 57.89  
+ Mean   : 50.50                                         Mean   : 57.58  
+ 3rd Qu.: 75.25                                         3rd Qu.: 74.75  
+ Max.   :100.00                                         Max.   :122.17  
+                                                        NA's   :1       
+  satisfaction    loyalty_score   
+ Min.   : 3.000   Min.   : 13.40  
+ 1st Qu.: 7.000   1st Qu.: 52.70  
+ Median : 8.000   Median : 62.90  
+ Mean   : 7.596   Mean   : 63.33  
+ 3rd Qu.: 9.000   3rd Qu.: 71.30  
+ Max.   :10.000   Max.   :100.00  
+ NA's   :1        NA's   :1       
+> 
+> # Group comparison
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> consumer_survey %>%
++   group_by(flyer_group) %>%
++   summarise(
++     n = n(),
++     mean_spending = mean(spending, na.rm = TRUE),
++     median_satisfaction = median(satisfaction, na.rm = TRUE)
++   )
+# A tibble: 2 x 4
+  flyer_group     n mean_spending median_satisfaction
+  <chr>       <int>         <dbl>               <dbl>
+1 Got Flyer      50          63.9                   8
+2 No Flyer       50          51.4                   7
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("consumer_survey", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+
+detaching 'package:dplyr'
+
+> nameEx("correlation_table")
+> ### * correlation_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: correlation_table
+> ### Title: Correlation Table with Confidence Intervals
+> ### Aliases: correlation_table
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D df <- data.frame(
+> ##D   satisfaction = rnorm(100),
+> ##D   loyalty = rnorm(100),
+> ##D   value = rnorm(100)
+> ##D )
+> ##D 
+> ##D cors <- correlation_table(df, c("satisfaction", "loyalty", "value"))
+> ##D print(cors)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("correlation_table", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("create_analysis_report")
+> ### * create_analysis_report
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: create_analysis_report
+> ### Title: Create a Transparent Analysis Report
+> ### Aliases: create_analysis_report
+> 
+> ### ** Examples
+> 
+> # Example 1: Simple analysis of a single variable
+> spending <- c(45.2, 67.8, 23.4, 89.1, 34.5, 56.7, 78.9, 12.3, 91.2, 43.5)
+> create_analysis_report(spending, title = "Consumer Spending Analysis")
+==========================
+Consumer Spending Analysis
+==========================
+Generated on: 2026-01-11
+
+SECTION 1: DATA OVERVIEW
+--------------------------------------------------
+Variable analyzed: Variable
+Total observations: 10
+Valid observations: 10
+Missing values: 0 (0.0%)
+
+SECTION 2: DESCRIPTIVE STATISTICS
+--------------------------------------------------
+Sample size (n): 10
+
+Central Tendency Measures:
+  Mean: 54.26
+  Median: 50.95
+
+Variability Measures:
+  Standard Deviation: 27.24
+  Variance: 741.79
+  Interquartile Range (IQR): 39.38
+
+Range:
+  Minimum: 12.3
+  Maximum: 91.2
+  Range: 78.9
+
+Quartiles:
+  25th percentile (Q1): 36.75
+  50th percentile (Q2/Median): 50.95
+  75th percentile (Q3): 76.12
+
+SECTION 4: METHODOLOGICAL NOTES
+--------------------------------------------------
+For complete transparency and reproducibility, note the following:
+
+1. Missing Value Handling:
+   - Missing values (NA) were removed before all calculations
+   - 0 out of 10 observations were missing (0.0%)
+
+2. Statistical Methods:
+   - Descriptive statistics calculated using base R functions
+   - Standard deviation uses n-1 denominator (sample SD)
+
+3. Software:
+   - R version: R version 4.3.1 (2023-06-16)
+   - Package: consumeR
+
+==================================================
+END OF REPORT
+================================================== 
+> 
+> # Example 2: Analysis with a data frame
+> consumer_data <- data.frame(
++   spending = c(45, 67, 23, 89, 34, 56, 78, 12, 91, 43),
++   satisfaction = c(7, 8, 6, 9, 7, 8, 9, 5, 9, 7)
++ )
+> create_analysis_report(consumer_data, variable = "satisfaction",
++                       title = "Customer Satisfaction Analysis")
+==============================
+Customer Satisfaction Analysis
+==============================
+Generated on: 2026-01-11
+
+SECTION 1: DATA OVERVIEW
+--------------------------------------------------
+Variable analyzed: satisfaction
+Total observations: 10
+Valid observations: 10
+Missing values: 0 (0.0%)
+
+SECTION 2: DESCRIPTIVE STATISTICS
+--------------------------------------------------
+Sample size (n): 10
+
+Central Tendency Measures:
+  Mean: 7.5
+  Median: 7.5
+
+Variability Measures:
+  Standard Deviation: 1.35
+  Variance: 1.83
+  Interquartile Range (IQR): 1.75
+
+Range:
+  Minimum: 5
+  Maximum: 9
+  Range: 4
+
+Quartiles:
+  25th percentile (Q1): 7
+  50th percentile (Q2/Median): 7.5
+  75th percentile (Q3): 8.75
+
+SECTION 4: METHODOLOGICAL NOTES
+--------------------------------------------------
+For complete transparency and reproducibility, note the following:
+
+1. Missing Value Handling:
+   - Missing values (NA) were removed before all calculations
+   - 0 out of 10 observations were missing (0.0%)
+
+2. Statistical Methods:
+   - Descriptive statistics calculated using base R functions
+   - Standard deviation uses n-1 denominator (sample SD)
+
+3. Software:
+   - R version: R version 4.3.1 (2023-06-16)
+   - Package: consumeR
+
+==================================================
+END OF REPORT
+================================================== 
+> 
+> # Example 3: Group comparison
+> study_data <- data.frame(
++   purchase_amount = c(45, 67, 23, 89, 34, 56, 78, 12, 91, 43,
++                      34, 45, 29, 56, 41, 39, 49, 31, 52, 38),
++   condition = c(rep("Treatment", 10), rep("Control", 10))
++ )
+> create_analysis_report(study_data,
++                       variable = "purchase_amount",
++                       group_var = "condition",
++                       title = "Treatment Effect Analysis")
+
+Checking statistical assumptions...
+Assumption checks complete. See 'assumptions' element in results for details.
+
+Auto-selection: Using Welch's t-test (normality met, but variances unequal)
+=========================
+Treatment Effect Analysis
+=========================
+Generated on: 2026-01-11
+
+SECTION 1: DATA OVERVIEW
+--------------------------------------------------
+Variable analyzed: purchase_amount
+Total observations: 20
+Valid observations: 20
+Missing values: 0 (0.0%)
+
+SECTION 2: DESCRIPTIVE STATISTICS
+--------------------------------------------------
+Sample size (n): 20
+
+Central Tendency Measures:
+  Mean: 47.6
+  Median: 44
+
+Variability Measures:
+  Standard Deviation: 20.73
+  Variance: 429.94
+  Interquartile Range (IQR): 22
+
+Range:
+  Minimum: 12
+  Maximum: 91
+  Range: 79
+
+Quartiles:
+  25th percentile (Q1): 34
+  50th percentile (Q2/Median): 44
+  75th percentile (Q3): 56
+
+SECTION 3: GROUP COMPARISON
+--------------------------------------------------
+Grouping variable: condition
+Groups compared: Treatment vs Control
+
+Group 1 (Treatment):
+  n = 10
+  Mean = 53.8
+
+Group 2 (Control):
+  n = 10
+  Mean = 41.4
+
+Statistical Test Results:
+  Test used: Welch's t-test
+  P-value: 0.198886
+  Significant at alpha = 0.05: FALSE
+  Mean difference: 12.4
+
+Interpretation:
+  No significant difference detected between groups (p = 0.1989). Group 1: M = 53.8, SD = 27.22; Group 2: M = 41.4, SD = 9.01. The effect size is medium (Cohen's d = 0.61).
+
+SECTION 4: METHODOLOGICAL NOTES
+--------------------------------------------------
+For complete transparency and reproducibility, note the following:
+
+1. Missing Value Handling:
+   - Missing values (NA) were removed before all calculations
+   - 0 out of 20 observations were missing (0.0%)
+
+2. Statistical Methods:
+   - Descriptive statistics calculated using base R functions
+   - Standard deviation uses n-1 denominator (sample SD)
+   - Group comparison used: Welch's t-test
+   - Significance level (alpha) set at 0.05
+
+3. Software:
+   - R version: R version 4.3.1 (2023-06-16)
+   - Package: consumeR
+
+==================================================
+END OF REPORT
+================================================== 
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("create_analysis_report", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("efa_diagnostics")
+> ### * efa_diagnostics
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: efa_diagnostics
+> ### Title: EFA Diagnostics: KMO, Bartlett's Test, Parallel Analysis
+> ### Aliases: efa_diagnostics
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Prepare item data
+> ##D items <- customer_survey[, c("q1", "q2", "q3", "q4", "q5", "q6")]
+> ##D 
+> ##D # Run diagnostics
+> ##D diagnostics <- efa_diagnostics(items)
+> ##D print(diagnostics)
+> ##D 
+> ##D # Check suitability
+> ##D if (diagnostics$suitable) {
+> ##D   # Proceed with EFA
+> ##D   efa_result <- perform_efa(items, n_factors = diagnostics$parallel$nfact)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("efa_diagnostics", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("emmeans_contrasts")
+> ### * emmeans_contrasts
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: emmeans_contrasts
+> ### Title: Planned Contrasts and Simple Effects via emmeans
+> ### Aliases: emmeans_contrasts
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Fit ANOVA
+> ##D model <- lm(satisfaction ~ condition, data = df)
+> ##D 
+> ##D # Pairwise comparisons with Tukey adjustment
+> ##D contrasts <- emmeans_contrasts(model, specs = "condition")
+> ##D 
+> ##D # Treatment vs control
+> ##D contrasts <- emmeans_contrasts(
+> ##D   model,
+> ##D   specs = "condition",
+> ##D   contrasts = "trt.vs.ctrl",
+> ##D   ref = "control"
+> ##D )
+> ##D 
+> ##D # Simple effects (condition at each time point)
+> ##D model2 <- lm(satisfaction ~ condition * time, data = df)
+> ##D simple <- emmeans_contrasts(
+> ##D   model2,
+> ##D   specs = "condition",
+> ##D   by = "time"
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("emmeans_contrasts", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("fisher_exact_test")
+> ### * fisher_exact_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: fisher_exact_test
+> ### Title: Fisher's Exact Test for Small Samples
+> ### Aliases: fisher_exact_test
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Small sample 2x2 table
+> ##D result <- fisher_exact_test(
+> ##D   data = df,
+> ##D   x = "treatment",
+> ##D   y = "response"
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("fisher_exact_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("format_est_ci")
+> ### * format_est_ci
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: format_est_ci
+> ### Title: Format Estimates with Confidence Intervals
+> ### Aliases: format_est_ci
+> 
+> ### ** Examples
+> 
+> # Single value
+> format_est_ci(2.34, 1.23, 3.45)  # "2.34 [1.23, 3.45]"
+[1] "2.34 [1.23, 3.45]"
+> 
+> # Multiple values
+> format_est_ci(
++   est = c(2.34, 5.67),
++   lo = c(1.23, 4.56),
++   hi = c(3.45, 6.78)
++ )
+[1] "2.34 [1.23, 3.45]" "5.67 [4.56, 6.78]"
+> 
+> # More decimal places
+> format_est_ci(2.3456, 1.2345, 3.4567, digits = 3)
+[1] "2.346 [1.234, 3.457]"
+> 
+> # As percentages
+> format_est_ci(0.234, 0.123, 0.345, percent = TRUE)  # "23.4% [12.3%, 34.5%]"
+[1] "23.40% [12.30%, 34.50%]"
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("format_est_ci", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("format_n")
+> ### * format_n
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: format_n
+> ### Title: Format Sample Sizes for Publication
+> ### Aliases: format_n
+> 
+> ### ** Examples
+> 
+> # Total sample
+> format_n(150)  # "N = 150"
+[1] "N = 150"
+> 
+> # Subgroup sample
+> format_n(45, type = "n")  # "n = 45"
+[1] "n = 45"
+> 
+> # Multiple values
+> format_n(c(100, 50), type = "n")  # c("n = 100", "n = 50")
+[1] "n = 100" "n = 50" 
+> 
+> # Without label
+> format_n(150, include_label = FALSE)  # "150"
+[1] "150"
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("format_n", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("format_p")
+> ### * format_p
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: format_p
+> ### Title: Format P-Values for Publication
+> ### Aliases: format_p
+> 
+> ### ** Examples
+> 
+> # APA style (no leading zero)
+> format_p(0.042)  # "p = .042"
+[1] "p = .042"
+> format_p(0.0001) # "p < .001"
+[1] "p < .001"
+> format_p(c(0.042, 0.0001, 0.523))
+[1] "p = .042" "p < .001" "p = .523"
+> 
+> # Plain style (with leading zero)
+> format_p(0.042, style = "plain")  # "p = 0.042"
+[1] "p = 0.042"
+> 
+> # More decimal places
+> format_p(0.04237, digits = 4)  # "p = .0424"
+[1] "p = .0424"
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("format_p", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("friedman_test")
+> ### * friedman_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: friedman_test
+> ### Title: Friedman Test
+> ### Aliases: friedman_test
+> 
+> ### ** Examples
+> 
+> set.seed(42)
+> df <- expand.grid(
++   subject = 1:30,
++   time = c("T1", "T2", "T3")
++ )
+> df$rating <- rpois(nrow(df), lambda = 4 + as.numeric(factor(df$time)))
+> 
+> result <- friedman_test(df, outcome = "rating", time = "time", subject = "subject")
+> print(result)
+Friedman Test
+=============
+
+n subjects: 30
+n time points: 3
+
+chi^2 statistic: 0.54
+df: 2
+p-value: p = .764
+Kendall's W: 0.009
+
+Time Point Medians:
+# A tibble: 3 x 2
+  time  median
+  <fct>  <dbl>
+1 T1       6  
+2 T2       6.5
+3 T3       6  
+
+Interpretation:
+   Non-significant difference across 3 time points, chi^2(2) = 0.54, p = .764, Kendall's W = 0.009. 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("friedman_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("icc_calculate")
+> ### * icc_calculate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: icc_calculate
+> ### Title: Calculate Intraclass Correlation Coefficient
+> ### Aliases: icc_calculate
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Calculate ICC from unconditional model
+> ##D icc <- icc_calculate(satisfaction ~ (1 | store_id), data = mydata)
+> ##D print(icc)
+> ##D 
+> ##D # Or from fitted model
+> ##D model <- run_mlm(satisfaction ~ price + (1 | store_id), data = mydata)
+> ##D icc <- icc_calculate(model)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("icc_calculate", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("import_research_data")
+> ### * import_research_data
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: import_research_data
+> ### Title: Import Data from CSV or SPSS with Interactive Variable Type
+> ###   Checking
+> ### Aliases: import_research_data
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Example 1: Import CSV file (interactive)
+> ##D my_data <- import_research_data("survey_data.csv")
+> ##D # Shows summary, asks for confirmation
+> ##D # Returns cleaned data ready for analysis
+> ##D 
+> ##D # Example 2: Import SPSS file (non-interactive)
+> ##D my_data <- import_research_data(
+> ##D   "study1_data.sav",
+> ##D   interactive = FALSE,
+> ##D   create_report = TRUE
+> ##D )
+> ##D 
+> ##D # Example 3: Access the imported data
+> ##D result <- import_research_data("data.csv")
+> ##D clean_data <- result$data  # The cleaned tibble
+> ##D var_info <- result$variable_summary  # Info about variables
+> ##D plot(result$validation_report)  # View quality report
+> ##D 
+> ##D # Example 4: Manual type specification
+> ##D result <- import_research_data("data.csv")
+> ##D # Then use check_variable_types() to review and modify
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("import_research_data", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("johnson_neyman")
+> ### * johnson_neyman
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: johnson_neyman
+> ### Title: Johnson-Neyman Technique for Regions of Significance
+> ### Aliases: johnson_neyman
+> 
+> ### ** Examples
+> 
+> # Price sensitivity moderated by brand loyalty
+> set.seed(42)
+> n <- 200
+> df <- data.frame(
++   price = rnorm(n, 50, 10),
++   loyalty = rnorm(n, 5, 1.5),
++   purchase = rnorm(n, 5, 1)
++ )
+> df$purchase <- df$purchase - 0.1 * df$price + 0.3 * df$loyalty +
++                0.05 * df$price * df$loyalty
+> 
+> model <- lm(purchase ~ price * loyalty, data = df)
+> 
+> # Find regions of significance
+> jn <- johnson_neyman(model, focal = "price", moderator = "loyalty")
+> print(jn)
+Johnson-Neyman Technique
+========================
+
+Focal predictor: price
+Moderator: loyalty
+Significance level: alpha = 0.050
+
+Transition Point(s):
+# A tibble: 1 x 2
+  transition_point transition_type       
+             <dbl> <chr>                 
+1             3.10 Significance threshold
+
+Regions of Significance:
+# A tibble: 2 x 3
+  region           moderator_range effect_status  
+  <chr>            <chr>           <chr>          
+1 loyalty < 3.101  [2.18, 3.101)   Non-significant
+2 loyalty >= 3.101 [3.101, 7.86]   Significant    
+
+Interpretation:
+   The effect of price transitions from non-significant to significant at loyalty = 3.101.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("johnson_neyman", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("kruskal_wallis_test")
+> ### * kruskal_wallis_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: kruskal_wallis_test
+> ### Title: Kruskal-Wallis Test
+> ### Aliases: kruskal_wallis_test
+> 
+> ### ** Examples
+> 
+> set.seed(42)
+> df <- data.frame(
++   rating = c(rpois(40, 3), rpois(40, 5), rpois(40, 4)),
++   product = rep(c("A", "B", "C"), each = 40)
++ )
+> 
+> result <- kruskal_wallis_test(df, outcome = "rating", group = "product")
+> print(result)
+Kruskal-Wallis Test
+===================
+
+H statistic: 6.14
+df: 2
+p-value: p = .047
+Epsilon-squared: 0.052
+
+Group Medians:
+# A tibble: 3 x 3
+  product     n median
+  <chr>   <int>  <dbl>
+1 A          40    3.5
+2 B          40    4.5
+3 C          40    4  
+
+Interpretation:
+   Significant difference across 3 groups, H(2) = 6.14, p = .047, epsilon^2 = 0.052. Follow up with pairwise comparisons using Bonferroni correction.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("kruskal_wallis_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("logistic_assumptions")
+> ### * logistic_assumptions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: logistic_assumptions
+> ### Title: Check Logistic Regression Assumptions
+> ### Aliases: logistic_assumptions
+> 
+> ### ** Examples
+> 
+> # Fit model
+> set.seed(42)
+> df <- data.frame(
++   purchased = sample(0:1, 150, replace = TRUE),
++   price = rnorm(150, 50, 10),
++   quality = rnorm(150, 5, 1),
++   age = sample(25:65, 150, replace = TRUE)
++ )
+> model <- run_logistic(purchased ~ price + quality + age, data = df)
+> 
+> # Check assumptions
+> checks <- logistic_assumptions(model, data = df)
+> print(checks)
+Logistic Regression Assumption Checks
+=====================================
+
+1. Multicollinearity (VIF):
+   Max VIF: 1.02
+   Status: PASS PASS
+
+2. Influential Cases (Cook's D):
+   Number of influential cases: 1
+   Threshold: 0.0267
+   Status: FAIL FAIL
+
+3. Separation Check:
+   Status: PASS PASS (no extreme coefficients)
+
+4. Linearity of Logit:
+   Continuous predictors tested: price, quality, age
+   Status: PASS PASS
+
+Overall Status:
+   FAIL Some assumptions violated
+
+Remediation:
+   - 1 influential case(s) detected (Cook's D > 0.0267). Investigate cases: 43. Consider removing or using robust methods.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("logistic_assumptions", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("make_table_md")
+> ### * make_table_md
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: make_table_md
+> ### Title: Create Markdown Table
+> ### Aliases: make_table_md
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Simple table
+> ##D df <- data.frame(
+> ##D   Variable = c("Age", "Income", "Satisfaction"),
+> ##D   Mean = c(34.5, 65000, 7.2),
+> ##D   SD = c(8.3, 15000, 1.4)
+> ##D )
+> ##D make_table_md(df, caption = "Descriptive Statistics")
+> ##D 
+> ##D # Custom alignment
+> ##D make_table_md(df, align = c("l", "r", "r"))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("make_table_md", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("make_table_tsv")
+> ### * make_table_tsv
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: make_table_tsv
+> ### Title: Create TSV Table for Copy-Paste
+> ### Aliases: make_table_tsv
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Create table
+> ##D df <- data.frame(
+> ##D   Variable = c("Age", "Income", "Satisfaction"),
+> ##D   Mean = c(34.5, 65000, 7.2),
+> ##D   SD = c(8.3, 15000, 1.4)
+> ##D )
+> ##D 
+> ##D # Print as TSV
+> ##D make_table_tsv(df)
+> ##D 
+> ##D # Copy the output and paste into Excel/Sheets
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("make_table_tsv", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mann_whitney_test")
+> ### * mann_whitney_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mann_whitney_test
+> ### Title: Mann-Whitney U Test (Wilcoxon Rank-Sum Test)
+> ### Aliases: mann_whitney_test
+> 
+> ### ** Examples
+> 
+> # Compare purchase intention between groups
+> set.seed(42)
+> df <- data.frame(
++   intention = c(rpois(50, 3), rpois(50, 5)),  # Non-normal
++   condition = rep(c("Control", "Treatment"), each = 50)
++ )
+> 
+> result <- mann_whitney_test(df, outcome = "intention", group = "condition")
+> print(result)
+Mann-Whitney U Test
+===================
+
+Control vs Treatment
+n1 = 50, n2 = 50
+
+U statistic: 949.00
+p-value: p = .036
+Rank-biserial r: 0.241
+
+Median (Control): 3.00
+Median (Treatment): 4.50
+
+Interpretation:
+   Significant difference between Control (Mdn = 3.00) and Treatment (Mdn = 4.50), U = 949.0, p = .036, r_rb = 0.241 (small effect).
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mann_whitney_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mcnemar_test")
+> ### * mcnemar_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mcnemar_test
+> ### Title: McNemar's Test for Paired Categorical Data
+> ### Aliases: mcnemar_test
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Before-after purchase behavior
+> ##D result <- mcnemar_test(
+> ##D   data = df,
+> ##D   var1 = "purchased_before",
+> ##D   var2 = "purchased_after"
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mcnemar_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mediation_parallel")
+> ### * mediation_parallel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mediation_parallel
+> ### Title: Parallel Mediation Analysis
+> ### Aliases: mediation_parallel
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Two parallel mediators
+> ##D result <- mediation_parallel(
+> ##D   data = consumer_data,
+> ##D   x = "brand_reputation",
+> ##D   mediators = c("perceived_quality", "brand_trust"),
+> ##D   y = "purchase_intention",
+> ##D   boot_samples = 5000,
+> ##D   seed = 123
+> ##D )
+> ##D print(result)
+> ##D 
+> ##D # Three mediators with covariates
+> ##D result2 <- mediation_parallel(
+> ##D   data = mydata,
+> ##D   x = "ad_exposure",
+> ##D   mediators = c("awareness", "attitude", "intention"),
+> ##D   y = "behavior",
+> ##D   covariates = c("age", "gender"),
+> ##D   boot_samples = 5000
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mediation_parallel", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mediation_serial")
+> ### * mediation_serial
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mediation_serial
+> ### Title: Serial Mediation Analysis
+> ### Aliases: mediation_serial
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Two-mediator serial model
+> ##D result <- mediation_serial(
+> ##D   data = consumer_data,
+> ##D   x = "advertising",
+> ##D   mediators = c("awareness", "attitude"),
+> ##D   y = "purchase",
+> ##D   boot_samples = 5000,
+> ##D   seed = 123
+> ##D )
+> ##D print(result)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mediation_serial", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mediation_simple")
+> ### * mediation_simple
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mediation_simple
+> ### Title: Simple Mediation Analysis with Bootstrap Confidence Intervals
+> ### Aliases: mediation_simple
+> 
+> ### ** Examples
+> 
+> # Brand attitude mediates price -> purchase intention
+> set.seed(42)
+> n <- 200
+> df <- data.frame(
++   price_perception = rnorm(n, 5, 1),
++   brand_attitude = rnorm(n, 5, 1),
++   purchase_intention = rnorm(n, 5, 1)
++ )
+> # Create mediation relationship
+> df$brand_attitude <- df$brand_attitude + 0.5 * df$price_perception
+> df$purchase_intention <- df$purchase_intention +
++   0.3 * df$price_perception + 0.6 * df$brand_attitude
+> 
+> # Run mediation analysis
+> result <- mediation_simple(
++   data = df,
++   x = "price_perception",
++   m = "brand_attitude",
++   y = "purchase_intention",
++   boot_samples = 1000,  # Use 5000+ for publications
++   seed = 42
++ )
+> 
+> print(result)
+Simple Mediation Analysis
+=========================
+
+Model: price_perception -> brand_attitude -> purchase_intention
+Sample size: N = 200
+Bootstrap samples: 1000
+
+Path Coefficients:
+# A tibble: 4 x 6
+  path                label estimate std_error  p_value significant
+  <chr>               <chr>    <dbl>     <dbl>    <dbl> <lgl>      
+1 a (X -> M)          a        0.422    0.0688 4.70e- 9 TRUE       
+2 b (M -> Y)          b        0.667    0.0783 4.11e-15 TRUE       
+3 c (X -> Y, total)   c        0.496    0.0885 6.94e- 8 TRUE       
+4 c' (X -> Y, direct) c'       0.215    0.0827 1.02e- 2 TRUE       
+
+Indirect Effect:
+# A tibble: 1 x 8
+  effect       estimate std_error_sobel ci_lower ci_upper ci_method boot_samples
+  <chr>           <dbl>           <dbl>    <dbl>    <dbl> <chr>            <int>
+1 Indirect (a~    0.281          0.0566    0.190    0.403 bca               1000
+# i 1 more variable: significant <lgl>
+
+Total effect (c): 0.496
+Direct effect (c'): 0.215
+Proportion mediated: 56.7%
+
+Result:
+   Partial mediation
+
+Interpretation:
+   Partial mediation detected. Indirect effect = 0.281, 95% CI [0.190, 0.403]. Path a: 0.422 (p < .001), Path b: 0.667 (p < .001), Direct effect (c'): 0.215 (p = .010).
+> summary(result)
+Simple Mediation Analysis
+=========================
+
+Model: price_perception -> brand_attitude -> purchase_intention
+Sample size: N = 200
+Bootstrap samples: 1000
+
+Path Coefficients:
+# A tibble: 4 x 6
+  path                label estimate std_error  p_value significant
+  <chr>               <chr>    <dbl>     <dbl>    <dbl> <lgl>      
+1 a (X -> M)          a        0.422    0.0688 4.70e- 9 TRUE       
+2 b (M -> Y)          b        0.667    0.0783 4.11e-15 TRUE       
+3 c (X -> Y, total)   c        0.496    0.0885 6.94e- 8 TRUE       
+4 c' (X -> Y, direct) c'       0.215    0.0827 1.02e- 2 TRUE       
+
+Indirect Effect:
+# A tibble: 1 x 8
+  effect       estimate std_error_sobel ci_lower ci_upper ci_method boot_samples
+  <chr>           <dbl>           <dbl>    <dbl>    <dbl> <chr>            <int>
+1 Indirect (a~    0.281          0.0566    0.190    0.403 bca               1000
+# i 1 more variable: significant <lgl>
+
+Total effect (c): 0.496
+Direct effect (c'): 0.215
+Proportion mediated: 56.7%
+
+Result:
+   Partial mediation
+
+Interpretation:
+   Partial mediation detected. Indirect effect = 0.281, 95% CI [0.190, 0.403]. Path a: 0.422 (p < .001), Path b: 0.667 (p < .001), Direct effect (c'): 0.215 (p = .010).
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mediation_simple", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mlm_assumptions")
+> ### * mlm_assumptions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mlm_assumptions
+> ### Title: Check MLM Assumptions
+> ### Aliases: mlm_assumptions
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D model <- run_mlm(y ~ x + (1 | group), data = mydata)
+> ##D assumptions <- mlm_assumptions(model)
+> ##D print(assumptions$summary)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mlm_assumptions", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("moderated_mediation")
+> ### * moderated_mediation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: moderated_mediation
+> ### Title: Moderated Mediation Analysis (Hayes PROCESS Models 7, 8, 14)
+> ### Aliases: moderated_mediation
+> 
+> ### ** Examples
+> 
+> # Model 7: Trust mediates CSR -> loyalty, moderated by involvement
+> set.seed(42)
+> n <- 200
+> df <- data.frame(
++   csr = rnorm(n),
++   trust = rnorm(n),
++   loyalty = rnorm(n),
++   involvement = rnorm(n)
++ )
+> # Create moderated mediation structure
+> df$trust <- df$trust + 0.5 * df$csr
+> df$loyalty <- df$loyalty + 0.3 * df$trust +
++   0.4 * df$involvement + 0.2 * df$trust * df$involvement
+> 
+> result <- moderated_mediation(
++   data = df,
++   x = "csr",
++   m = "trust",
++   y = "loyalty",
++   moderator = "involvement",
++   model = "7",
++   boot_samples = 1000,  # Use 5000+ for publication
++   seed = 42
++ )
+> print(result)
+Moderated Mediation Analysis
+============================
+
+Model: Hayes PROCESS Model 7
+X = csr, M = trust, Y = loyalty, W = involvement
+
+Path Coefficients:
+# A tibble: 5 x 2
+  path        estimate
+  <chr>          <dbl>
+1 a (X->M)       0.422
+2 b (M->Y)       0.352
+3 c' (direct)   -0.109
+4 axW           NA    
+5 bxW            0.271
+
+Index of Moderated Mediation:
+# A tibble: 1 x 4
+  index ci_lower ci_upper significant
+  <dbl>    <dbl>    <dbl> <lgl>      
+1 0.114   0.0291    0.223 TRUE       
+
+Conditional Indirect Effects:
+# A tibble: 3 x 6
+  moderator_value moderator_label indirect_effect ci_lower ci_upper significant
+            <dbl> <chr>                     <dbl>    <dbl>    <dbl> <lgl>      
+1          -1.06  Low (-1 SD)              0.0420  -0.0734    0.151 FALSE      
+2          -0.128 Mean                     0.148    0.0796    0.242 TRUE       
+3           0.801 High (+1 SD)             0.255    0.139     0.397 TRUE       
+
+Interpretation:
+   Moderated mediation detected (Hayes Model 7). Index of moderated mediation = 0.114, 95% CI [0.029, 0.223]. The indirect effect strengthens as involvement increases.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("moderated_mediation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("odds_ratio_table")
+> ### * odds_ratio_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: odds_ratio_table
+> ### Title: Odds Ratio with Confidence Interval
+> ### Aliases: odds_ratio_table
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Treatment effect on success
+> ##D result <- odds_ratio_table(
+> ##D   data = df,
+> ##D   x = "treatment",  # Exposed vs unexposed
+> ##D   y = "success"     # Outcome
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("odds_ratio_table", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("perform_efa")
+> ### * perform_efa
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: perform_efa
+> ### Title: Perform Exploratory Factor Analysis with Beautiful
+> ###   Visualizations
+> ### Aliases: perform_efa
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Example: Analyze customer experience survey
+> ##D # Suppose we have 9 items that might measure 3 dimensions
+> ##D 
+> ##D library(dplyr)
+> ##D library(ggplot2)
+> ##D 
+> ##D # Run EFA to discover factor structure
+> ##D efa_results <- perform_efa(
+> ##D   data = customer_data,
+> ##D   items = c("q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"),
+> ##D   item_labels = c(
+> ##D     q1 = "Store cleanliness",
+> ##D     q2 = "Product selection",
+> ##D     q3 = "Staff friendliness",
+> ##D     # ... etc
+> ##D   )
+> ##D )
+> ##D 
+> ##D # View the scree plot
+> ##D print(efa_results$scree_plot)
+> ##D 
+> ##D # View loading heatmap
+> ##D print(efa_results$loading_plot)
+> ##D 
+> ##D # Get interpretation
+> ##D cat(efa_results$interpretation)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("perform_efa", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("pseudo_r2")
+> ### * pseudo_r2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: pseudo_r2
+> ### Title: Calculate Pseudo R-squared for Logistic Regression
+> ### Aliases: pseudo_r2
+> 
+> ### ** Examples
+> 
+> set.seed(42)
+> df <- data.frame(
++   outcome = sample(0:1, 100, replace = TRUE),
++   x1 = rnorm(100),
++   x2 = rnorm(100)
++ )
+> model <- run_logistic(outcome ~ x1 + x2, data = df)
+> pseudo_r2(model)
+# A tibble: 1 x 6
+  mcfadden cox_snell nagelkerke    tjur   aic   bic
+     <dbl>     <dbl>      <dbl>   <dbl> <dbl> <dbl>
+1  0.00238   0.00326    0.00436 0.00322  143.  151.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("pseudo_r2", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("reverse_score_likert")
+> ### * reverse_score_likert
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: reverse_score_likert
+> ### Title: Reverse Score Likert-Type Items
+> ### Aliases: reverse_score_likert
+> 
+> ### ** Examples
+> 
+> # Basic usage (1-7 scale)
+> responses <- c(1, 2, 3, 4, 5, 6, 7)
+> reverse_score_likert(responses)  # c(7, 6, 5, 4, 3, 2, 1)
+[1] 7 6 5 4 3 2 1
+> 
+> # 1-5 scale
+> responses_5pt <- c(1, 2, 3, 4, 5)
+> reverse_score_likert(responses_5pt, min = 1, max = 5)  # c(5, 4, 3, 2, 1)
+[1] 5 4 3 2 1
+> 
+> # Handles NA
+> responses_na <- c(1, NA, 3, 5, NA, 7)
+> reverse_score_likert(responses_na)  # c(7, NA, 5, 3, NA, 1)
+[1]  7 NA  5  3 NA  1
+> 
+> # With out-of-range values (strict = FALSE)
+> responses_bad <- c(1, 2, 8, 4, 5)  # 8 is out of range
+> reverse_score_likert(responses_bad, strict = FALSE)
+Warning in reverse_score_likert(responses_bad, strict = FALSE) :
+  1 value(s) outside [1, 7] range. These will not be reverse scored: 8
+[1] 7 6 8 4 3
+> # Warning issued, 8 preserved
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("reverse_score_likert", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("rm_pairwise")
+> ### * rm_pairwise
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: rm_pairwise
+> ### Title: Pairwise Comparisons for Repeated Measures ANOVA
+> ### Aliases: rm_pairwise
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # After significant RM ANOVA
+> ##D # Create example data
+> ##D set.seed(42)
+> ##D df <- expand.grid(
+> ##D   id = 1:30,
+> ##D   time = c("Before", "During", "After")
+> ##D )
+> ##D df$satisfaction <- rnorm(nrow(df), mean = 5 + as.numeric(factor(df$time)), sd = 1)
+> ##D 
+> ##D result <- run_rm_anova(df, outcome = "satisfaction", within = "time", subject = "id")
+> ##D pairwise <- rm_pairwise(result, factor = "time")
+> ##D print(pairwise)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("rm_pairwise", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("row_sd")
+> ### * row_sd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: row_sd
+> ### Title: Calculate Row-Wise Standard Deviation
+> ### Aliases: row_sd
+> 
+> ### ** Examples
+> 
+> # Basic usage
+> df <- data.frame(
++   q1 = c(5, 7, 1, 4),
++   q2 = c(6, 7, 1, 5),
++   q3 = c(5, 7, 1, 3)
++ )
+> row_sd(df)  # SD for each row
+[1] 0.5773503 0.0000000 0.0000000 1.0000000
+> 
+> # Specific items
+> row_sd(df, items = c("q1", "q2"))
+[1] 0.7071068 0.0000000 0.0000000 0.7071068
+> 
+> # With missing values
+> df_na <- data.frame(
++   q1 = c(5, NA, 1),
++   q2 = c(6, 7, NA),
++   q3 = c(5, 7, 1)
++ )
+> row_sd(df_na, na.rm = TRUE)
+[1] 0.5773503 0.0000000 0.0000000
+> 
+> # Detect straight-lining
+> straight_liner <- data.frame(q1 = 7, q2 = 7, q3 = 7)
+> row_sd(straight_liner)  # Returns 0
+[1] 0
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("row_sd", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_anova")
+> ### * run_anova
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_anova
+> ### Title: Run ANOVA with Type II or Type III Sums of Squares
+> ### Aliases: run_anova
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Fit model
+> ##D model <- lm(satisfaction ~ condition * time, data = df)
+> ##D 
+> ##D # Type II SS (default)
+> ##D anova_result <- run_anova(model)
+> ##D 
+> ##D # Type III SS
+> ##D anova_result <- run_anova(model, type = "III")
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_anova", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_cfa")
+> ### * run_cfa
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_cfa
+> ### Title: Run Confirmatory Factor Analysis (CFA)
+> ### Aliases: run_cfa
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Define CFA model
+> ##D model <- "
+> ##D   # Latent variables
+> ##D   satisfaction =~ sat1 + sat2 + sat3
+> ##D   loyalty =~ loy1 + loy2 + loy3
+> ##D 
+> ##D   # Covariance
+> ##D   satisfaction ~~ loyalty
+> ##D "
+> ##D 
+> ##D # Run CFA
+> ##D fit <- run_cfa(model, data = customer_survey)
+> ##D 
+> ##D # Get fit indices
+> ##D fit_indices <- tidy_cfa_fit(fit)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_cfa", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_logistic")
+> ### * run_logistic
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_logistic
+> ### Title: Run Logistic Regression for Binary Outcomes
+> ### Aliases: run_logistic
+> 
+> ### ** Examples
+> 
+> # Purchase decision based on price and quality perceptions
+> set.seed(42)
+> n <- 200
+> df <- data.frame(
++   purchased = sample(0:1, n, replace = TRUE, prob = c(0.4, 0.6)),
++   price = rnorm(n, 50, 10),
++   quality = rnorm(n, 5, 1),
++   age = sample(18:65, n, replace = TRUE)
++ )
+> 
+> # Fit logistic regression
+> model <- run_logistic(purchased ~ price + quality + age, data = df)
+> summary(model)
+
+Call:
+stats::glm(formula = formula, family = family, data = data)
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)
+(Intercept) -1.1836807  1.1322358  -1.045    0.296
+price       -0.0004524  0.0149167  -0.030    0.976
+quality      0.2227126  0.1530107   1.456    0.146
+age          0.0062961  0.0106679   0.590    0.555
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 275.98  on 199  degrees of freedom
+Residual deviance: 273.32  on 196  degrees of freedom
+AIC: 281.32
+
+Number of Fisher Scoring iterations: 4
+
+> 
+> # Get publication-ready results with odds ratios
+> results <- tidy_logistic(model)
+> print(results)
+# A tibble: 3 x 8
+  term    estimate std_error statistic p_value conf_low conf_high interpretation
+  <chr>      <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl> <chr>         
+1 price      1.000    0.0149   -0.0303   0.976    0.971      1.03 0.0% decrease~
+2 quality    1.25     0.153     1.46     0.146    0.926      1.69 24.9% increas~
+3 age        1.01     0.0107    0.590    0.555    0.985      1.03 0.6% increase~
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_logistic", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_mlm")
+> ### * run_mlm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_mlm
+> ### Title: Multi-Level Modeling (MLM/HLM)
+> ### Aliases: run_mlm
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Random intercept model: Satisfaction nested within stores
+> ##D model1 <- run_mlm(
+> ##D   satisfaction ~ price + quality + (1 | store_id),
+> ##D   data = consumer_data
+> ##D )
+> ##D print(model1)
+> ##D 
+> ##D # Random slope model: Price effect varies by store
+> ##D model2 <- run_mlm(
+> ##D   satisfaction ~ price + quality + (price | store_id),
+> ##D   data = consumer_data
+> ##D )
+> ##D 
+> ##D # Crossed random effects: Consumers and products
+> ##D model3 <- run_mlm(
+> ##D   rating ~ brand + price + (1 | consumer_id) + (1 | product_id),
+> ##D   data = rating_data
+> ##D )
+> ##D 
+> ##D # Extract results
+> ##D tidy_mlm(model1)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_mlm", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_rm_anova")
+> ### * run_rm_anova
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_rm_anova
+> ### Title: Repeated Measures ANOVA
+> ### Aliases: run_rm_anova
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Within-subjects design: Satisfaction across 3 time points
+> ##D set.seed(42)
+> ##D df <- expand.grid(
+> ##D   subject = 1:30,
+> ##D   time = c("Before", "During", "After")
+> ##D )
+> ##D df$satisfaction <- rnorm(nrow(df), mean = 5 + as.numeric(factor(df$time)), sd = 1)
+> ##D 
+> ##D result <- run_rm_anova(
+> ##D   data = df,
+> ##D   outcome = "satisfaction",
+> ##D   within = "time",
+> ##D   subject = "subject"
+> ##D )
+> ##D print(result)
+> ##D 
+> ##D # Mixed design: Time (within) x Condition (between)
+> ##D df$condition <- rep(c("Control", "Treatment"), each = 45)
+> ##D result <- run_rm_anova(
+> ##D   data = df,
+> ##D   outcome = "satisfaction",
+> ##D   within = "time",
+> ##D   between = "condition",
+> ##D   subject = "subject"
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_rm_anova", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("run_sem")
+> ### * run_sem
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: run_sem
+> ### Title: Structural Equation Modeling (SEM) Path Analysis
+> ### Aliases: run_sem
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Simple mediation model
+> ##D model <- "
+> ##D   # Direct effects
+> ##D   satisfaction ~ b*quality + c*price
+> ##D   quality ~ a*brand_reputation
+> ##D 
+> ##D   # Indirect effect
+> ##D   indirect := a * b
+> ##D "
+> ##D 
+> ##D result <- run_sem(model, data = consumer_survey, se = "bootstrap",
+> ##D                   bootstrap = 5000, seed = 123)
+> ##D print(result)
+> ##D 
+> ##D # Path model with multiple outcomes
+> ##D model2 <- c(
+> ##D   "purchase_intent ~ attitude + subjective_norm",
+> ##D   "attitude ~ ad_exposure + prior_belief",
+> ##D   "subjective_norm ~ ad_exposure"
+> ##D )
+> ##D 
+> ##D result2 <- run_sem(model2, data = mydata)
+> ##D tidy_sem(result2)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("run_sem", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("simple_slopes")
+> ### * simple_slopes
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: simple_slopes
+> ### Title: Simple Slopes Analysis for Interaction Effects
+> ### Aliases: simple_slopes
+> 
+> ### ** Examples
+> 
+> # Price sensitivity moderated by brand loyalty
+> set.seed(42)
+> n <- 150
+> df <- data.frame(
++   price = rnorm(n, 50, 10),
++   loyalty = rnorm(n, 5, 1.5),
++   purchase = rnorm(n, 5, 1)
++ )
+> # Interaction: price effect depends on loyalty
+> df$purchase <- df$purchase - 0.1 * df$price + 0.3 * df$loyalty +
++                0.05 * df$price * df$loyalty
+> 
+> # Fit model with interaction
+> model <- lm(purchase ~ price * loyalty, data = df)
+> 
+> # Probe interaction with simple slopes
+> slopes <- simple_slopes(model, focal = "price", moderator = "loyalty")
+> print(slopes)
+Simple Slopes Analysis
+======================
+
+Focal predictor: price
+Moderator: loyalty
+Confidence level: 95%
+
+Simple Slopes at Moderator Values:
+# A tibble: 3 x 9
+  moderator_value moderator_label  slope std_error t_statistic  p_value ci_lower
+            <dbl> <chr>            <dbl>     <dbl>       <dbl>    <dbl>    <dbl>
+1            3.52 Low (-1 SD)     0.0953   0.0113         8.46 2.57e-14   0.0730
+2            4.98 Mean            0.156    0.00748       20.8  1.54e-45   0.141 
+3            6.44 High (+1 SD)    0.216    0.0120        18.0  5.79e-39   0.192 
+# i 2 more variables: ci_upper <dbl>, significant <lgl>
+
+Interpretation:
+   The effect of price on the outcome is significant at all levels of loyalty. Simple slopes range from 0.095 to 0.216, indicating the moderating effect of loyalty.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("simple_slopes", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("tidy_cfa_fit")
+> ### * tidy_cfa_fit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: tidy_cfa_fit
+> ### Title: Extract Tidy CFA Fit Indices
+> ### Aliases: tidy_cfa_fit
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Run CFA
+> ##D model <- "satisfaction =~ q1 + q2 + q3"
+> ##D fit <- run_cfa(model, data = df)
+> ##D 
+> ##D # Extract fit indices
+> ##D fit_indices <- tidy_cfa_fit(fit)
+> ##D print(fit_indices)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tidy_cfa_fit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("tidy_lm_robust")
+> ### * tidy_lm_robust
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: tidy_lm_robust
+> ### Title: Tidy Regression Results with Robust Standard Errors
+> ### Aliases: tidy_lm_robust
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Fit model
+> ##D model <- lm(satisfaction ~ price + quality + service, data = df)
+> ##D 
+> ##D # Check for heteroscedasticity
+> ##D assumptions <- assumption_checks(model)
+> ##D 
+> ##D # If violated, use robust SEs
+> ##D robust_results <- tidy_lm_robust(model, hc_type = "HC3")
+> ##D print(robust_results)
+> ##D 
+> ##D # Compare to OLS
+> ##D ols_results <- broom::tidy(model, conf.int = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tidy_lm_robust", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("tidy_logistic")
+> ### * tidy_logistic
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: tidy_logistic
+> ### Title: Tidy Logistic Regression Results with Odds Ratios
+> ### Aliases: tidy_logistic
+> 
+> ### ** Examples
+> 
+> # Fit model
+> set.seed(42)
+> df <- data.frame(
++   purchased = sample(0:1, 100, replace = TRUE),
++   price = rnorm(100, 50, 10),
++   quality = rnorm(100, 5, 1)
++ )
+> model <- run_logistic(purchased ~ price + quality, data = df)
+> 
+> # Get odds ratios with CIs
+> results <- tidy_logistic(model)
+> print(results)
+# A tibble: 2 x 8
+  term    estimate std_error statistic p_value conf_low conf_high interpretation
+  <chr>      <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl> <chr>         
+1 price      1.01     0.0218     0.379   0.705    0.966      1.05 0.8% increase~
+2 quality    0.906    0.218     -0.451   0.652    0.591      1.39 9.4% decrease~
+> 
+> # Get log-odds (coefficient scale)
+> results_logodds <- tidy_logistic(model, exponentiate = FALSE)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tidy_logistic", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("tidy_mlm")
+> ### * tidy_mlm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: tidy_mlm
+> ### Title: Extract Publication-Ready MLM Results
+> ### Aliases: tidy_mlm
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D model <- run_mlm(y ~ x + (1 | group), data = mydata)
+> ##D tidy_mlm(model)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tidy_mlm", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("tidy_sem")
+> ### * tidy_sem
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: tidy_sem
+> ### Title: Extract Publication-Ready SEM Results
+> ### Aliases: tidy_sem
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D result <- run_sem(model, data = mydata)
+> ##D tidy_sem(result)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tidy_sem", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("wilcoxon_signed_rank_test")
+> ### * wilcoxon_signed_rank_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: wilcoxon_signed_rank_test
+> ### Title: Wilcoxon Signed-Rank Test
+> ### Aliases: wilcoxon_signed_rank_test
+> 
+> ### ** Examples
+> 
+> set.seed(42)
+> df <- data.frame(
++   pre = rpois(50, 4),
++   post = rpois(50, 6)
++ )
+> 
+> result <- wilcoxon_signed_rank_test(df, before = "pre", after = "post")
+Warning in wilcox.test.default(x, y, paired = TRUE, alternative = alternative) :
+  cannot compute exact p-value with ties
+Warning in wilcox.test.default(x, y, paired = TRUE, alternative = alternative) :
+  cannot compute exact p-value with zeroes
+> print(result)
+Wilcoxon Signed-Rank Test
+=========================
+
+pre vs post (paired)
+n pairs = 50
+
+V statistic: 428.50
+p-value: p = .101
+Rank-biserial r: 0.232
+
+Median (pre): 5.00
+Median (post): 5.50
+Median difference: 1.00
+
+Interpretation:
+   Non-significant change from pre (Mdn = 5.00) to post (Mdn = 5.50), V = 428.5, p = .101, r_rb = 0.232, median difference = 1.00.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("wilcoxon_signed_rank_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("write_table")
+> ### * write_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: write_table
+> ### Title: Write Table to File
+> ### Aliases: write_table
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D df <- data.frame(
+> ##D   Variable = c("Age", "Income"),
+> ##D   Mean = c(34.5, 65000),
+> ##D   SD = c(8.3, 15000)
+> ##D )
+> ##D 
+> ##D # Save as TSV
+> ##D write_table(df, "results/descriptives.tsv")
+> ##D 
+> ##D # Save as markdown
+> ##D write_table(df, "results/table1.md", format = "md")
+> ##D 
+> ##D # Save as RDS (preserves types)
+> ##D write_table(df, "results/data.rds", format = "rds")
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("write_table", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  7.007 0.182 11.312 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

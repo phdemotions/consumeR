@@ -1,0 +1,165 @@
+* using log directory '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp3YZAgw/file1621074166224/consumeR.Rcheck'
+* using R version 4.3.1 (2023-06-16)
+* using platform: aarch64-apple-darwin20 (64-bit)
+* R was compiled by
+    Apple clang version 14.0.0 (clang-1400.0.29.202)
+    GNU Fortran (GCC) 12.2.0
+* running under: macOS 15.6.1
+* using session charset: ASCII
+* using options '--no-manual --as-cran'
+* checking for file 'consumeR/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'consumeR' version '0.1.0'
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ... [6s/22s] NOTE
+Maintainer: 'Josh Gonzales <joshgonzalesphd@gmail.com>'
+
+New submission
+
+License components with restrictions and base license permitting such:
+  MIT + file LICENSE
+File 'LICENSE':
+  MIT License
+  
+  Copyright (c) 2026 Josh Gonzales
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package 'consumeR' can be installed ... [7s/12s] WARNING
+Found the following significant warnings:
+  Warning: score_composite.Rd:39: unknown macro '\item'
+  Warning: score_composite.Rd:41: unexpected section header '\value'
+  Warning: score_composite.Rd:59: unexpected section header '\description'
+  Warning: score_composite.Rd:63: unexpected section header '\details'
+  Warning: score_composite.Rd:73: unexpected section header '\examples'
+  Warning: score_composite.Rd:116: unexpected END_OF_INPUT '
+  Warning: test_group_differences.Rd:39: unknown macro '\item'
+  Warning: test_group_differences.Rd:41: unknown macro '\item'
+  Warning: test_group_differences.Rd:45: unknown macro '\item'
+  Warning: test_group_differences.Rd:48: unexpected section header '\value'
+  Warning: test_group_differences.Rd:66: unexpected section header '\description'
+  Warning: test_group_differences.Rd:71: unexpected section header '\details'
+  Warning: test_group_differences.Rd:89: unexpected section header '\examples'
+  Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+See '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp3YZAgw/file1621074166224/consumeR.Rcheck/00install.out' for details.
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... NOTE
+unable to verify current time
+* checking 'build' directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... WARNING
+'::' or ':::' import not declared from: 'haven'
+'loadNamespace' or 'requireNamespace' call not declared from: 'haven'
+Missing or unexported objects:
+  'emmeans::pairs' 'stats::scale'
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [14s/19s] OK
+* checking Rd files ... WARNING
+prepare_Rd: score_composite.Rd:39: unknown macro '\item'
+prepare_Rd: score_composite.Rd:41: unexpected section header '\value'
+prepare_Rd: score_composite.Rd:59: unexpected section header '\description'
+prepare_Rd: score_composite.Rd:63: unexpected section header '\details'
+prepare_Rd: score_composite.Rd:73: unexpected section header '\examples'
+prepare_Rd: score_composite.Rd:116: unexpected END_OF_INPUT '
+'
+checkRd: (5) score_composite.Rd:0-117: Must have a \description
+prepare_Rd: test_group_differences.Rd:39: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:41: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:45: unknown macro '\item'
+prepare_Rd: test_group_differences.Rd:48: unexpected section header '\value'
+prepare_Rd: test_group_differences.Rd:66: unexpected section header '\description'
+prepare_Rd: test_group_differences.Rd:71: unexpected section header '\details'
+prepare_Rd: test_group_differences.Rd:89: unexpected section header '\examples'
+prepare_Rd: test_group_differences.Rd:106: unexpected END_OF_INPUT '
+'
+checkRd: (5) test_group_differences.Rd:0-107: Must have a \description
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'score_composite'
+  'name'
+
+Undocumented arguments in documentation object 'test_group_differences'
+  'paired' 'check_assumptions' 'verbose'
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of 'data' directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking installed files from 'inst/doc' ... OK
+* checking files in 'vignettes' ... OK
+* checking examples ... [7s/12s] OK
+* checking for unstated dependencies in 'tests' ... OK
+* checking tests ... [267s/408s] ERROR
+  Running 'testthat.R' [267s/407s]
+Running the tests in 'tests/testthat.R' failed.
+Last 13 lines of output:
+       x
+    1. +-testthat::expect_error(...) at test-sem.R:404:3
+    2. | \-testthat:::quasi_capture(...)
+    3. |   +-testthat (local) .capture(...)
+    4. |   | \-base::withCallingHandlers(...)
+    5. |   \-rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+    6. \-consumeR::compare_sem_models(result, result2, model_names = "Only one name")
+    7.   +-base::do.call(lavaan::anova, fits)
+    8.   +-stats (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
+    9.   \-lavaan (local) `<stndrdGn>`(`<lavaan>`, `<lavaan>`)
+   10.     \-lavaan::lavTestLRT(object = object, ..., model.names = tmp.names)
+  
+  [ FAIL 81 | WARN 41 | SKIP 1 | PASS 772 ]
+  Error: Test failures
+  Execution halted
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in 'inst/doc' ... OK
+* checking re-building of vignette outputs ... OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 1 ERROR, 4 WARNINGs, 2 NOTEs

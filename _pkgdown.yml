@@ -107,6 +107,15 @@ reference:
     contents:
       - consumer_survey
 
+  - title: "Internal Documentation"
+    desc: >
+      Print methods and internal helper documentation (usually not needed directly)
+    contents:
+      - consumeR-package
+      - assumptions
+      - publication_text
+      - starts_with("print.")
+
 articles:
   - title: Getting Started
     navbar: ~

@@ -136,7 +136,7 @@ reverse_score_likert <- function(x, min = 1, max = 7, strict = TRUE) {
 #' consistent responses (e.g., all 7s or all 1s).
 #'
 #' **Use cases:**
-#' - Detect straight-lining (all same response → SD = 0)
+#' - Detect straight-lining (all same response -> SD = 0)
 #' - Identify careless responding
 #' - Calculate intra-individual variability
 #'
@@ -242,9 +242,9 @@ row_sd <- function(data, items = NULL, na.rm = TRUE) {
 #' - "threshold": Calculate composite if at least `threshold` items are non-missing
 #'
 #' **Default threshold:** 50% of items (rounded up)
-#' - 3 items → need 2 non-missing
-#' - 5 items → need 3 non-missing
-#' - 10 items → need 5 non-missing
+#' - 3 items -> need 2 non-missing
+#' - 5 items -> need 3 non-missing
+#' - 10 items -> need 5 non-missing
 #'
 #' @examples
 #' # Basic composite (mean)

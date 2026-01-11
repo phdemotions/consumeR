@@ -16,7 +16,7 @@
 #' @return A list containing:
 #'   \itemize{
 #'     \item \code{method}: Correlation method used
-#'     \item \code{correlation}: Correlation coefficient (r or ρ)
+#'     \item \code{correlation}: Correlation coefficient (r or \u03C1)
 #'     \item \code{p_value}: Statistical significance
 #'     \item \code{significant}: Is correlation significant?
 #'     \item \code{n}: Sample size
@@ -279,7 +279,7 @@ analyze_correlation <- function(data,
   if (is_significant) {
     interpretation <- paste0(
       interpretation,
-      "This correlation is statistically significant at α = ", alpha, ". "
+      "This correlation is statistically significant at \u03B1 = ", alpha, ". "
     )
 
     if (abs_r < 0.30) {
@@ -297,7 +297,7 @@ analyze_correlation <- function(data,
   } else {
     interpretation <- paste0(
       interpretation,
-      "This correlation is NOT statistically significant at α = ", alpha, ". ",
+      "This correlation is NOT statistically significant at \u03B1 = ", alpha, ". ",
       "There is insufficient evidence of a linear relationship."
     )
   }
@@ -328,7 +328,7 @@ analyze_correlation <- function(data,
     additional_notes = paste0(
       "Correlation strength was interpreted using Cohen's (1988) guidelines. ",
       "The correlation coefficient of ", round(r, 3), " indicates that the variables ",
-      "share approximately ", round(r_squared * 100, 1), "% common variance (r² = ",
+      "share approximately ", round(r_squared * 100, 1), "% common variance (r^2 = ",
       round(r_squared, 3), ")."
     )
   )
@@ -393,7 +393,7 @@ print.correlation_result <- function(x, show_assumptions = FALSE, show_publicati
     cat("  95% CI: [", x$ci_lower, ",", x$ci_upper, "]\n", sep = "")
   }
 
-  cat("  r² =", x$r_squared, "(", round(x$r_squared * 100, 1), "% shared variance)\n")
+  cat("  r^2 =", x$r_squared, "(", round(x$r_squared * 100, 1), "% shared variance)\n")
   cat("  p-value:", x$p_value, "\n")
   cat("  Significant:", ifelse(x$significant, "YES (p < .05)", "NO (p >= .05)"), "\n")
   cat("\n")

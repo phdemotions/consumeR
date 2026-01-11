@@ -197,14 +197,14 @@ print.mann_whitney <- function(x, ...) {
 #'   - statistic: H statistic (chi-square approximation)
 #'   - df: Degrees of freedom
 #'   - p_value: p-value
-#'   - epsilon_squared: Effect size (η² analog for ranks)
+#'   - epsilon_squared: Effect size (\u03B7^2 analog for ranks)
 #'   - group_medians: Tibble with medians for each group
 #'   - interpretation: Publication-ready text
 #'
 #' @details
 #' **Effect Size (Epsilon-squared):**
-#' - ε² = H / (n² - 1) / (n + 1)
-#' - Interpretation: Similar to η², < 0.01 negligible, 0.01-0.06 small,
+#' - epsilon^2 = H / (n^2 - 1) / (n + 1)
+#' - Interpretation: Similar to \u03B7^2, < 0.01 negligible, 0.01-0.06 small,
 #'   0.06-0.14 medium, > 0.14 large
 #'
 #' **Post-hoc Tests:**
@@ -264,7 +264,7 @@ kruskal_wallis_test <- function(data, outcome, group) {
   sig_text <- if (test_result$p.value < 0.05) "Significant" else "Non-significant"
 
   interpretation <- sprintf(
-    "%s difference across %d groups, H(%d) = %.2f, %s, ε² = %.3f. ",
+    "%s difference across %d groups, H(%d) = %.2f, %s, epsilon^2 = %.3f. ",
     sig_text,
     length(groups),
     test_result$parameter,
@@ -469,7 +469,7 @@ print.wilcoxon_signed_rank <- function(x, ...) {
 #'
 #' @details
 #' **Effect Size (Kendall's W):**
-#' - W = χ²_F / (n(k-1))
+#' - W = chi^2_F / (n(k-1))
 #' - Interpretation: < 0.1 negligible, 0.1-0.3 small, 0.3-0.5 medium, > 0.5 large
 #'
 #' @export
@@ -530,7 +530,7 @@ friedman_test <- function(data, outcome, time, subject) {
   sig_text <- if (test_result$p.value < 0.05) "Significant" else "Non-significant"
 
   interpretation <- sprintf(
-    "%s difference across %d time points, χ²(%d) = %.2f, %s, Kendall's W = %.3f. ",
+    "%s difference across %d time points, chi^2(%d) = %.2f, %s, Kendall's W = %.3f. ",
     sig_text,
     k,
     test_result$parameter,
@@ -567,7 +567,7 @@ print.friedman <- function(x, ...) {
   cat(sprintf("n subjects: %d\n", x$n_subjects))
   cat(sprintf("n time points: %d\n\n", x$n_times))
 
-  cat(sprintf("χ² statistic: %.2f\n", x$statistic))
+  cat(sprintf("chi^2 statistic: %.2f\n", x$statistic))
   cat(sprintf("df: %d\n", x$df))
   cat(sprintf("p-value: %s\n", format_p(x$p_value, style = "apa")))
   cat(sprintf("Kendall's W: %.3f\n\n", x$kendall_w))

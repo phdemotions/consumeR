@@ -10,11 +10,11 @@
 #' @param y Character; name of the dependent variable (outcome)
 #' @param moderator Character; name of the moderator variable
 #' @param model Character; which Hayes PROCESS model:
-#'   "7" (default): Moderates M→Y path (b path)
-#'   "8": Moderates both X→M and M→Y paths (a and b paths)
-#'   "14": Moderates X→M path (a path)
+#'   "7" (default): Moderates M->Y path (b path)
+#'   "8": Moderates both X->M and M->Y paths (a and b paths)
+#'   "14": Moderates X->M path (a path)
 #' @param moderator_values Numeric vector of moderator values to probe. Default: NULL
-#'   (uses mean ± 1 SD)
+#'   (uses mean +/- 1 SD)
 #' @param covariates Character vector; names of covariates to control for (optional)
 #' @param conf_level Confidence level for intervals (default: 0.95)
 #' @param boot_samples Number of bootstrap samples (default: 5000; min 1000)
@@ -33,23 +33,23 @@
 #' @details
 #' **Hayes PROCESS Models:**
 #'
-#' **Model 7** (Moderator on b path, M→Y):
-#' - X → M (path a)
-#' - M → Y depends on W (path b + interaction)
-#' - Indirect effect = a × (b + b₃W)
-#' - Index of moderated mediation = a × b₃
+#' **Model 7** (Moderator on b path, M->Y):
+#' - X -> M (path a)
+#' - M -> Y depends on W (path b + interaction)
+#' - Indirect effect = a x (b + b_3W)
+#' - Index of moderated mediation = a x b_3
 #'
 #' **Model 8** (Moderator on both a and b paths):
-#' - X → M depends on W (path a + interaction)
-#' - M → Y depends on W (path b + interaction)
-#' - Indirect effect = (a + a₃W) × (b + b₃W)
+#' - X -> M depends on W (path a + interaction)
+#' - M -> Y depends on W (path b + interaction)
+#' - Indirect effect = (a + a_3W) x (b + b_3W)
 #' - Most complex model
 #'
-#' **Model 14** (Moderator on a path, X→M):
-#' - X → M depends on W (path a + interaction)
-#' - M → Y (path b)
-#' - Indirect effect = (a + a₃W) × b
-#' - Index of moderated mediation = a₃ × b
+#' **Model 14** (Moderator on a path, X->M):
+#' - X -> M depends on W (path a + interaction)
+#' - M -> Y (path b)
+#' - Indirect effect = (a + a_3W) x b
+#' - Index of moderated mediation = a_3 x b
 #'
 #' **Index of Moderated Mediation:**
 #' - Quantifies how much the indirect effect changes per unit of moderator
@@ -78,7 +78,7 @@
 #'
 #' @export
 #' @examples
-#' # Model 7: Trust mediates CSR → loyalty, moderated by involvement
+#' # Model 7: Trust mediates CSR -> loyalty, moderated by involvement
 #' set.seed(42)
 #' n <- 200
 #' df <- data.frame(
@@ -180,7 +180,7 @@ moderated_mediation <- function(data,
   }
 
   if (model == "7") {
-    # Model 7: Moderator on b path (M→Y)
+    # Model 7: Moderator on b path (M->Y)
     # a path: M ~ X
     formula_a <- stats::as.formula(sprintf("%s ~ %s%s", m, x, cov_string))
 
@@ -202,7 +202,7 @@ moderated_mediation <- function(data,
     ))
 
   } else {  # model == "14"
-    # Model 14: Moderator on a path (X→M)
+    # Model 14: Moderator on a path (X->M)
     # a path with moderation: M ~ X + X*W
     formula_a <- stats::as.formula(sprintf(
       "%s ~ %s + %s:moderator_c%s", m, x, x, cov_string
@@ -247,14 +247,14 @@ moderated_mediation <- function(data,
     w_centered <- w_val - mean(mod_var)
 
     if (model == "7") {
-      # Indirect = a × (b + b₃W)
+      # Indirect = a x (b + b_3W)
       indirect_w <- paths$a * (paths$b + paths$b_mod * w_centered)
     } else if (model == "8") {
-      # Indirect = (a + a₃W) × (b + b₃W)
+      # Indirect = (a + a_3W) x (b + b_3W)
       indirect_w <- (paths$a + paths$a_mod * w_centered) *
         (paths$b + paths$b_mod * w_centered)
     } else {  # model == "14"
-      # Indirect = (a + a₃W) × b
+      # Indirect = (a + a_3W) x b
       indirect_w <- (paths$a + paths$a_mod * w_centered) * paths$b
     }
 
@@ -403,7 +403,7 @@ moderated_mediation <- function(data,
   # Compile results
   result <- list(
     paths = tibble::tibble(
-      path = c("a (X→M)", "b (M→Y)", "c' (direct)", "a×W", "b×W"),
+      path = c("a (X->M)", "b (M->Y)", "c' (direct)", "axW", "bxW"),
       estimate = c(paths$a, paths$b, paths$c_prime, paths$a_mod, paths$b_mod)
     ),
     conditional_indirect = cond_ind_tibble,

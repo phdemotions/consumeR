@@ -30,11 +30,11 @@
 #' **Composite Reliability (CR)**:
 #' - Like Cronbach's alpha but more accurate
 #' - Uses factor loadings instead of correlations
-#' - Threshold: CR ≥ 0.70 is good
+#' - Threshold: CR >= 0.70 is good
 #'
 #' **Average Variance Extracted (AVE)**:
 #' - % of variance explained by the construct vs. measurement error
-#' - Threshold: AVE ≥ 0.50 means construct explains majority of variance
+#' - Threshold: AVE >= 0.50 means construct explains majority of variance
 #' - If AVE < 0.50, more variance is due to error than true scores
 #'
 #' **Square Root of AVE**:
@@ -42,13 +42,13 @@
 #' - Should be higher than correlations with other constructs
 #'
 #' ## Quality Thresholds (Fornell & Larcker, 1981):
-#' - CR ≥ 0.70: Adequate reliability
-#' - AVE ≥ 0.50: Adequate convergent validity
-#' - √AVE > correlation with other constructs: Discriminant validity
+#' - CR >= 0.70: Adequate reliability
+#' - AVE >= 0.50: Adequate convergent validity
+#' - sqrtAVE > correlation with other constructs: Discriminant validity
 #'
 #' ## How This is Calculated:
 #' 1. Run a factor analysis to get item loadings
-#' 2. CR = (sum of loadings)² / [(sum of loadings)² + sum of error variances]
+#' 2. CR = (sum of loadings)^2 / [(sum of loadings)^2 + sum of error variances]
 #' 3. AVE = sum of squared loadings / number of items
 #'
 #' @examples
@@ -119,7 +119,7 @@ calculate_composite_reliability <- function(data,
 
   if (n_complete < 10) {
     warning("Sample size is very small (n=", n_complete, "). ",
-            "Results may not be reliable. Recommend n ≥ 100 for factor analysis.")
+            "Results may not be reliable. Recommend n >= 100 for factor analysis.")
   }
 
   # Step 3: Calculate Cronbach's Alpha (for comparison)
@@ -128,7 +128,7 @@ calculate_composite_reliability <- function(data,
   item_variances <- sapply(item_data_complete, var)
   total_variance <- var(rowSums(item_data_complete))
   alpha <- (k / (k - 1)) * (1 - sum(item_variances) / total_variance)
-  message("  Cronbach's α = ", round(alpha, 3))
+  message("  Cronbach's \u03B1 = ", round(alpha, 3))
 
   # Step 4: Standardize Items (mean=0, sd=1)
   message("\nStandardizing items for factor analysis...")
@@ -160,11 +160,11 @@ calculate_composite_reliability <- function(data,
   # Sum of loadings
   sum_loadings <- sum(loadings)
 
-  # Sum of error variances (1 - loading²)
+  # Sum of error variances (1 - loading^2)
   sum_error_variances <- sum(1 - loadings^2)
 
-  # CR formula: (Σλ)² / [(Σλ)² + Σ(1-λ²)]
-  # where λ = factor loading
+  # CR formula: (Sum\u03BB)^2 / [(Sum\u03BB)^2 + Sum(1-\u03BB^2)]
+  # where \u03BB = factor loading
   composite_reliability <- (sum_loadings^2) / ((sum_loadings^2) + sum_error_variances)
 
   message("  Composite Reliability (CR) = ", round(composite_reliability, 3))
@@ -179,7 +179,7 @@ calculate_composite_reliability <- function(data,
 
   # Square root of AVE (used for discriminant validity checks)
   sqrt_ave <- sqrt(ave)
-  message("  √AVE = ", round(sqrt_ave, 3))
+  message("  sqrtAVE = ", round(sqrt_ave, 3))
 
   # Step 8: Create Item Statistics Table
   item_stats <- data.frame(
@@ -208,27 +208,27 @@ calculate_composite_reliability <- function(data,
   cr_pass <- composite_reliability >= 0.70
   ave_pass <- ave >= 0.50
 
-  message("  CR ≥ 0.70? ", ifelse(cr_pass, "✓ PASS", "✗ FAIL"))
-  message("  AVE ≥ 0.50? ", ifelse(ave_pass, "✓ PASS", "✗ FAIL"))
+  message("  CR >= 0.70? ", ifelse(cr_pass, "PASS PASS", "FAIL FAIL"))
+  message("  AVE >= 0.50? ", ifelse(ave_pass, "PASS PASS", "FAIL FAIL"))
 
   passes_threshold <- cr_pass && ave_pass
 
   # Step 10: Generate Interpretation
   interpretation <- paste0(
     "COMPOSITE RELIABILITY ANALYSIS for ", scale_name, ":\n\n",
-    "Cronbach's Alpha: α = ", round(alpha, 3), "\n",
+    "Cronbach's Alpha: \u03B1 = ", round(alpha, 3), "\n",
     "Composite Reliability: CR = ", round(composite_reliability, 3),
-    ifelse(cr_pass, " ✓ (Good)", " ✗ (Below threshold)"), "\n",
+    ifelse(cr_pass, " PASS (Good)", " FAIL (Below threshold)"), "\n",
     "Average Variance Extracted: AVE = ", round(ave, 3),
-    ifelse(ave_pass, " ✓ (Good)", " ✗ (Below threshold)"), "\n",
-    "√AVE = ", round(sqrt_ave, 3), "\n\n"
+    ifelse(ave_pass, " PASS (Good)", " FAIL (Below threshold)"), "\n",
+    "sqrtAVE = ", round(sqrt_ave, 3), "\n\n"
   )
 
   if (passes_threshold) {
     interpretation <- paste0(interpretation,
       "INTERPRETATION: This scale demonstrates GOOD reliability and validity.\n",
-      "- CR ≥ 0.70 indicates adequate internal consistency\n",
-      "- AVE ≥ 0.50 indicates adequate convergent validity\n",
+      "- CR >= 0.70 indicates adequate internal consistency\n",
+      "- AVE >= 0.50 indicates adequate convergent validity\n",
       "- The construct explains ", round(ave * 100, 1), "% of item variance\n\n",
       "This scale is suitable for use in research and should be accepted by reviewers."
     )
@@ -298,9 +298,9 @@ calculate_composite_reliability <- function(data,
 #' @export
 print.composite_reliability <- function(x, ...) {
   cat("\n")
-  cat("╔════════════════════════════════════════════════════════╗\n")
-  cat("║       COMPOSITE RELIABILITY & VALIDITY ANALYSIS        ║\n")
-  cat("╚════════════════════════════════════════════════════════╝\n\n")
+  cat("==========================================================\n")
+  cat("|       COMPOSITE RELIABILITY & VALIDITY ANALYSIS        |\n")
+  cat("==========================================================\n\n")
 
   cat("Scale:", x$scale_name, "\n")
   cat("Number of items:", x$n_items, "\n")
@@ -309,27 +309,27 @@ print.composite_reliability <- function(x, ...) {
   cat("RELIABILITY MEASURES:\n")
   cat("  Cronbach's Alpha:", round(x$cronbachs_alpha, 3), "\n")
   cat("  Composite Reliability (CR):", round(x$composite_reliability, 3),
-      ifelse(x$cr_pass, "✓", "✗"), "\n\n")
+      ifelse(x$cr_pass, "PASS", "FAIL"), "\n\n")
 
   cat("VALIDITY MEASURES:\n")
   cat("  Average Variance Extracted (AVE):", round(x$ave, 3),
-      ifelse(x$ave_pass, "✓", "✗"), "\n")
-  cat("  Square Root of AVE (√AVE):", round(x$sqrt_ave, 3), "\n")
+      ifelse(x$ave_pass, "PASS", "FAIL"), "\n")
+  cat("  Square Root of AVE (sqrtAVE):", round(x$sqrt_ave, 3), "\n")
   cat("  Variance explained by construct:", round(x$ave * 100, 1), "%\n\n")
 
   cat("QUALITY ASSESSMENT:\n")
   if (x$passes_threshold) {
-    cat("  Status: ✓ PASSED all thresholds\n")
+    cat("  Status: PASS PASSED all thresholds\n")
     cat("  This scale is suitable for research use\n\n")
   } else {
-    cat("  Status: ✗ FAILED quality thresholds\n")
+    cat("  Status: FAIL FAILED quality thresholds\n")
     cat("  Consider revising scale before publication\n\n")
   }
 
   cat("ITEM LOADINGS:\n")
   print(x$item_statistics[, c("label", "loading", "variance_explained")],
         row.names = FALSE)
-  cat("\nNote: Loadings ≥ 0.70 are considered strong\n\n")
+  cat("\nNote: Loadings >= 0.70 are considered strong\n\n")
 
   invisible(x)
 }

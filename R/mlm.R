@@ -66,7 +66,7 @@
 #' }
 #'
 #' @references
-#' Bates, D., Mächler, M., Bolker, B., & Walker, S. (2015). Fitting linear
+#' Bates, D., Machler, M., Bolker, B., & Walker, S. (2015). Fitting linear
 #'   mixed-effects models using lme4. Journal of Statistical Software, 67(1),
 #'   1-48.
 #'
@@ -384,7 +384,7 @@ generate_mlm_interpretation <- function(fixed, icc, n_groups) {
 #' ICC represents the proportion of total variance attributable to between-group
 #' differences. It is calculated as:
 #'
-#' ICC = σ²_between / (σ²_between + σ²_within)
+#' ICC = sigma^2_between / (sigma^2_between + sigma^2_within)
 #'
 #' **Interpretation Guidelines**:
 #' \itemize{
@@ -644,9 +644,9 @@ generate_assumption_summary <- function(resid_normal, re_normality) {
   if (is.na(resid_normal)) {
     parts <- c(parts, "Residuals normality: Unable to test (sample size)")
   } else if (resid_normal) {
-    parts <- c(parts, "Residuals normality: ✓ Assumption met")
+    parts <- c(parts, "Residuals normality: PASS Assumption met")
   } else {
-    parts <- c(parts, "Residuals normality: ✗ Violated (p < .05)")
+    parts <- c(parts, "Residuals normality: FAIL Violated (p < .05)")
   }
 
   for (g in names(re_normality)) {
@@ -654,9 +654,9 @@ generate_assumption_summary <- function(resid_normal, re_normality) {
     if (is.na(p_val)) {
       parts <- c(parts, sprintf("Random effects (%s): Unable to test", g))
     } else if (p_val > 0.05) {
-      parts <- c(parts, sprintf("Random effects (%s): ✓ Assumption met", g))
+      parts <- c(parts, sprintf("Random effects (%s): PASS Assumption met", g))
     } else {
-      parts <- c(parts, sprintf("Random effects (%s): ✗ Violated (p < .05)", g))
+      parts <- c(parts, sprintf("Random effects (%s): FAIL Violated (p < .05)", g))
     }
   }
 

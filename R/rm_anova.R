@@ -26,8 +26,8 @@
 #' **Within-Subjects Designs:**
 #' - Tests whether means differ across repeated measures
 #' - Assumes sphericity (equal variances of differences between all pairs)
-#' - Greenhouse-Geisser correction if sphericity violated (ε < 0.75)
-#' - Huynh-Feldt correction if sphericity mildly violated (ε > 0.75)
+#' - Greenhouse-Geisser correction if sphericity violated (epsilon < 0.75)
+#' - Huynh-Feldt correction if sphericity mildly violated (epsilon > 0.75)
 #'
 #' **Mixed Designs:**
 #' - Combines within-subjects and between-subjects factors
@@ -35,7 +35,7 @@
 #' - Sphericity assumption only applies to within-subjects factors
 #'
 #' **Effect Sizes:**
-#' - Partial eta-squared (ηp²): Proportion of variance explained
+#' - Partial eta-squared (\u03B7p^2): Proportion of variance explained
 #' - Small: 0.01, Medium: 0.06, Large: 0.14
 #'
 #' **For JCP Publications:**
@@ -70,7 +70,7 @@
 #' )
 #' print(result)
 #'
-#' # Mixed design: Time (within) × Condition (between)
+#' # Mixed design: Time (within) x Condition (between)
 #' df$condition <- rep(c("Control", "Treatment"), each = 45)
 #' result <- run_rm_anova(
 #'   data = df,
@@ -169,7 +169,7 @@ run_rm_anova <- function(data,
   )
 
   # Calculate partial eta-squared for each effect
-  # ηp² = SS_effect / (SS_effect + SS_error)
+  # \u03B7p^2 = SS_effect / (SS_effect + SS_error)
   # Need to identify error terms for each effect
 
   anova_tidy <- anova_tidy |>
@@ -178,7 +178,7 @@ run_rm_anova <- function(data,
       interpretation = NA_character_
     )
 
-  # For within-subjects effects, calculate ηp²
+  # For within-subjects effects, calculate \u03B7p^2
   # This is complex because error terms vary by effect
   # For now, calculate based on available SS
   for (i in seq_len(nrow(anova_tidy))) {
@@ -434,6 +434,14 @@ print.rm_anova <- function(x, ...) {
 #' @export
 #' @examples
 #' # After significant RM ANOVA
+#' # Create example data
+#' set.seed(42)
+#' df <- expand.grid(
+#'   id = 1:30,
+#'   time = c("Before", "During", "After")
+#' )
+#' df$satisfaction <- rnorm(nrow(df), mean = 5 + as.numeric(factor(df$time)), sd = 1)
+#'
 #' result <- run_rm_anova(df, outcome = "satisfaction", within = "time", subject = "id")
 #' pairwise <- rm_pairwise(result, factor = "time")
 #' print(pairwise)

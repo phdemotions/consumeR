@@ -23,7 +23,7 @@
 #'     \item \code{df2}: Degrees of freedom (denominator)
 #'     \item \code{p_value}: P-value from the test
 #'     \item \code{significant}: Logical, TRUE if p < alpha
-#'     \item \code{eta_squared}: Effect size (η²)
+#'     \item \code{eta_squared}: Effect size (\u03B7^2)
 #'     \item \code{group_statistics}: Descriptive stats for each group
 #'     \item \code{assumptions}: Assumption check results (if requested)
 #'     \item \code{post_hoc_results}: Post-hoc test results (if requested)
@@ -42,7 +42,7 @@
 #'
 #' When homogeneity is violated, Welch's ANOVA is recommended.
 #'
-#' ## Effect Size Interpretation (η²):
+#' ## Effect Size Interpretation (\u03B7^2):
 #' \itemize{
 #'   \item 0.01 - 0.05: Small effect
 #'   \item 0.06 - 0.13: Medium effect
@@ -302,7 +302,7 @@ compare_groups_anova <- function(data,
     ifelse(is_significant, "revealed a statistically significant", "did not reveal a statistically significant"),
     " difference among groups (F(", df1, ", ", round(df2, 1), ") = ", round(f_stat, 2),
     ", p = ", round(p_value, 4), "). ",
-    "The effect size is ", effect_interp, " (η² = ", round(eta_squared, 3), "). "
+    "The effect size is ", effect_interp, " (\u03B7^2 = ", round(eta_squared, 3), "). "
   )
 
   if (is_significant && !is.null(post_hoc_results)) {
@@ -413,7 +413,7 @@ print.anova_result <- function(x, show_assumptions = FALSE, show_posthoc = TRUE,
   cat("\n")
 
   cat("EFFECT SIZE:\n")
-  cat("  η² =", x$eta_squared, "(", x$effect_interpretation, ")\n")
+  cat("  \u03B7^2 =", x$eta_squared, "(", x$effect_interpretation, ")\n")
   cat("  Interpretation: This effect accounts for", round(x$eta_squared * 100, 1), "% of variance\n")
   cat("\n")
 

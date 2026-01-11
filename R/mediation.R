@@ -1,6 +1,6 @@
 #' Simple Mediation Analysis with Bootstrap Confidence Intervals
 #'
-#' Performs simple mediation analysis for the causal path X → M → Y using
+#' Performs simple mediation analysis for the causal path X -> M -> Y using
 #' bootstrap resampling to estimate confidence intervals for indirect effects.
 #' This is the gold standard approach for mediation in consumer psychology
 #' research, recommended by Preacher & Hayes (2004, 2008).
@@ -28,10 +28,10 @@
 #'
 #' @details
 #' **Mediation Model:**
-#' - Path a: X → M (effect of X on mediator)
-#' - Path b: M → Y (effect of mediator on Y, controlling for X)
-#' - Path c: X → Y (total effect, without mediator)
-#' - Path c': X → Y (direct effect, controlling for mediator)
+#' - Path a: X -> M (effect of X on mediator)
+#' - Path b: M -> Y (effect of mediator on Y, controlling for X)
+#' - Path c: X -> Y (total effect, without mediator)
+#' - Path c': X -> Y (direct effect, controlling for mediator)
 #' - Indirect effect: a*b (mediated effect through M)
 #'
 #' **Significance Testing:**
@@ -45,7 +45,7 @@
 #' - No mediation: Indirect effect not significant
 #'
 #' **For JCP Publications:**
-#' - Use ≥ 5000 bootstrap samples (10000 for critical tests)
+#' - Use >= 5000 bootstrap samples (10000 for critical tests)
 #' - Report bias-corrected and accelerated (BCa) CIs
 #' - Report all path coefficients with SEs
 #' - Report proportion mediated if total effect is significant
@@ -66,7 +66,7 @@
 #'
 #' @export
 #' @examples
-#' # Brand attitude mediates price → purchase intention
+#' # Brand attitude mediates price -> purchase intention
 #' set.seed(42)
 #' n <- 200
 #' df <- data.frame(
@@ -161,19 +161,19 @@ mediation_simple <- function(data,
   }
 
   # Fit models
-  # Path a: X → M
+  # Path a: X -> M
   model_a <- stats::lm(formula_m, data = data_complete)
   coef_a <- stats::coef(model_a)[x]
   se_a <- summary(model_a)$coefficients[x, "Std. Error"]
   p_a <- summary(model_a)$coefficients[x, "Pr(>|t|)"]
 
-  # Path c: X → Y (total effect)
+  # Path c: X -> Y (total effect)
   model_c <- stats::lm(formula_y_total, data = data_complete)
   coef_c <- stats::coef(model_c)[x]
   se_c <- summary(model_c)$coefficients[x, "Std. Error"]
   p_c <- summary(model_c)$coefficients[x, "Pr(>|t|)"]
 
-  # Paths b and c': M → Y and X → Y (direct effect), controlling for mediator
+  # Paths b and c': M -> Y and X -> Y (direct effect), controlling for mediator
   model_bc <- stats::lm(formula_y_direct, data = data_complete)
   coef_b <- stats::coef(model_bc)[m]
   se_b <- summary(model_bc)$coefficients[m, "Std. Error"]
@@ -291,7 +291,7 @@ mediation_simple <- function(data,
 
   # Create paths tibble
   paths <- tibble::tibble(
-    path = c("a (X → M)", "b (M → Y)", "c (X → Y, total)", "c' (X → Y, direct)"),
+    path = c("a (X -> M)", "b (M -> Y)", "c (X -> Y, total)", "c' (X -> Y, direct)"),
     label = c("a", "b", "c", "c'"),
     estimate = c(coef_a, coef_b, coef_c, coef_c_prime),
     std_error = c(se_a, se_b, se_c, se_c_prime),
@@ -353,7 +353,7 @@ print.mediation_simple <- function(x, ...) {
   cat("Simple Mediation Analysis\n")
   cat("=========================\n\n")
 
-  cat(sprintf("Model: %s → %s → %s\n", x$variables$x, x$variables$m, x$variables$y))
+  cat(sprintf("Model: %s -> %s -> %s\n", x$variables$x, x$variables$m, x$variables$y))
   if (!is.null(x$variables$covariates)) {
     cat(sprintf("Covariates: %s\n", paste(x$variables$covariates, collapse = ", ")))
   }

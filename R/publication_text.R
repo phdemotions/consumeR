@@ -385,7 +385,7 @@ generate_anova_results <- function(results, effect_sizes = NULL) {
     eta_sq <- effect_sizes$eta_squared
     result_text <- paste0(
       result_text,
-      ", η² = ", round(eta_sq, 3)
+      ", \u03B7^2 = ", round(eta_sq, 3)
     )
   }
 
@@ -418,7 +418,7 @@ generate_regression_results <- function(results) {
       "The overall regression model ",
       ifelse(p_val < 0.05, "was statistically significant", "was not statistically significant"),
       " (F = ", round(f_stat, 2), ", p = ", format_pvalue(p_val),
-      ", R² = ", round(r_sq, 3), ")"
+      ", R^2 = ", round(r_sq, 3), ")"
     )
 
     return(paste0(result_text, "."))

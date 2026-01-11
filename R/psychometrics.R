@@ -34,9 +34,9 @@ NULL
 #' @details
 #' **Kaiser-Meyer-Olkin (KMO):**
 #' - Measures sampling adequacy
-#' - Overall KMO ≥ 0.80: Excellent
-#' - Overall KMO ≥ 0.70: Good
-#' - Overall KMO ≥ 0.60: Adequate
+#' - Overall KMO >= 0.80: Excellent
+#' - Overall KMO >= 0.70: Good
+#' - Overall KMO >= 0.60: Adequate
 #' - Overall KMO < 0.60: Inadequate (factor analysis not recommended)
 #'
 #' **Bartlett's Test of Sphericity:**
@@ -134,7 +134,7 @@ efa_diagnostics <- function(df_items, n_obs = NULL, fa_method = "ml") {
 
   bartlett_suitable <- bartlett_result$p.value < 0.05
 
-  message("  χ² = ", round(bartlett_result$chisq, 2),
+  message("  chi^2 = ", round(bartlett_result$chisq, 2),
           ", df = ", bartlett_result$df,
           ", p ", if (bartlett_result$p.value < 0.001) "< .001" else paste("=", round(bartlett_result$p.value, 3)))
 
@@ -189,28 +189,28 @@ efa_diagnostics <- function(df_items, n_obs = NULL, fa_method = "ml") {
 
   if (overall_kmo < 0.60) {
     interpretation <- paste0(interpretation,
-      "⚠ WARNING: KMO < 0.60 indicates sampling inadequacy.\n",
+      "WARNING: WARNING: KMO < 0.60 indicates sampling inadequacy.\n",
       "Factor analysis may not be appropriate for this data.\n\n"
     )
   } else {
     interpretation <- paste0(interpretation,
-      "✓ KMO is adequate for factor analysis.\n\n"
+      "PASS KMO is adequate for factor analysis.\n\n"
     )
   }
 
   interpretation <- paste0(interpretation,
     "BARTLETT'S TEST OF SPHERICITY\n",
-    "χ²(", bartlett_result$df, ") = ", round(bartlett_result$chisq, 2),
+    "chi^2(", bartlett_result$df, ") = ", round(bartlett_result$chisq, 2),
     ", p ", if (bartlett_result$p.value < 0.001) "< .001\n" else paste("=", round(bartlett_result$p.value, 3), "\n")
   )
 
   if (bartlett_suitable) {
     interpretation <- paste0(interpretation,
-      "✓ Significant result indicates correlations exist among items.\n\n"
+      "PASS Significant result indicates correlations exist among items.\n\n"
     )
   } else {
     interpretation <- paste0(interpretation,
-      "⚠ WARNING: Non-significant result suggests insufficient correlations.\n",
+      "WARNING: WARNING: Non-significant result suggests insufficient correlations.\n",
       "Factor analysis may not be appropriate.\n\n"
     )
   }
@@ -223,12 +223,12 @@ efa_diagnostics <- function(df_items, n_obs = NULL, fa_method = "ml") {
 
   if (suitable) {
     interpretation <- paste0(interpretation,
-      "RECOMMENDATION: ✓ Data is SUITABLE for factor analysis.\n",
+      "RECOMMENDATION: PASS Data is SUITABLE for factor analysis.\n",
       "Proceed with EFA using ", n_factors_suggested, " factor", if (n_factors_suggested != 1) "s" else "", ".\n"
     )
   } else {
     interpretation <- paste0(interpretation,
-      "RECOMMENDATION: ✗ Data may NOT be suitable for factor analysis.\n",
+      "RECOMMENDATION: FAIL Data may NOT be suitable for factor analysis.\n",
       "Consider revising items or collecting more data.\n"
     )
   }
@@ -391,9 +391,9 @@ run_cfa <- function(model,
 #'
 #' @details
 #' **Fit index cutoffs (common guidelines):**
-#' - **CFI/TLI:** ≥ 0.95 excellent, ≥ 0.90 acceptable
-#' - **RMSEA:** ≤ 0.06 excellent, ≤ 0.08 acceptable, ≤ 0.10 marginal
-#' - **SRMR:** ≤ 0.08 good fit
+#' - **CFI/TLI:** >= 0.95 excellent, >= 0.90 acceptable
+#' - **RMSEA:** <= 0.06 excellent, <= 0.08 acceptable, <= 0.10 marginal
+#' - **SRMR:** <= 0.08 good fit
 #'
 #' References:
 #' - Hu & Bentler (1999): Cutoff criteria for fit indexes
@@ -482,8 +482,8 @@ tidy_cfa_fit <- function(fit) {
 #'
 #' **Chi-square difference test:**
 #' - Tests if the larger model fits significantly better
-#' - Δχ² = χ²_small - χ²_large
-#' - Δdf = df_small - df_large
+#' - Deltachi^2 = chi^2_small - chi^2_large
+#' - Deltadf = df_small - df_large
 #' - If p < .05: Larger model fits significantly better
 #'
 #' **AIC/BIC:**
@@ -587,7 +587,7 @@ compare_cfa_models <- function(fit_small, fit_large, test = "default") {
 
   # Print interpretation
   message("\nChi-square difference test:")
-  message("  Δχ²(", df_diff, ") = ", round(chisq_diff, 2), ", p ",
+  message("  Deltachi^2(", df_diff, ") = ", round(chisq_diff, 2), ", p ",
           if (p_diff < 0.001) "< .001" else paste("=", round(p_diff, 3)))
 
   if (p_diff < 0.05) {

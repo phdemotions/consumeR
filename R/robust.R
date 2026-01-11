@@ -310,7 +310,7 @@ assumption_checks <- function(model, alpha = 0.05) {
     assumption_met = bp_p > alpha,
     recommendation = if (bp_p <= alpha) {
       paste0("Use robust standard errors (HC3). Report: 'Heteroscedasticity was ",
-             "detected (BP χ²(1) = ", round(bp_statistic, 2), ", p ",
+             "detected (BP chi^2(1) = ", round(bp_statistic, 2), ", p ",
              if (bp_p < 0.001) "< .001" else paste("=", round(bp_p, 3)),
              "). Accordingly, we report heteroscedasticity-robust standard errors ",
              "(HC3; Long & Ervin, 2000).'")
@@ -386,12 +386,12 @@ assumption_checks <- function(model, alpha = 0.05) {
   )
 
   message("\nAssumption checks complete:")
-  message("  Homoscedasticity: ", if (results$homoscedasticity$assumption_met) "✓" else "✗")
+  message("  Homoscedasticity: ", if (results$homoscedasticity$assumption_met) "PASS" else "FAIL")
   if (!is.null(results$multicollinearity)) {
-    message("  Multicollinearity: ", if (results$multicollinearity$assumption_met) "✓" else "✗")
+    message("  Multicollinearity: ", if (results$multicollinearity$assumption_met) "PASS" else "FAIL")
   }
   if (!is.null(results$normality)) {
-    message("  Normality: ", if (results$normality$assumption_met) "✓" else "✗")
+    message("  Normality: ", if (results$normality$assumption_met) "PASS" else "FAIL")
   }
 
   structure(results, class = c("assumption_checks", "list"))
@@ -408,14 +408,14 @@ print.assumption_checks <- function(x, ...) {
     check <- x[[check_name]]
     cat(toupper(check_name), "\n")
     cat("Test: ", check$test, "\n")
-    cat("Result: ", if (check$assumption_met) "✓ PASSED" else "✗ VIOLATED", "\n")
+    cat("Result: ", if (check$assumption_met) "PASS PASSED" else "FAIL VIOLATED", "\n")
     cat("Recommendation: ", check$recommendation, "\n\n")
   }
 
   if (!x$summary$all_met) {
-    cat("⚠ WARNING: Some assumptions violated. Follow recommendations above.\n")
+    cat("WARNING: WARNING: Some assumptions violated. Follow recommendations above.\n")
   } else {
-    cat("✓ All assumptions met. Standard inference appropriate.\n")
+    cat("PASS All assumptions met. Standard inference appropriate.\n")
   }
 
   cat("\n")

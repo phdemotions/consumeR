@@ -16,6 +16,10 @@ score_composite(
   name = NULL
 )
 }
+\description{
+Calculates composite scores from multiple items with optional reverse scoring
+and flexible NA handling. Returns a structured object with scores and metadata.
+}
 \arguments{
 \item{df}{Data frame containing items}
 
@@ -55,10 +59,6 @@ A list with class "composite_score" containing:
       \item \code{below_threshold}: Logical vector indicating which rows didn't meet threshold
     }
 }
-}
-\description{
-Calculates composite scores from multiple items with optional reverse scoring
-and flexible NA handling. Returns a structured object with scores and metadata.
 }
 \details{
 **NA handling rules:**

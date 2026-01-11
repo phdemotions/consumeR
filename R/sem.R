@@ -31,7 +31,7 @@
 #'   \describe{
 #'     \item{params}{Tibble of parameter estimates with CIs}
 #'     \item{fit}{Tibble of model fit indices}
-#'     \item{r2}{Tibble of R² for endogenous variables}
+#'     \item{r2}{Tibble of R^2 for endogenous variables}
 #'     \item{indirect_effects}{Tibble of indirect effects (if present)}
 #'     \item{model_syntax}{Original model specification}
 #'     \item{interpretation}{Publication-ready interpretation text}
@@ -60,10 +60,10 @@
 #'
 #' **Fit Index Guidelines (Hu & Bentler, 1999)**:
 #' \itemize{
-#'   \item CFI ≥ 0.95 (good), ≥ 0.90 (acceptable)
-#'   \item TLI ≥ 0.95 (good), ≥ 0.90 (acceptable)
-#'   \item RMSEA ≤ 0.06 (good), ≤ 0.08 (acceptable)
-#'   \item SRMR ≤ 0.08 (good), ≤ 0.10 (acceptable)
+#'   \item CFI >= 0.95 (good), >= 0.90 (acceptable)
+#'   \item TLI >= 0.95 (good), >= 0.90 (acceptable)
+#'   \item RMSEA <= 0.06 (good), <= 0.08 (acceptable)
+#'   \item SRMR <= 0.08 (good), <= 0.10 (acceptable)
 #' }
 #'
 #' @references
@@ -192,7 +192,7 @@ run_sem <- function(model,
   # Extract fit indices
   fit_stats <- extract_sem_fit(fit, measures = fit_measures)
 
-  # Extract R² for endogenous variables
+  # Extract R^2 for endogenous variables
   r2_vals <- extract_sem_r2(fit)
 
   # Extract indirect effects if defined
@@ -321,11 +321,11 @@ extract_sem_fit <- function(fit, measures) {
 }
 
 
-#' Extract R² for Endogenous Variables
+#' Extract R^2 for Endogenous Variables
 #'
 #' @param fit Fitted lavaan object
 #'
-#' @return Tibble of R² values
+#' @return Tibble of R^2 values
 #' @keywords internal
 extract_sem_r2 <- function(fit) {
 
@@ -438,12 +438,12 @@ generate_sem_interpretation <- function(fit_stats, params, indirect) {
 #'
 #' @description
 #' Extract and format SEM results for publication. Returns parameter estimates,
-#' fit indices, and R² values in a publication-ready format.
+#' fit indices, and R^2 values in a publication-ready format.
 #'
 #' @param sem_result Result from \code{run_sem()}.
 #' @param parameters Logical. Include parameter estimates table? Default TRUE.
 #' @param fit Logical. Include fit indices? Default TRUE.
-#' @param r2 Logical. Include R² values? Default TRUE.
+#' @param r2 Logical. Include R^2 values? Default TRUE.
 #' @param indirect Logical. Include indirect effects? Default TRUE.
 #' @param standardized Logical. Use standardized estimates? Default TRUE.
 #'
@@ -588,9 +588,9 @@ print.sem_result <- function(x, ...) {
   print(x$fit, n = Inf)
   cat("\n")
 
-  # R²
+  # R^2
   if (!is.null(x$r2)) {
-    cat("R² for Endogenous Variables:\n")
+    cat("R^2 for Endogenous Variables:\n")
     cat("----------------------------\n")
     print(x$r2, n = Inf)
     cat("\n")

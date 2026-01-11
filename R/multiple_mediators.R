@@ -36,10 +36,10 @@
 #' @details
 #' **Parallel Mediation Model**:
 #'
-#' X → M1 → Y
-#' X → M2 → Y
-#' X → M3 → Y
-#' X ⇢ Y (direct effect)
+#' X -> M1 -> Y
+#' X -> M2 -> Y
+#' X -> M3 -> Y
+#' X -> Y (direct effect)
 #'
 #' Each mediator operates independently. Total indirect effect is the sum of
 #' specific indirect effects: (a1*b1) + (a2*b2) + (a3*b3) + ...
@@ -61,7 +61,7 @@
 #'   \item Report total indirect effect
 #'   \item Report direct effect (c')
 #'   \item Conduct contrasts if comparing mediators
-#'   \item Use ≥5000 bootstrap samples for publication
+#'   \item Use >=5000 bootstrap samples for publication
 #'   \item Report which mediators are significant
 #' }
 #'
@@ -203,13 +203,13 @@ mediation_parallel <- function(data,
 #'
 #' @description
 #' Analyze serial (sequential) mediation where mediators operate in a specific
-#' order: X → M1 → M2 → ... → Y. Tests specific indirect effects through
+#' order: X -> M1 -> M2 -> ... -> Y. Tests specific indirect effects through
 #' different pathways using bootstrap CIs.
 #'
 #' @param data Data frame containing all variables.
 #' @param x Name of independent variable (character).
 #' @param mediators Character vector of mediator variable names in sequential
-#'   order (e.g., c("M1", "M2") for X → M1 → M2 → Y).
+#'   order (e.g., c("M1", "M2") for X -> M1 -> M2 -> Y).
 #' @param y Name of dependent variable (character).
 #' @param covariates Optional character vector of covariate names.
 #' @param conf_level Confidence level for intervals. Default is 0.95.
@@ -232,16 +232,16 @@ mediation_parallel <- function(data,
 #' @details
 #' **Serial Mediation Model (2 mediators)**:
 #'
-#' Path 1: X → M1 → Y (a1*b1)
-#' Path 2: X → M2 → Y (a2*b2)
-#' Path 3: X → M1 → M2 → Y (a1*d21*b2) [serial path]
-#' Direct: X ⇢ Y (c')
+#' Path 1: X -> M1 -> Y (a1*b1)
+#' Path 2: X -> M2 -> Y (a2*b2)
+#' Path 3: X -> M1 -> M2 -> Y (a1*d21*b2) [serial path]
+#' Direct: X -> Y (c')
 #'
 #' **Specific Indirect Effects**:
 #' \itemize{
-#'   \item Through M1 only: X → M1 → Y
-#'   \item Through M2 only: X → M2 → Y
-#'   \item Serial through M1 then M2: X → M1 → M2 → Y
+#'   \item Through M1 only: X -> M1 -> Y
+#'   \item Through M2 only: X -> M2 -> Y
+#'   \item Serial through M1 then M2: X -> M1 -> M2 -> Y
 #' }
 #'
 #' The serial path represents the unique contribution of the sequential
@@ -511,12 +511,12 @@ estimate_serial_paths <- function(data, x, mediators, y, covariates) {
   }
 
   # For 2 mediators: M1, M2
-  # X → M1 (a1)
-  # X → M2 (a2)
-  # M1 → M2 (d21)
-  # M1 → Y (b1)
-  # M2 → Y (b2)
-  # X → Y (c')
+  # X -> M1 (a1)
+  # X -> M2 (a2)
+  # M1 -> M2 (d21)
+  # M1 -> Y (b1)
+  # M2 -> Y (b2)
+  # X -> Y (c')
 
   m1 <- mediators[1]
   m2 <- mediators[2]
@@ -572,7 +572,7 @@ bootstrap_serial_mediation <- function(data, x, mediators, y, covariates,
   m1 <- mediators[1]
   m2 <- mediators[2]
 
-  # Storage: ind1 (X→M1→Y), ind2 (X→M2→Y), ind3 (X→M1→M2→Y)
+  # Storage: ind1 (X->M1->Y), ind2 (X->M2->Y), ind3 (X->M1->M2->Y)
   boot_ind1 <- numeric(boot_samples)
   boot_ind2 <- numeric(boot_samples)
   boot_ind3 <- numeric(boot_samples)
@@ -585,9 +585,9 @@ bootstrap_serial_mediation <- function(data, x, mediators, y, covariates,
     paths_b <- estimate_serial_paths(boot_data, x, mediators, y, covariates)
 
     # Specific indirect effects
-    boot_ind1[b] <- paths_b$a1 * paths_b$b1  # X → M1 → Y
-    boot_ind2[b] <- paths_b$a2 * paths_b$b2  # X → M2 → Y
-    boot_ind3[b] <- paths_b$a1 * paths_b$d21 * paths_b$b2  # X → M1 → M2 → Y
+    boot_ind1[b] <- paths_b$a1 * paths_b$b1  # X -> M1 -> Y
+    boot_ind2[b] <- paths_b$a2 * paths_b$b2  # X -> M2 -> Y
+    boot_ind3[b] <- paths_b$a1 * paths_b$d21 * paths_b$b2  # X -> M1 -> M2 -> Y
   }
 
   # Point estimates
@@ -603,9 +603,9 @@ bootstrap_serial_mediation <- function(data, x, mediators, y, covariates,
 
   specific_indirect <- tibble::tibble(
     pathway = c(
-      sprintf("X → %s → Y", m1),
-      sprintf("X → %s → Y", m2),
-      sprintf("X → %s → %s → Y", m1, m2)
+      sprintf("X -> %s -> Y", m1),
+      sprintf("X -> %s -> Y", m2),
+      sprintf("X -> %s -> %s -> Y", m1, m2)
     ),
     indirect_effect = c(ind1_est, ind2_est, ind3_est),
     ci_lower = c(ci1[1], ci2[1], ci3[1]),
@@ -817,6 +817,8 @@ generate_serial_interpretation <- function(specific, total, direct) {
 
 #' Print Method for Parallel Mediation
 #'
+#' @param x A parallel_mediation object
+#' @param ... Additional arguments (not used)
 #' @export
 print.parallel_mediation <- function(x, ...) {
 
@@ -863,6 +865,8 @@ print.parallel_mediation <- function(x, ...) {
 
 #' Print Method for Serial Mediation
 #'
+#' @param x A serial_mediation object
+#' @param ... Additional arguments (not used)
 #' @export
 print.serial_mediation <- function(x, ...) {
 
@@ -872,7 +876,7 @@ print.serial_mediation <- function(x, ...) {
   cat("Variables:\n")
   cat(sprintf("  X: %s\n", x$variables$x))
   cat(sprintf("  Mediators (sequential): %s\n",
-              paste(x$variables$mediators, collapse = " → ")))
+              paste(x$variables$mediators, collapse = " -> ")))
   cat(sprintf("  Y: %s\n", x$variables$y))
   if (!is.null(x$variables$covariates)) {
     cat(sprintf("  Covariates: %s\n", paste(x$variables$covariates, collapse = ", ")))

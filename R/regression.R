@@ -16,8 +16,8 @@
 #'   \itemize{
 #'     \item \code{model_type}: "Simple" or "Multiple" regression
 #'     \item \code{coefficients}: Table of regression coefficients with tests
-#'     \item \code{r_squared}: R² value
-#'     \item \code{adj_r_squared}: Adjusted R² value
+#'     \item \code{r_squared}: R^2 value
+#'     \item \code{adj_r_squared}: Adjusted R^2 value
 #'     \item \code{f_statistic}: Overall model F-statistic
 #'     \item \code{f_df1}: F-statistic numerator df
 #'     \item \code{f_df2}: F-statistic denominator df
@@ -42,7 +42,7 @@
 #'   \item \strong{No multicollinearity}: Predictors aren't highly correlated (multiple regression)
 #' }
 #'
-#' ## R² Interpretation:
+#' ## R^2 Interpretation:
 #' \itemize{
 #'   \item 0.01 - 0.09: Small effect
 #'   \item 0.09 - 0.25: Medium effect
@@ -185,13 +185,13 @@ analyze_regression <- function(data,
     if (homoscedasticity_met) {
       homoscedasticity_text <- paste0(
         "The homoscedasticity assumption is MET (Breusch-Pagan test: ",
-        "χ² = ", round(bp_statistic, 2), ", p = ", round(bp_p_value, 4), "). ",
+        "chi^2 = ", round(bp_statistic, 2), ", p = ", round(bp_p_value, 4), "). ",
         "The variance of residuals is constant across predicted values."
       )
 
       homoscedasticity_pub <- paste0(
         "Homoscedasticity was assessed using the Breusch-Pagan test. ",
-        "The assumption was met (χ² = ", round(bp_statistic, 2), ", p = ",
+        "The assumption was met (chi^2 = ", round(bp_statistic, 2), ", p = ",
         round(bp_p_value, 4), "), indicating constant error variance."
       )
 
@@ -212,13 +212,13 @@ analyze_regression <- function(data,
     } else {
       homoscedasticity_text <- paste0(
         "The homoscedasticity assumption is VIOLATED (Breusch-Pagan test: ",
-        "χ² = ", round(bp_statistic, 2), ", p = ", round(bp_p_value, 4), "). ",
+        "chi^2 = ", round(bp_statistic, 2), ", p = ", round(bp_p_value, 4), "). ",
         "The variance of residuals changes across predicted values."
       )
 
       homoscedasticity_pub <- paste0(
         "Homoscedasticity was assessed using the Breusch-Pagan test. ",
-        "The assumption was violated (χ² = ", round(bp_statistic, 2), ", p = ",
+        "The assumption was violated (chi^2 = ", round(bp_statistic, 2), ", p = ",
         round(bp_p_value, 4), "). Accordingly, heteroscedasticity-robust standard errors ",
         "were computed."
       )
@@ -264,7 +264,7 @@ analyze_regression <- function(data,
     # 5. Multicollinearity (for multiple regression)
     if (n_predictors > 1) {
       # Calculate VIF (Variance Inflation Factor)
-      # VIF = 1 / (1 - R²) for each predictor regressed on others
+      # VIF = 1 / (1 - R^2) for each predictor regressed on others
 
       predictor_names <- names(coef(lm_model))[-1]  # Exclude intercept
       vif_values <- numeric(length(predictor_names))
@@ -392,7 +392,7 @@ analyze_regression <- function(data,
     "The ", tolower(model_type), " model ",
     ifelse(is_significant, "was statistically significant", "was not statistically significant"),
     " (F(", f_df1, ", ", f_df2, ") = ", round(f_stat, 2),
-    ", p = ", round(p_value, 4), ", R² = ", round(r_squared, 3), "). "
+    ", p = ", round(p_value, 4), ", R^2 = ", round(r_squared, 3), "). "
   )
 
   if (is_significant) {
@@ -491,8 +491,8 @@ print.regression_result <- function(x, show_assumptions = FALSE, show_publicatio
   cat("MODEL SUMMARY:\n")
   cat("  Observations:", x$n_observations, "\n")
   cat("  Predictors:", x$n_predictors, "\n")
-  cat("  R² =", x$r_squared, "(explains", round(x$r_squared * 100, 1), "% of variance)\n")
-  cat("  Adjusted R² =", x$adj_r_squared, "\n")
+  cat("  R^2 =", x$r_squared, "(explains", round(x$r_squared * 100, 1), "% of variance)\n")
+  cat("  Adjusted R^2 =", x$adj_r_squared, "\n")
   cat("  RMSE =", x$rmse, "\n")
   cat("\n")
 

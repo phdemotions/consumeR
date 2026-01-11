@@ -1708,6 +1708,33 @@ pseudo_r2(model)
 base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
 base::cat("pseudo_r2", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
+nameEx("quick_test_help")
+### * quick_test_help
+
+flush(stderr()); flush(stdout())
+
+base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+### Name: quick_test_help
+### Title: Quick Test Helper - Find the Right Statistical Test
+### Aliases: quick_test_help
+
+### ** Examples
+
+## Not run: 
+##D # I want to know if advertising affects sales
+##D data(consumer_survey)
+##D quick_test_help(consumer_survey, outcome = "spending", predictor = "flyer_group")
+##D 
+##D # I want to know if age relates to satisfaction
+##D quick_test_help(consumer_survey, outcome = "satisfaction", predictor = "age")
+## End(Not run)
+
+
+
+
+base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+base::cat("quick_test_help", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+cleanEx()
 nameEx("reverse_score_likert")
 ### * reverse_score_likert
 
@@ -2046,6 +2073,42 @@ base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
 base::cat("run_sem", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+cleanEx()
+nameEx("select_statistical_test")
+### * select_statistical_test
+
+flush(stderr()); flush(stdout())
+
+base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+### Name: select_statistical_test
+### Title: Interactive Statistical Test Selection Guide
+### Aliases: select_statistical_test
+
+### ** Examples
+
+## Not run: 
+##D # Interactive mode - answers questions step by step
+##D guide <- select_statistical_test()
+##D 
+##D # Or provide variables upfront for quick recommendation
+##D guide <- select_statistical_test(
+##D   data = my_data,
+##D   outcome = "purchase_amount",
+##D   predictor = "ad_condition"
+##D )
+##D 
+##D # See the recommendation
+##D print(guide)
+##D 
+##D # Run the suggested code
+##D eval(parse(text = guide$example_code))
+## End(Not run)
+
+
+
+
+base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+base::cat("select_statistical_test", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simple_slopes")
 ### * simple_slopes

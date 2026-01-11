@@ -130,7 +130,7 @@ emmeans_contrasts <- function(model,
   message("\nCalculating contrasts with adjustment = '", adjust, "'...")
 
   if (contrasts == "pairwise") {
-    contr <- emmeans::pairs(emm, adjust = adjust, infer = infer)
+    contr <- pairs(emm, adjust = adjust, infer = infer)
   } else if (contrasts == "trt.vs.ctrl") {
     contr <- emmeans::contrast(emm, method = "trt.vs.ctrl", adjust = adjust, infer = infer, ...)
   } else if (contrasts == "eff") {

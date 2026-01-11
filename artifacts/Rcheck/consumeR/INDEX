@@ -95,11 +95,15 @@ print.regression_result
 print.sem_result        Print Method for SEM Results
 print.serial_mediation
                         Print Method for Serial Mediation
+print.test_recommendation
+                        Print Method for Test Recommendations
 pseudo_r2               Calculate Pseudo R-squared for Logistic
                         Regression
 psychometrics           Psychometric Analysis Functions
 publication_text        Generate Publication-Ready Text for Statistical
                         Results
+quick_test_help         Quick Test Helper - Find the Right Statistical
+                        Test
 reverse_score_likert    Reverse Score Likert-Type Items
 rm_pairwise             Pairwise Comparisons for Repeated Measures
                         ANOVA
@@ -114,6 +118,8 @@ run_rm_anova            Repeated Measures ANOVA
 run_sem                 Structural Equation Modeling (SEM) Path
                         Analysis
 score_composite         Score Composite Scale with Metadata
+select_statistical_test
+                        Interactive Statistical Test Selection Guide
 simple_slopes           Simple Slopes Analysis for Interaction Effects
 table_formatting        Table Formatting and Export Functions
 test_group_differences

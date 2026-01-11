@@ -7,7 +7,7 @@ test_that("create_analysis_report works with vector input", {
   # Should not error
   expect_output(
     result <- create_analysis_report(data, title = "Test Report"),
-    "Consumer Data Analysis"
+    "Test Report"
   )
 
   # Should return a list invisibly

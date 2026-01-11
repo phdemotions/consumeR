@@ -1,5 +1,6 @@
 #' Test for Differences Between Consumer Groups
 #'
+#' @description
 #' This function compares two groups of consumers to determine if they
 #' are statistically different. It is designed for maximum transparency
 #' during peer review, with clear documentation of every step and assumption.

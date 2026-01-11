@@ -21,6 +21,7 @@ check_independence	check_independence
 check_normality	check_normality
 check_variable_types	check_variable_types
 chisq_test	chisq_test
+classify_variable_type	classify_variable_type
 clean_names_safe	clean_names_safe
 clean_survey_data	clean_survey_data
 cohens_d_table	cohens_d_table
@@ -32,6 +33,7 @@ composite_scoring	composite_scoring
 consumer_survey	consumer_survey
 correlation_table	correlation_table
 create_analysis_report	create_analysis_report
+determine_test_recommendation	determine_test_recommendation
 efa_diagnostics	efa_diagnostics
 emmeans_contrasts	emmeans_contrasts
 estimate_parallel_paths	estimate_parallel_paths
@@ -87,9 +89,11 @@ print.publication_block	print.publication_block
 print.regression_result	print.regression_result
 print.sem_result	print.sem_result
 print.serial_mediation	print.serial_mediation
+print.test_recommendation	print.test_recommendation
 pseudo_r2	pseudo_r2
 psychometrics	psychometrics
 publication_text	publication_text
+quick_test_help	quick_test_help
 reverse_score_likert	reverse_score_likert
 rm_pairwise	rm_pairwise
 robust	robust
@@ -101,6 +105,7 @@ run_mlm	run_mlm
 run_rm_anova	run_rm_anova
 run_sem	run_sem
 score_composite	score_composite
+select_statistical_test	select_statistical_test
 simple_slopes	simple_slopes
 table_formatting	table_formatting
 test_group_differences	test_group_differences

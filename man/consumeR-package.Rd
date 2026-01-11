@@ -3,7 +3,7 @@
 \docType{package}
 \name{consumeR-package}
 \alias{consumeR-package}
-\alias{consumeR}
+\alias{_PACKAGE}
 \title{consumeR: Transparent and Reproducible Consumer Research Analysis}
 \description{
 The consumeR package provides transparent, well-documented functions for
@@ -47,3 +47,4 @@ Useful links:
 \strong{Maintainer}: Josh Gonzales \email{joshgonzalesphd@gmail.com} (\href{https://orcid.org/0000-0001-8633-3380}{ORCID})
 
 }
+\keyword{internal}

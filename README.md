@@ -83,43 +83,47 @@ final_data <- cleaned$clean_data
 
 ### Currently Supported
 
-consumeR currently provides functions for:
+consumeR provides functions for transparent analytical workflows:
 
 | Category | Functions |
 |----------|-----------|
 | **Data Management** | Import (CSV, SPSS), variable checking, name cleaning |
 | **Data Cleaning** | Exclusion tracking, attention check validation, missing data reporting |
 | **Descriptive Statistics** | Summary statistics, correlation matrices |
-| **Group Comparisons** | t-tests, ANOVA, post-hoc contrasts |
-| **Regression** | OLS with assumption checks, robust standard errors |
-| **Reliability** | Cronbach's alpha, composite reliability, AVE |
-| **Moderation** | Simple slopes, Johnson-Neyman regions |
-| **Categorical Analysis** | Chi-square, Fisher's exact, McNemar's test |
+| **Group Comparisons** | t-tests, ANOVA, repeated measures ANOVA, post-hoc contrasts |
+| **Regression** | OLS with assumption checks, robust standard errors, logistic regression |
+| **Reliability & Validity** | Cronbach's alpha, composite reliability, AVE |
+| **Factor Analysis** | Exploratory (EFA) with diagnostics, Confirmatory (CFA) with fit indices |
+| **Mediation & Moderation** | Simple, parallel, serial, and moderated mediation; simple slopes; Johnson-Neyman |
+| **Multilevel Models** | Random-intercept models, ICC calculation, assumption diagnostics |
+| **Structural Equation Modeling** | Path analysis, indirect effects, model comparison |
+| **Categorical Analysis** | Chi-square, Fisher's exact, McNemar's test, odds ratios |
 | **Non-Parametric Tests** | Mann-Whitney, Kruskal-Wallis, Wilcoxon, Friedman |
-| **Effect Sizes** | Cohen's d, Cramér's V, partial η², odds ratios |
+| **Effect Sizes** | Cohen's d, Cramér's V, partial η², odds ratios with CIs |
 
-### Planned Extensions
+### Potential Future Extensions
 
-Features under development or planned:
+Features that could be added based on user needs:
 
-- Exploratory factor analysis (EFA) with diagnostics
-- Confirmatory factor analysis (CFA) with fit indices
-- Logistic regression for binary outcomes
-- Count models (Poisson, negative binomial)
-- Random-intercept multilevel models
-- Mediation analysis with bootstrap CIs
+- Count models (Poisson, negative binomial regression)
+- Advanced SEM features (latent growth models, MIMIC models)
+- Additional multilevel extensions (cross-classified models, growth curves)
+- Propensity score matching for observational studies
+- Sensitivity analyses for missing data
+
+**Community-driven**: Future development prioritizes features requested by active users.
 
 ### Out of Scope
 
 The following are explicitly **not planned** as they fall outside the package's design goals:
 
-- Machine learning / predictive modeling (black-box methods)
-- Bayesian inference
-- Advanced structural equation modeling beyond basic CFA
-- Time series analysis
-- Spatial statistics
+- Machine learning / predictive modeling (use `tidymodels`, `caret`, or `mlr3`)
+- Bayesian inference (use `brms`, `rstanarm`, or `rethinking`)
+- Time series analysis (use `forecast` or `fable`)
+- Spatial statistics (use `sf` or `spatstat`)
+- Network analysis (use `igraph` or `tidygraph`)
 
-**Design philosophy**: consumeR focuses on transparent, assumption-based inference common in experimental and survey-based consumer research.
+**Design philosophy
 
 ## Key Features
 

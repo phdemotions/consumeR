@@ -31,12 +31,12 @@ moderated_mediation(
 \item{moderator}{Character; name of the moderator variable}
 
 \item{model}{Character; which Hayes PROCESS model:
-"7" (default): Moderates M→Y path (b path)
-"8": Moderates both X→M and M→Y paths (a and b paths)
-"14": Moderates X→M path (a path)}
+"7" (default): Moderates M->Y path (b path)
+"8": Moderates both X->M and M->Y paths (a and b paths)
+"14": Moderates X->M path (a path)}
 
 \item{moderator_values}{Numeric vector of moderator values to probe. Default: NULL
-(uses mean ± 1 SD)}
+(uses mean +/- 1 SD)}
 
 \item{covariates}{Character vector; names of covariates to control for (optional)}
 
@@ -66,23 +66,23 @@ by Hayes (2018), allowing researchers to examine when and for whom mediation occ
 \details{
 **Hayes PROCESS Models:**
 
-**Model 7** (Moderator on b path, M→Y):
-- X → M (path a)
-- M → Y depends on W (path b + interaction)
-- Indirect effect = a × (b + b₃W)
-- Index of moderated mediation = a × b₃
+**Model 7** (Moderator on b path, M->Y):
+- X -> M (path a)
+- M -> Y depends on W (path b + interaction)
+- Indirect effect = a x (b + b_3W)
+- Index of moderated mediation = a x b_3
 
 **Model 8** (Moderator on both a and b paths):
-- X → M depends on W (path a + interaction)
-- M → Y depends on W (path b + interaction)
-- Indirect effect = (a + a₃W) × (b + b₃W)
+- X -> M depends on W (path a + interaction)
+- M -> Y depends on W (path b + interaction)
+- Indirect effect = (a + a_3W) x (b + b_3W)
 - Most complex model
 
-**Model 14** (Moderator on a path, X→M):
-- X → M depends on W (path a + interaction)
-- M → Y (path b)
-- Indirect effect = (a + a₃W) × b
-- Index of moderated mediation = a₃ × b
+**Model 14** (Moderator on a path, X->M):
+- X -> M depends on W (path a + interaction)
+- M -> Y (path b)
+- Indirect effect = (a + a_3W) x b
+- Index of moderated mediation = a_3 x b
 
 **Index of Moderated Mediation:**
 - Quantifies how much the indirect effect changes per unit of moderator
@@ -103,7 +103,7 @@ by Hayes (2018), allowing researchers to examine when and for whom mediation occ
 - Use 5000+ bootstrap samples
 }
 \examples{
-# Model 7: Trust mediates CSR → loyalty, moderated by involvement
+# Model 7: Trust mediates CSR -> loyalty, moderated by involvement
 set.seed(42)
 n <- 200
 df <- data.frame(

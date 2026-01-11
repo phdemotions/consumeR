@@ -45,7 +45,7 @@ Includes effect size (partial eta-squared) and publication-ready output.
   - Use when: Significant interactions present, want to test simple effects
   - Required for unbalanced designs with interactions
 
-**Partial Eta-Squared (η²p):**
+**Partial Eta-Squared (eta-squaredp):**
 - Effect size: proportion of variance explained by each term
 - Guidelines: 0.01 = small, 0.06 = medium, 0.14 = large
 - More appropriate than eta-squared for factorial designs

@@ -36,7 +36,7 @@ confidence intervals, and \code{logistic_assumptions()} to check model assumptio
 
 For JCP publications, always report:
 - Odds ratios with 95% CIs
-- Model fit statistics (AIC, pseudo-R²)
+- Model fit statistics (AIC, pseudo-R^2)
 - Assumption checks (linearity of logit, multicollinearity)
 - Classification accuracy if relevant
 }

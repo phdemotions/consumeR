@@ -6,6 +6,11 @@
 \usage{
 \method{print}{serial_mediation}(x, ...)
 }
+\arguments{
+\item{x}{A serial_mediation object}
+
+\item{...}{Additional arguments (not used)}
+}
 \description{
 Print Method for Serial Mediation
 }

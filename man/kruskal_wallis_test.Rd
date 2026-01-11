@@ -18,7 +18,7 @@ A list of class "kruskal_wallis" containing:
   - statistic: H statistic (chi-square approximation)
   - df: Degrees of freedom
   - p_value: p-value
-  - epsilon_squared: Effect size (η² analog for ranks)
+  - epsilon_squared: Effect size (eta-squared analog for ranks)
   - group_medians: Tibble with medians for each group
   - interpretation: Publication-ready text
 }
@@ -29,8 +29,8 @@ to one-way ANOVA.
 }
 \details{
 **Effect Size (Epsilon-squared):**
-- ε² = H / (n² - 1) / (n + 1)
-- Interpretation: Similar to η², < 0.01 negligible, 0.01-0.06 small,
+- epsilon^2 = H / (n^2 - 1) / (n + 1)
+- Interpretation: Similar to eta-squared, < 0.01 negligible, 0.01-0.06 small,
   0.06-0.14 medium, > 0.14 large
 
 **Post-hoc Tests:**

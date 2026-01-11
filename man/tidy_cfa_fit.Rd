@@ -31,9 +31,9 @@ in a tidy, single-row tibble format.
 }
 \details{
 **Fit index cutoffs (common guidelines):**
-- **CFI/TLI:** ≥ 0.95 excellent, ≥ 0.90 acceptable
-- **RMSEA:** ≤ 0.06 excellent, ≤ 0.08 acceptable, ≤ 0.10 marginal
-- **SRMR:** ≤ 0.08 good fit
+- **CFI/TLI:** >= 0.95 excellent, >= 0.90 acceptable
+- **RMSEA:** <= 0.06 excellent, <= 0.08 acceptable, <= 0.10 marginal
+- **SRMR:** <= 0.08 good fit
 
 References:
 - Hu & Bentler (1999): Cutoff criteria for fit indexes

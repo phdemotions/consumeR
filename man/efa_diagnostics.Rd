@@ -34,9 +34,9 @@ test of sphericity, and parallel analysis for determining number of factors.
 \details{
 **Kaiser-Meyer-Olkin (KMO):**
 - Measures sampling adequacy
-- Overall KMO ≥ 0.80: Excellent
-- Overall KMO ≥ 0.70: Good
-- Overall KMO ≥ 0.60: Adequate
+- Overall KMO >= 0.80: Excellent
+- Overall KMO >= 0.70: Good
+- Overall KMO >= 0.60: Adequate
 - Overall KMO < 0.60: Inadequate (factor analysis not recommended)
 
 **Bartlett's Test of Sphericity:**

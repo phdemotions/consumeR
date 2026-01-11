@@ -48,11 +48,11 @@ it tells you if your questions reliably measure what you think they measure.
 **Composite Reliability (CR)**:
 - Like Cronbach's alpha but more accurate
 - Uses factor loadings instead of correlations
-- Threshold: CR ≥ 0.70 is good
+- Threshold: CR >= 0.70 is good
 
 **Average Variance Extracted (AVE)**:
 - % of variance explained by the construct vs. measurement error
-- Threshold: AVE ≥ 0.50 means construct explains majority of variance
+- Threshold: AVE >= 0.50 means construct explains majority of variance
 - If AVE < 0.50, more variance is due to error than true scores
 
 **Square Root of AVE**:
@@ -60,13 +60,13 @@ it tells you if your questions reliably measure what you think they measure.
 - Should be higher than correlations with other constructs
 
 ## Quality Thresholds (Fornell & Larcker, 1981):
-- CR ≥ 0.70: Adequate reliability
-- AVE ≥ 0.50: Adequate convergent validity
-- √AVE > correlation with other constructs: Discriminant validity
+- CR >= 0.70: Adequate reliability
+- AVE >= 0.50: Adequate convergent validity
+- sqrtAVE > correlation with other constructs: Discriminant validity
 
 ## How This is Calculated:
 1. Run a factor analysis to get item loadings
-2. CR = (sum of loadings)² / [(sum of loadings)² + sum of error variances]
+2. CR = (sum of loadings)^2 / [(sum of loadings)^2 + sum of error variances]
 3. AVE = sum of squared loadings / number of items
 }
 \examples{

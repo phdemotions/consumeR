@@ -13,7 +13,7 @@ chisq_test(data = NULL, x, y, correct = TRUE, simulate_p = FALSE, B = 2000)
 
 \item{y}{Character (column name) or vector (second categorical variable)}
 
-\item{correct}{Logical. Apply Yates' continuity correction for 2×2 tables? (default TRUE)}
+\item{correct}{Logical. Apply Yates' continuity correction for 2x2 tables? (default TRUE)}
 
 \item{simulate_p}{Logical. Use Monte Carlo simulation for p-value? (default FALSE)}
 
@@ -25,7 +25,7 @@ A list with class "chisq_result" containing:
   \item \code{chisq}: Chi-square statistic
   \item \code{df}: Degrees of freedom
   \item \code{p_value}: P-value
-  \item \code{cramers_v}: Cramér's V effect size
+  \item \code{cramers_v}: Cramer's V effect size
   \item \code{effect_interp}: Effect size interpretation
   \item \code{observed}: Observed frequencies table
   \item \code{expected}: Expected frequencies table
@@ -37,22 +37,22 @@ A list with class "chisq_result" containing:
 }
 \description{
 Conducts chi-square test of independence for contingency tables with
-Cramér's V effect size and standardized residuals. Publication-ready
+Cramer's V effect size and standardized residuals. Publication-ready
 output for JCP standards.
 }
 \details{
-**Cramér's V Effect Size:**
-- For 2×2 tables: V = √(χ²/n)
-- For larger tables: V = √(χ²/(n × min(rows-1, cols-1)))
+**Cramer's V Effect Size:**
+- For 2x2 tables: V = sqrt(chi^2/n)
+- For larger tables: V = sqrt(chi^2/(n x min(rows-1, cols-1)))
 - Interpretation: 0.10 = small, 0.30 = medium, 0.50 = large
 
 **Assumptions:**
-- Expected frequency ≥ 5 in all cells (for 2×2)
-- Expected frequency ≥ 5 in 80% of cells (for larger tables)
+- Expected frequency >= 5 in all cells (for 2x2)
+- Expected frequency >= 5 in 80% of cells (for larger tables)
 - If violated, use Fisher's exact test instead
 
 **Yates' Correction:**
-- Applied by default for 2×2 tables
+- Applied by default for 2x2 tables
 - Makes test more conservative (reduces Type I error)
 - Can turn off with correct = FALSE
 }

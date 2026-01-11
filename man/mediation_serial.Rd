@@ -22,7 +22,7 @@ mediation_serial(
 \item{x}{Name of independent variable (character).}
 
 \item{mediators}{Character vector of mediator variable names in sequential
-order (e.g., c("M1", "M2") for X → M1 → M2 → Y).}
+order (e.g., c("M1", "M2") for X -> M1 -> M2 -> Y).}
 
 \item{y}{Name of dependent variable (character).}
 
@@ -51,22 +51,22 @@ Object of class \code{serial_mediation} containing:
 }
 \description{
 Analyze serial (sequential) mediation where mediators operate in a specific
-order: X → M1 → M2 → ... → Y. Tests specific indirect effects through
+order: X -> M1 -> M2 -> ... -> Y. Tests specific indirect effects through
 different pathways using bootstrap CIs.
 }
 \details{
 **Serial Mediation Model (2 mediators)**:
 
-Path 1: X → M1 → Y (a1*b1)
-Path 2: X → M2 → Y (a2*b2)
-Path 3: X → M1 → M2 → Y (a1*d21*b2) [serial path]
-Direct: X ⇢ Y (c')
+Path 1: X -> M1 -> Y (a1*b1)
+Path 2: X -> M2 -> Y (a2*b2)
+Path 3: X -> M1 -> M2 -> Y (a1*d21*b2) [serial path]
+Direct: X -> Y (c')
 
 **Specific Indirect Effects**:
 \itemize{
-  \item Through M1 only: X → M1 → Y
-  \item Through M2 only: X → M2 → Y
-  \item Serial through M1 then M2: X → M1 → M2 → Y
+  \item Through M1 only: X -> M1 -> Y
+  \item Through M2 only: X -> M2 -> Y
+  \item Serial through M1 then M2: X -> M1 -> M2 -> Y
 }
 
 The serial path represents the unique contribution of the sequential

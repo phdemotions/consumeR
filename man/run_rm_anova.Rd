@@ -51,8 +51,8 @@ are measured at multiple time points or under multiple conditions.
 **Within-Subjects Designs:**
 - Tests whether means differ across repeated measures
 - Assumes sphericity (equal variances of differences between all pairs)
-- Greenhouse-Geisser correction if sphericity violated (ε < 0.75)
-- Huynh-Feldt correction if sphericity mildly violated (ε > 0.75)
+- Greenhouse-Geisser correction if sphericity violated (epsilon < 0.75)
+- Huynh-Feldt correction if sphericity mildly violated (epsilon > 0.75)
 
 **Mixed Designs:**
 - Combines within-subjects and between-subjects factors
@@ -60,7 +60,7 @@ are measured at multiple time points or under multiple conditions.
 - Sphericity assumption only applies to within-subjects factors
 
 **Effect Sizes:**
-- Partial eta-squared (ηp²): Proportion of variance explained
+- Partial eta-squared (etap^2): Proportion of variance explained
 - Small: 0.01, Medium: 0.06, Large: 0.14
 
 **For JCP Publications:**
@@ -86,7 +86,7 @@ result <- run_rm_anova(
 )
 print(result)
 
-# Mixed design: Time (within) × Condition (between)
+# Mixed design: Time (within) x Condition (between)
 df$condition <- rep(c("Control", "Treatment"), each = 45)
 result <- run_rm_anova(
   data = df,

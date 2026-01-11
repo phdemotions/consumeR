@@ -24,15 +24,15 @@ fisher_exact_test(
 \item{conf_level}{Numeric. Confidence level for odds ratio CI (default 0.95)}
 }
 \value{
-A list containing test results and odds ratio (for 2×2 tables)
+A list containing test results and odds ratio (for 2x2 tables)
 }
 \description{
-Conducts Fisher's exact test for 2×2 (and larger) contingency tables.
+Conducts Fisher's exact test for 2x2 (and larger) contingency tables.
 Appropriate when chi-square assumptions are violated (expected frequencies < 5).
 }
 \examples{
 \dontrun{
-# Small sample 2×2 table
+# Small sample 2x2 table
 result <- fisher_exact_test(
   data = df,
   x = "treatment",

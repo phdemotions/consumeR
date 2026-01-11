@@ -21,7 +21,7 @@ simple_slopes(
 \item{moderator}{Character; name of the moderator variable (W variable)}
 
 \item{mod_values}{Numeric vector of moderator values to probe. Default: NULL
-(uses mean ± 1 SD for continuous moderators, or all levels for factors)}
+(uses mean +/- 1 SD for continuous moderators, or all levels for factors)}
 
 \item{conf_level}{Confidence level for intervals (default: 0.95)}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sem.R
 \name{extract_sem_r2}
 \alias{extract_sem_r2}
-\title{Extract R² for Endogenous Variables}
+\title{Extract R^2 for Endogenous Variables}
 \usage{
 extract_sem_r2(fit)
 }
@@ -10,9 +10,9 @@ extract_sem_r2(fit)
 \item{fit}{Fitted lavaan object}
 }
 \value{
-Tibble of R² values
+Tibble of R^2 values
 }
 \description{
-Extract R² for Endogenous Variables
+Extract R^2 for Endogenous Variables
 }
 \keyword{internal}

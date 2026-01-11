@@ -282,7 +282,7 @@ A list with:
   - `exclusion_summary`: Table of exclusions (for your manuscript)
   - `publication_text`: Copy-paste into your Methods section
   - `flags`: Which participants were excluded for which reasons
-  - `renamed_vars`: Which variables were renamed (old → new)
+  - `renamed_vars`: Which variables were renamed (old -> new)
   - `recoded_vars`: Which variables had values recoded
 }
 \description{
@@ -514,11 +514,11 @@ result <- clean_survey_data(
 
   # Rename Qualtrics' random names to meaningful names
   rename_vars = list(
-    brand_attitude = "Q1",          # Q1 → brand_attitude
-    purchase_intent = "Q2",         # Q2 → purchase_intent
-    satisfaction = "Q3",            # Q3 → satisfaction
-    age = "Q17",                    # Q17 → age
-    condition = "FL_16_DO"          # Flow field → condition
+    brand_attitude = "Q1",          # Q1 -> brand_attitude
+    purchase_intent = "Q2",         # Q2 -> purchase_intent
+    satisfaction = "Q3",            # Q3 -> satisfaction
+    age = "Q17",                    # Q17 -> age
+    condition = "FL_16_DO"          # Flow field -> condition
   ),
 
   # Recode numeric codes to meaningful labels

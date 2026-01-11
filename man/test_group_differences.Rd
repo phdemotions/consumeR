@@ -15,11 +15,6 @@ test_group_differences(
   verbose = TRUE
 )
 }
-\description{
-This function compares two groups of consumers to determine if they
-are statistically different. It is designed for maximum transparency
-during peer review, with clear documentation of every step and assumption.
-}
 \arguments{
 \item{group1}{A numeric vector containing data for the first group.
 For example, spending amounts for treatment group consumers.}
@@ -68,11 +63,15 @@ A list containing:
     \item \code{full_test_output}: Complete test results object
   }
 }
+\description{
+This function compares two groups of consumers to determine if they
+are statistically different. It is designed for maximum transparency
+during peer review, with clear documentation of every step and assumption.
+}
 \details{
 The function performs either a t-test (for normally distributed data)
 or a Wilcoxon test (for non-normal data). All steps are documented
 and assumptions are clearly stated.
-
 
 ## How the Test Selection Works:
 When test_type = "auto" (default), the function chooses:

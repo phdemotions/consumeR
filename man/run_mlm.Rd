@@ -104,7 +104,7 @@ tidy_mlm(model1)
 
 }
 \references{
-Bates, D., Mächler, M., Bolker, B., & Walker, S. (2015). Fitting linear
+Bates, D., Machler, M., Bolker, B., & Walker, S. (2015). Fitting linear
   mixed-effects models using lme4. Journal of Statistical Software, 67(1),
   1-48.
 

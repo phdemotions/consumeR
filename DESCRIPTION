@@ -34,8 +34,6 @@ Imports:
     purrr (>= 1.0.0)
 Suggests:
     testthat (>= 3.0.0),
-    knitr,
-    rmarkdown,
     janitor (>= 2.0.0),
     lavaan (>= 0.6.0),
     psych (>= 2.0.0),
@@ -46,6 +44,5 @@ Suggests:
     lmtest (>= 0.9.0),
     effectsize (>= 0.7.0),
     correlation (>= 0.8.0)
-VignetteBuilder: knitr
 URL: https://github.com/phdemotions/consumeR
 BugReports: https://github.com/phdemotions/consumeR/issues

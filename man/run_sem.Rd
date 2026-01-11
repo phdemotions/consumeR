@@ -55,7 +55,7 @@ Object of class \code{sem_result} (extends lavaan object) with
   \describe{
     \item{params}{Tibble of parameter estimates with CIs}
     \item{fit}{Tibble of model fit indices}
-    \item{r2}{Tibble of R² for endogenous variables}
+    \item{r2}{Tibble of R^2 for endogenous variables}
     \item{indirect_effects}{Tibble of indirect effects (if present)}
     \item{model_syntax}{Original model specification}
     \item{interpretation}{Publication-ready interpretation text}
@@ -89,10 +89,10 @@ defaults for consumer psychology research. It automatically:
 
 **Fit Index Guidelines (Hu & Bentler, 1999)**:
 \itemize{
-  \item CFI ≥ 0.95 (good), ≥ 0.90 (acceptable)
-  \item TLI ≥ 0.95 (good), ≥ 0.90 (acceptable)
-  \item RMSEA ≤ 0.06 (good), ≤ 0.08 (acceptable)
-  \item SRMR ≤ 0.08 (good), ≤ 0.10 (acceptable)
+  \item CFI >= 0.95 (good), >= 0.90 (acceptable)
+  \item TLI >= 0.95 (good), >= 0.90 (acceptable)
+  \item RMSEA <= 0.06 (good), <= 0.08 (acceptable)
+  \item SRMR <= 0.08 (good), <= 0.10 (acceptable)
 }
 }
 \examples{

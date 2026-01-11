@@ -31,8 +31,8 @@ A list containing:
   \itemize{
     \item \code{model_type}: "Simple" or "Multiple" regression
     \item \code{coefficients}: Table of regression coefficients with tests
-    \item \code{r_squared}: R² value
-    \item \code{adj_r_squared}: Adjusted R² value
+    \item \code{r_squared}: R^2 value
+    \item \code{adj_r_squared}: Adjusted R^2 value
     \item \code{f_statistic}: Overall model F-statistic
     \item \code{f_df1}: F-statistic numerator df
     \item \code{f_df2}: F-statistic denominator df
@@ -62,7 +62,7 @@ diagnostic plots, and publication-ready output. Supports both simple
   \item \strong{No multicollinearity}: Predictors aren't highly correlated (multiple regression)
 }
 
-## R² Interpretation:
+## R^2 Interpretation:
 \itemize{
   \item 0.01 - 0.09: Small effect
   \item 0.09 - 0.25: Medium effect

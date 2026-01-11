@@ -48,17 +48,17 @@ A list of class "mediation_simple" containing:
   - interpretation: Publication-ready interpretation text
 }
 \description{
-Performs simple mediation analysis for the causal path X → M → Y using
+Performs simple mediation analysis for the causal path X -> M -> Y using
 bootstrap resampling to estimate confidence intervals for indirect effects.
 This is the gold standard approach for mediation in consumer psychology
 research, recommended by Preacher & Hayes (2004, 2008).
 }
 \details{
 **Mediation Model:**
-- Path a: X → M (effect of X on mediator)
-- Path b: M → Y (effect of mediator on Y, controlling for X)
-- Path c: X → Y (total effect, without mediator)
-- Path c': X → Y (direct effect, controlling for mediator)
+- Path a: X -> M (effect of X on mediator)
+- Path b: M -> Y (effect of mediator on Y, controlling for X)
+- Path c: X -> Y (total effect, without mediator)
+- Path c': X -> Y (direct effect, controlling for mediator)
 - Indirect effect: a*b (mediated effect through M)
 
 **Significance Testing:**
@@ -72,14 +72,14 @@ not assume normality of the sampling distribution.
 - No mediation: Indirect effect not significant
 
 **For JCP Publications:**
-- Use ≥ 5000 bootstrap samples (10000 for critical tests)
+- Use >= 5000 bootstrap samples (10000 for critical tests)
 - Report bias-corrected and accelerated (BCa) CIs
 - Report all path coefficients with SEs
 - Report proportion mediated if total effect is significant
 - Visualize mediation model with path diagram
 }
 \examples{
-# Brand attitude mediates price → purchase intention
+# Brand attitude mediates price -> purchase intention
 set.seed(42)
 n <- 200
 df <- data.frame(

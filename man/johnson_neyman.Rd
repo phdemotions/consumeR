@@ -23,7 +23,7 @@ johnson_neyman(
 \item{alpha}{Significance level (default: 0.05)}
 
 \item{mod_range}{Numeric vector of length 2 specifying range of moderator
-values to search. Default: NULL (uses observed range ± 1 SD)}
+values to search. Default: NULL (uses observed range +/- 1 SD)}
 
 \item{n_points}{Number of points to evaluate (default: 1000)}
 }
@@ -40,7 +40,7 @@ A list of class "johnson_neyman" containing:
 \description{
 Identifies the range of moderator values where the effect of a focal predictor
 is statistically significant. This provides more nuanced interpretation than
-simple slopes at arbitrary values (e.g., ± 1 SD), showing exactly where the
+simple slopes at arbitrary values (e.g., +/- 1 SD), showing exactly where the
 effect "turns on" and "turns off" as a function of the moderator.
 }
 \details{
@@ -49,9 +49,9 @@ interval for the simple slope of X equals zero. This identifies "transition
 points" between significant and non-significant effects.
 
 **Output Regions:**
-- Region 1: W < lower bound → effect significant/non-significant
-- Region 2: lower < W < upper → effect non-significant/significant
-- Region 3: W > upper bound → effect significant/non-significant
+- Region 1: W < lower bound -> effect significant/non-significant
+- Region 2: lower < W < upper -> effect non-significant/significant
+- Region 3: W > upper bound -> effect significant/non-significant
 
 **For JCP Publications:**
 - Use JN technique for continuous moderators

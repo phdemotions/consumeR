@@ -62,10 +62,10 @@ specific indirect effects following Preacher & Hayes (2008).
 \details{
 **Parallel Mediation Model**:
 
-X → M1 → Y
-X → M2 → Y
-X → M3 → Y
-X ⇢ Y (direct effect)
+X -> M1 -> Y
+X -> M2 -> Y
+X -> M3 -> Y
+X -> Y (direct effect)
 
 Each mediator operates independently. Total indirect effect is the sum of
 specific indirect effects: (a1*b1) + (a2*b2) + (a3*b3) + ...
@@ -87,7 +87,7 @@ contrast indicates one mediator is stronger than another.
   \item Report total indirect effect
   \item Report direct effect (c')
   \item Conduct contrasts if comparing mediators
-  \item Use ≥5000 bootstrap samples for publication
+  \item Use >=5000 bootstrap samples for publication
   \item Report which mediators are significant
 }
 }

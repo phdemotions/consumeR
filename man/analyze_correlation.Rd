@@ -33,7 +33,7 @@ analyze_correlation(
 A list containing:
   \itemize{
     \item \code{method}: Correlation method used
-    \item \code{correlation}: Correlation coefficient (r or ρ)
+    \item \code{correlation}: Correlation coefficient (r or rho)
     \item \code{p_value}: Statistical significance
     \item \code{significant}: Is correlation significant?
     \item \code{n}: Sample size

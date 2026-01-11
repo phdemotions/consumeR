@@ -38,6 +38,14 @@ Uses appropriate corrections for multiple comparisons.
 }
 \examples{
 # After significant RM ANOVA
+# Create example data
+set.seed(42)
+df <- expand.grid(
+  id = 1:30,
+  time = c("Before", "During", "After")
+)
+df$satisfaction <- rnorm(nrow(df), mean = 5 + as.numeric(factor(df$time)), sd = 1)
+
 result <- run_rm_anova(df, outcome = "satisfaction", within = "time", subject = "id")
 pairwise <- rm_pairwise(result, factor = "time")
 print(pairwise)

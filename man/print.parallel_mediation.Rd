@@ -6,6 +6,11 @@
 \usage{
 \method{print}{parallel_mediation}(x, ...)
 }
+\arguments{
+\item{x}{A parallel_mediation object}
+
+\item{...}{Additional arguments (not used)}
+}
 \description{
 Print Method for Parallel Mediation
 }

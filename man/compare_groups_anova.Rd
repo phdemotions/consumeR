@@ -42,7 +42,7 @@ A list containing:
     \item \code{df2}: Degrees of freedom (denominator)
     \item \code{p_value}: P-value from the test
     \item \code{significant}: Logical, TRUE if p < alpha
-    \item \code{eta_squared}: Effect size (η²)
+    \item \code{eta_squared}: Effect size (\eqn{\eta^2})
     \item \code{group_statistics}: Descriptive stats for each group
     \item \code{assumptions}: Assumption check results (if requested)
     \item \code{post_hoc_results}: Post-hoc test results (if requested)
@@ -66,7 +66,7 @@ post-hoc tests, and publication-ready output.
 
 When homogeneity is violated, Welch's ANOVA is recommended.
 
-## Effect Size Interpretation (η²):
+## Effect Size Interpretation (eta-squared):
 \itemize{
   \item 0.01 - 0.05: Small effect
   \item 0.06 - 0.13: Medium effect

@@ -66,6 +66,6 @@ results_logodds <- tidy_logistic(model, exponentiate = FALSE)
 }
 \references{
 Norton, E. C., Dowd, B. E., & Maciejewski, M. L. (2019).
-Marginal Effects—Quantifying the Effect of Changes in Risk Factors in
+Marginal Effects--Quantifying the Effect of Changes in Risk Factors in
 Logistic Regression Models. JAMA, 321(13), 1304-1305.
 }

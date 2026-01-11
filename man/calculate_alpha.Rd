@@ -58,11 +58,11 @@ Cronbach's alpha measures internal consistency - whether items that are
 supposed to measure the same thing actually correlate with each other.
 
 ## Interpreting Alpha:
-- **α ≥ 0.90**: Excellent reliability
-- **α ≥ 0.80**: Good reliability
-- **α ≥ 0.70**: Acceptable reliability
-- **α ≥ 0.60**: Questionable reliability
-- **α < 0.60**: Poor reliability
+\eqn{\alpha} >= 0.90**: Excellent reliability
+\eqn{\alpha} >= 0.80**: Good reliability
+\eqn{\alpha} >= 0.70**: Acceptable reliability
+\eqn{\alpha} >= 0.60**: Questionable reliability
+\eqn{\alpha} < 0.60**: Poor reliability
 
 ## How It's Calculated:
 Alpha = (k / (k-1)) * (1 - sum of item variances / total variance)

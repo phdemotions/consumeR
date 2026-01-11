@@ -19,7 +19,7 @@ odds_ratio_table(data = NULL, x, y, conf_level = 0.95)
 Tibble with odds ratio, CI, and interpretation
 }
 \description{
-Calculates odds ratio with confidence interval for 2×2 contingency tables.
+Calculates odds ratio with confidence interval for 2x2 contingency tables.
 Common in case-control studies and binary outcome analysis.
 }
 \details{

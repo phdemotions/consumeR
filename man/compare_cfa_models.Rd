@@ -33,8 +33,8 @@ Also reports AIC and BIC for model comparison.
 
 **Chi-square difference test:**
 - Tests if the larger model fits significantly better
-- Δχ² = χ²_small - χ²_large
-- Δdf = df_small - df_large
+- Deltachi^2 = chi^2_small - chi^2_large
+- Deltadf = df_small - df_large
 - If p < .05: Larger model fits significantly better
 
 **AIC/BIC:**

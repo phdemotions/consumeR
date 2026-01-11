@@ -11,24 +11,24 @@ pseudo_r2(model)
 }
 \value{
 A tibble with pseudo R-squared measures:
-  - mcfadden: McFadden's R² (most common)
-  - cox_snell: Cox & Snell R²
-  - nagelkerke: Nagelkerke R² (normalized Cox & Snell)
-  - tjur: Tjur's R² (coefficient of discrimination)
+  - mcfadden: McFadden's R^2 (most common)
+  - cox_snell: Cox & Snell R^2
+  - nagelkerke: Nagelkerke R^2 (normalized Cox & Snell)
+  - tjur: Tjur's R^2 (coefficient of discrimination)
   - aic: Akaike Information Criterion
   - bic: Bayesian Information Criterion
 }
 \description{
 Calculates multiple pseudo R-squared measures for logistic regression models.
-These are analogous to R² in linear regression but appropriate for binary outcomes.
+These are analogous to R^2 in linear regression but appropriate for binary outcomes.
 }
 \details{
-Interpretation (McFadden's R²):
+Interpretation (McFadden's R^2):
 - 0.2-0.4: Excellent fit
 - 0.1-0.2: Good fit
 - < 0.1: Weak fit
 
-For JCP publications, report McFadden's R² and AIC/BIC for model comparison.
+For JCP publications, report McFadden's R^2 and AIC/BIC for model comparison.
 }
 \examples{
 set.seed(42)

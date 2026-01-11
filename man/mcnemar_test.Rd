@@ -31,7 +31,7 @@ measurements on the same individuals).
 **Assumptions:**
 - Paired observations (same individuals measured twice)
 - Nominal or ordinal variables
-- For 2×2 tables with ≥25 discordant pairs
+- For 2x2 tables with >=25 discordant pairs
 }
 \examples{
 \dontrun{

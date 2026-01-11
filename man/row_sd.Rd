@@ -27,7 +27,7 @@ across items. High SD suggests inconsistent responses, low SD suggests
 consistent responses (e.g., all 7s or all 1s).
 
 **Use cases:**
-- Detect straight-lining (all same response → SD = 0)
+- Detect straight-lining (all same response -> SD = 0)
 - Identify careless responding
 - Calculate intra-individual variability
 }

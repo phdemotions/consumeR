@@ -16,10 +16,6 @@ score_composite(
   name = NULL
 )
 }
-\description{
-Calculates composite scores from multiple items with optional reverse scoring
-and flexible NA handling. Returns a structured object with scores and metadata.
-}
 \arguments{
 \item{df}{Data frame containing items}
 
@@ -60,15 +56,19 @@ A list with class "composite_score" containing:
     }
 }
 }
+\description{
+Calculates composite scores from multiple items with optional reverse scoring
+and flexible NA handling. Returns a structured object with scores and metadata.
+}
 \details{
 **NA handling rules:**
 - "preserve": Standard behavior, NA propagates (if any item is NA, composite is NA)
 - "threshold": Calculate composite if at least `threshold` items are non-missing
 
 **Default threshold:** 50% of items (rounded up)
-- 3 items → need 2 non-missing
-- 5 items → need 3 non-missing
-- 10 items → need 5 non-missing
+- 3 items -> need 2 non-missing
+- 5 items -> need 3 non-missing
+- 10 items -> need 5 non-missing
 }
 \examples{
 # Basic composite (mean)

@@ -30,7 +30,7 @@ grouping. Justifies the need for multilevel modeling.
 ICC represents the proportion of total variance attributable to between-group
 differences. It is calculated as:
 
-ICC = σ²_between / (σ²_between + σ²_within)
+ICC = sigma^2_between / (sigma^2_between + sigma^2_within)
 
 **Interpretation Guidelines**:
 \itemize{

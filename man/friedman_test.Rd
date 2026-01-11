@@ -31,7 +31,7 @@ to repeated measures ANOVA.
 }
 \details{
 **Effect Size (Kendall's W):**
-- W = χ²_F / (n(k-1))
+- W = chi^2_F / (n(k-1))
 - Interpretation: < 0.1 negligible, 0.1-0.3 small, 0.3-0.5 medium, > 0.5 large
 }
 \examples{

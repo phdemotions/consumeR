@@ -20,7 +20,7 @@ tidy_sem(
 
 \item{fit}{Logical. Include fit indices? Default TRUE.}
 
-\item{r2}{Logical. Include R² values? Default TRUE.}
+\item{r2}{Logical. Include R^2 values? Default TRUE.}
 
 \item{indirect}{Logical. Include indirect effects? Default TRUE.}
 
@@ -31,7 +31,7 @@ List with tibbles for each requested component.
 }
 \description{
 Extract and format SEM results for publication. Returns parameter estimates,
-fit indices, and R² values in a publication-ready format.
+fit indices, and R^2 values in a publication-ready format.
 }
 \examples{
 \dontrun{

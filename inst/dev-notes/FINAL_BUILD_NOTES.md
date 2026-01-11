@@ -12,6 +12,18 @@
 **Fix**: Removed `@import stats` from R/consumeR-package.R (package uses fully qualified calls)
 **Status**: ✅ FIXED (Commit: 872b489)
 
+### 3. Vignette Build Error (CRITICAL)
+**Problem**: Vignette failed with error - "non-numeric argument to mathematical function" in `round()`
+**Root Cause**: `wilcox.test()` doesn't always return confidence intervals, causing `NULL` values to be passed to `round()`
+**Fix**: Added NULL checks and NA handling for confidence intervals in `test_group_differences()`
+**Status**: ✅ FIXED (Commit: 36228e9)
+
+**Changes Made**:
+- Check if `test_result$conf.int` is NULL before extracting values
+- Return NA instead of NULL when CI unavailable
+- Added NA checks before rounding CI values
+- Updated print method to gracefully handle missing CIs
+
 ## Remaining Step (OPTIONAL)
 
 ### Documentation Regeneration

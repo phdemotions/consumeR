@@ -1,0 +1,16 @@
+citHeader("To cite consumeR in publications use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "consumeR: Transparent and Reproducible Consumer Research Analysis",
+  author   = person("Josh", "Gonzales", email = "joshgonzalesphd@gmail.com", comment = c(ORCID = "0000-0001-8633-3380")),
+  year     = "2026",
+  note     = paste("R package version", meta$Version),
+  url      = "https://github.com/phdemotions/consumeR",
+  textVersion = paste(
+    "Gonzales, J. (2026).",
+    "consumeR: Transparent and Reproducible Consumer Research Analysis.",
+    paste("R package version", meta$Version),
+    "https://github.com/phdemotions/consumeR"
+  )
+)

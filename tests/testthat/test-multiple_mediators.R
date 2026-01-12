@@ -335,9 +335,9 @@ test_that("mediation_serial calculates pathway-specific effects", {
   expect_true("significant" %in% names(specific))
 
   # Check pathway labels
-  expect_true(any(grepl("m1.*→.*y", specific$pathway, ignore.case = TRUE)))
-  expect_true(any(grepl("m2.*→.*y", specific$pathway, ignore.case = TRUE)))
-  expect_true(any(grepl("m1.*→.*m2.*→.*y", specific$pathway, ignore.case = TRUE)))
+  expect_true(any(grepl("m1.*->.*y", specific$pathway, ignore.case = TRUE)))
+  expect_true(any(grepl("m2.*->.*y", specific$pathway, ignore.case = TRUE)))
+  expect_true(any(grepl("m1.*->.*m2.*->.*y", specific$pathway, ignore.case = TRUE)))
 })
 
 test_that("mediation_serial validates inputs", {
@@ -611,5 +611,5 @@ test_that("mediation_serial total equals sum of pathway effects", {
   sum_pathways <- sum(result$specific_indirect$indirect_effect)
   total <- result$total_indirect$estimate
 
-  expect_equal(sum_pathways, total, tolerance = 1e-6)
+  expect_equal(sum_pathways, as.numeric(total), tolerance = 1e-6)
 })

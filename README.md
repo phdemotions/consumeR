@@ -243,7 +243,7 @@ citation("consumeR")
 
 Once the Zenodo DOI is minted, citations will include:
 
-> Gonzales, J. (2026). consumeR: Transparent and Reproducible Consumer Research Analysis. R package version 0.1.0. DOI: 10.5281/zenodo.XXXXXXX
+> Gonzales, J. (2026). consumeR: Transparent and Reproducible Consumer Research Analysis. R package version 0.1.0. DOI: 10.5281/zenodo.18217192
 
 consumeR Roadmap: Method Coverage and Development Plan
 

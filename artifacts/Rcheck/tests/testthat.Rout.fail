@@ -148,7 +148,7 @@ Satisfaction	7.23	1.46
 ---
 Then paste into Excel, Google Sheets, or other spreadsheet software.
 
-[ FAIL 29 | WARN 33 | SKIP 2 | PASS 810 ]
+[ FAIL 25 | WARN 33 | SKIP 2 | PASS 814 ]
 
 == Skipped tests (2) ===========================================================
 * Manual test: unload knitr and verify error (1):
@@ -340,25 +340,7 @@ Backtrace:
  2.   \-consumeR:::extract_mlm_fixed(fit)
  3.     +-base::summary(lmerTest::as_lmerModLmerTest(fit))
  4.     \-lmerTest::as_lmerModLmerTest(fit)
--- Failure ('test-multiple_mediators.R:338:3'): mediation_serial calculates pathway-specific effects --
-any(grepl("m1.*<U+2192>.*y", specific$pathway, ignore.case = TRUE)) is not TRUE
 
-`actual`:   FALSE
-`expected`: TRUE 
--- Failure ('test-multiple_mediators.R:339:3'): mediation_serial calculates pathway-specific effects --
-any(grepl("m2.*<U+2192>.*y", specific$pathway, ignore.case = TRUE)) is not TRUE
-
-`actual`:   FALSE
-`expected`: TRUE 
--- Failure ('test-multiple_mediators.R:340:3'): mediation_serial calculates pathway-specific effects --
-any(...) is not TRUE
-
-`actual`:   FALSE
-`expected`: TRUE 
--- Failure ('test-multiple_mediators.R:614:3'): mediation_serial total equals sum of pathway effects --
-`sum_pathways` not equal to `total`.
-names for current but not for target
-
-[ FAIL 29 | WARN 33 | SKIP 2 | PASS 810 ]
+[ FAIL 25 | WARN 33 | SKIP 2 | PASS 814 ]
 Error: Test failures
 Execution halted

@@ -1,4 +1,4 @@
-* using log directory '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp8lB2PW/file40aefd8733e/consumeR.Rcheck'
+* using log directory '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpYeXGcK/file62af191ec89d/consumeR.Rcheck'
 * using R version 4.3.1 (2023-06-16)
 * using platform: aarch64-apple-darwin20 (64-bit)
 * R was compiled by
@@ -43,7 +43,7 @@ Warning: test_group_differences.Rd:71: unexpected section header '\details'
 Warning: test_group_differences.Rd:89: unexpected section header '\examples'
 Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
 '
- [3s/15s] NOTE
+ [4s/18s] NOTE
 Maintainer: 'Josh Gonzales <joshgonzalesphd@gmail.com>'
 
 New submission
@@ -96,16 +96,16 @@ Found the following significant warnings:
   Warning: test_group_differences.Rd:71: unexpected section header '\details'
   Warning: test_group_differences.Rd:89: unexpected section header '\examples'
   Warning: test_group_differences.Rd:106: unexpected END_OF_INPUT '
-See '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp8lB2PW/file40aefd8733e/consumeR.Rcheck/00install.out' for details.
+See '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpYeXGcK/file62af191ec89d/consumeR.Rcheck/00install.out' for details.
 * checking installed package size ... OK
 * checking package directory ... OK
-* checking for future file timestamps ... OK
+* checking for future file timestamps ... NOTE
+unable to verify current time
 * checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... NOTE
-Non-standard files/directories found at top level:
-  'CONTRIBUTING.md' 'CRAN_READINESS_STATUS.md' 'JOSS_READINESS.md'
-  'NOVICE_TESTING_SUMMARY.md'
+Non-standard file/directory found at top level:
+  'paper'
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -121,7 +121,7 @@ Non-standard files/directories found at top level:
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... OK
+* checking R code for possible problems ... [8s/11s] OK
 * checking Rd files ... WARNING
 prepare_Rd: score_composite.Rd:39: unknown macro '\item'
 prepare_Rd: score_composite.Rd:41: unexpected section header '\value'
@@ -168,23 +168,23 @@ Extensions' manual.
 * checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ...
-  Running 'testthat.R' [155s/198s]
- [155s/198s] ERROR
+  Running 'testthat.R' [163s/196s]
+ [163s/196s] ERROR
 Running the tests in 'tests/testthat.R' failed.
 Last 13 lines of output:
+   2.   \-consumeR:::extract_mlm_fixed(fit)
+   3.     +-base::summary(lmerTest::as_lmerModLmerTest(fit))
+   4.     \-lmerTest::as_lmerModLmerTest(fit)
+  -- Error ('test-mlm.R:470:3'): run_mlm significance flags are correct ----------
+  Error in `lmerTest::as_lmerModLmerTest(fit)`: Unable to extract deviance function from model fit
+  Backtrace:
+      x
+   1. \-consumeR::run_mlm(y ~ x1 + x2 + (1 | group), data = df) at test-mlm.R:470:3
+   2.   \-consumeR:::extract_mlm_fixed(fit)
+   3.     +-base::summary(lmerTest::as_lmerModLmerTest(fit))
+   4.     \-lmerTest::as_lmerModLmerTest(fit)
   
-  `actual`:   FALSE
-  `expected`: TRUE 
-  -- Failure ('test-multiple_mediators.R:340:3'): mediation_serial calculates pathway-specific effects --
-  any(...) is not TRUE
-  
-  `actual`:   FALSE
-  `expected`: TRUE 
-  -- Failure ('test-multiple_mediators.R:614:3'): mediation_serial total equals sum of pathway effects --
-  `sum_pathways` not equal to `total`.
-  names for current but not for target
-  
-  [ FAIL 29 | WARN 33 | SKIP 2 | PASS 810 ]
+  [ FAIL 25 | WARN 33 | SKIP 2 | PASS 814 ]
   Error: Test failures
   Execution halted
 * checking for unstated dependencies in vignettes ... OK
@@ -194,9 +194,9 @@ Last 13 lines of output:
 * checking for detritus in the temp directory ... OK
 * DONE
 
-Status: 1 ERROR, 3 WARNINGs, 2 NOTEs
+Status: 1 ERROR, 3 WARNINGs, 3 NOTEs
 See
-  '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/Rtmp8lB2PW/file40aefd8733e/consumeR.Rcheck/00check.log'
+  '/private/var/folders/0f/rtfnk7k55t173gpb8cps1l140000gn/T/RtmpYeXGcK/file62af191ec89d/consumeR.Rcheck/00check.log'
 for details.
 
 

@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+consumeR.Rproj
 inst/doc
 
 # Internal documentation (not for end users)

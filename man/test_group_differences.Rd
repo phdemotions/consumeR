@@ -33,17 +33,13 @@ Options are:
 \item{alternative}{Character string specifying the alternative hypothesis.
 Options are "two.sided" (default), "greater", or "less".}
 
-\item{conf_level}{Numeric. Confidence level for the interval. Default is 0.95
-(95% confidence).}
+\item{conf_level}{Numeric. Confidence level for the interval. Default is 0.95, i.e., 95 percent confidence.}
 
 \item{paired}{Logical. Are the observations paired? Default is FALSE.}
 
-\item{check_assumptions}{Logical. Should assumptions be tested? Default is TRUE.
-When TRUE, tests for normality and homogeneity of variance are performed
-and results are included in output.}
+\item{check_assumptions}{Logical. Should assumptions be tested? Default is TRUE. When TRUE, tests for normality and homogeneity of variance are performed and results are included in output.}
 
-\item{verbose}{Logical. Should detailed explanations be provided? Default is TRUE.
-When TRUE, includes verbose explanations suitable for learning.}
+\item{verbose}{Logical. Should detailed explanations be provided? Default is TRUE. When TRUE, includes verbose explanations suitable for learning.}
 }
 \value{
 A list containing:

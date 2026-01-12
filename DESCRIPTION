@@ -19,9 +19,9 @@ Description: Provides transparent, well-documented functions for consumer resear
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
     methods,
     stats,

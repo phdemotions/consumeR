@@ -212,11 +212,8 @@ row_sd <- function(data, items = NULL, na.rm = TRUE) {
 #' @param reverse_min Minimum value for reverse scoring (default 1)
 #' @param reverse_max Maximum value for reverse scoring (default 7)
 #' @param method Character. Composite method: "mean" (default) or "sum"
-#' @param na_rule Character. How to handle missing values:
-#'   - "preserve" (default): Preserve NA (na.rm = FALSE)
-#'   - "threshold": Require minimum number of non-missing items
-#' @param threshold Integer. If na_rule = "threshold", minimum non-missing items required.
-#'   If NULL, defaults to ceiling(length(items) * 0.5) (i.e., at least 50%)
+#' @param na_rule Character. How to handle missing values: "preserve" (default) preserves NA (na.rm = FALSE); "threshold" requires minimum number of non-missing items
+#' @param threshold Integer. If na_rule = "threshold", minimum non-missing items required. If NULL, defaults to ceiling(length(items) * 0.5), i.e., at least 50 percent
 #' @param name Character. Optional name for the composite (for metadata)
 #'
 #' @return A list with class "composite_score" containing:

@@ -18,14 +18,10 @@
 #'   }
 #' @param alternative Character string specifying the alternative hypothesis.
 #'   Options are "two.sided" (default), "greater", or "less".
-#' @param conf_level Numeric. Confidence level for the interval. Default is 0.95
-#'   (95% confidence).
+#' @param conf_level Numeric. Confidence level for the interval. Default is 0.95, i.e., 95 percent confidence.
 #' @param paired Logical. Are the observations paired? Default is FALSE.
-#' @param check_assumptions Logical. Should assumptions be tested? Default is TRUE.
-#'   When TRUE, tests for normality and homogeneity of variance are performed
-#'   and results are included in output.
-#' @param verbose Logical. Should detailed explanations be provided? Default is TRUE.
-#'   When TRUE, includes verbose explanations suitable for learning.
+#' @param check_assumptions Logical. Should assumptions be tested? Default is TRUE. When TRUE, tests for normality and homogeneity of variance are performed and results are included in output.
+#' @param verbose Logical. Should detailed explanations be provided? Default is TRUE. When TRUE, includes verbose explanations suitable for learning.
 #'
 #' @return A list containing:
 #'   \itemize{

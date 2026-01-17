@@ -2,7 +2,7 @@
 % Please edit documentation in R/assumptions_wrapper.R
 \name{check_test_assumptions}
 \alias{check_test_assumptions}
-\title{Check Statistical Assumptions for Analysis}
+\title{Assumption Checking Wrapper}
 \usage{
 check_test_assumptions(
   test_type = c("t_test", "anova", "regression", "correlation"),
@@ -45,9 +45,9 @@ S3 object of class c("assumptions_result", "list") with components:
   }
 }
 \description{
-Unified wrapper that sequences appropriate assumption checks based on test type.
-Calls existing check_normality(), check_homogeneity_of_variance(), and
-check_independence() functions in the correct order.
+This file provides a unified interface for checking statistical assumptions
+across different test types. It eliminates duplicated assumption-checking
+logic across analysis functions.
 }
 \examples{
 # T-test assumptions
@@ -62,4 +62,39 @@ check_test_assumptions(
   groups = "group",
   residuals = residuals(model)
 )
+
 }
+\seealso{
+Other infrastructure: 
+\code{\link{.apa7_templates}},
+\code{\link{build_analysis_result}()}
+}
+\concept{infrastructure}
+\keyword{Analysis}
+\keyword{Assumptions}
+\keyword{Calls}
+\keyword{Check}
+\keyword{Statistical}
+\keyword{Unified}
+\keyword{and}
+\keyword{appropriate}
+\keyword{assumption}
+\keyword{based}
+\keyword{check_homogeneity_of_variance(),}
+\keyword{check_independence()}
+\keyword{check_normality(),}
+\keyword{checks}
+\keyword{correct}
+\keyword{existing}
+\keyword{for}
+\keyword{functions}
+\keyword{in}
+\keyword{internal}
+\keyword{on}
+\keyword{order.}
+\keyword{sequences}
+\keyword{test}
+\keyword{that}
+\keyword{the}
+\keyword{type.}
+\keyword{wrapper}

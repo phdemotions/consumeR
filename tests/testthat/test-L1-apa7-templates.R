@@ -39,7 +39,7 @@ testthat::test_that("render_apa7_text errors when values are missing", {
         t_stat = "2.05"
       )
     ),
-    "ci_text"
+    "p_text|ci_text"  # Match either missing variable
   )
 })
 

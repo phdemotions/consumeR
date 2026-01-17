@@ -78,5 +78,5 @@ test_that("print.analysis_result shows optional sections", {
   expect_true(any(grepl("ASSUMPTION CHECKS", output)))
   expect_true(any(grepl("Normality", output)))
   expect_true(any(grepl("PUBLICATION TEXT", output)))
-  expect_true(any(grepl("t\(98\) = 2.05, p = \.042", output)))
+  expect_true(any(grepl("t\\(98\\) = 2.05, p = \\.042", output)))
 })

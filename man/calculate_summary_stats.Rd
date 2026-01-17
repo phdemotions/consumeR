@@ -17,20 +17,8 @@ like variance and range. Default is TRUE.}
 Default is 2.}
 }
 \value{
-A named list containing the following statistics:
-  \itemize{
-    \item \code{n}: Sample size (number of observations)
-    \item \code{mean}: Arithmetic mean
-    \item \code{median}: Median (50th percentile)
-    \item \code{sd}: Standard deviation
-    \item \code{min}: Minimum value
-    \item \code{max}: Maximum value
-    \item \code{q25}: First quartile (25th percentile)
-    \item \code{q75}: Third quartile (75th percentile)
-    \item \code{variance}: Variance (if include_all = TRUE)
-    \item \code{range}: Range (max - min) (if include_all = TRUE)
-    \item \code{iqr}: Interquartile range (if include_all = TRUE)
-  }
+An analysis_result object containing descriptive statistics, including
+  sample size, location/dispersion measures, and optional extended metrics.
 }
 \description{
 This function calculates descriptive statistics for a numeric variable.

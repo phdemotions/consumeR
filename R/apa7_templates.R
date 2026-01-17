@@ -102,7 +102,7 @@ render_apa7_text <- function(test_type, section, values) {
   }
 
   # Render using glue (will error if required values missing - good!)
-  glue::glue(template, .envir = values)
+  glue::glue_data(values, template)
 }
 
 #' Format P-Value for APA7

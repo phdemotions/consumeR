@@ -2,25 +2,91 @@
 % Please edit documentation in R/assumptions.R
 \name{check_homogeneity_of_variance}
 \alias{check_homogeneity_of_variance}
-\title{Check Homogeneity of Variance (Homoscedasticity)}
+\title{Check Homogeneity of Variance (Homoscedasticity) - Gold Standard}
 \usage{
-check_homogeneity_of_variance(data, groups, alpha = 0.05)
+check_homogeneity_of_variance(
+  data,
+  groups,
+  alpha = 0.05,
+  group_names = "groups"
+)
 }
 \arguments{
-\item{data}{Numeric vector of values}
+\item{data}{Numeric vector of values to test}
 
-\item{groups}{Factor or vector indicating group membership}
+\item{groups}{Factor or vector indicating group membership. Will be coerced to factor.}
 
-\item{alpha}{Significance level (default 0.05)}
+\item{alpha}{Numeric. Significance level for the test (default 0.05).
+Must be between 0 and 1.}
+
+\item{group_names}{Character. Optional name for the grouping variable (for reporting).
+Default is "groups". Used in all output messages.}
 }
 \value{
-List with test results and interpretation
+An S3 object of class "assumption_check" containing:
+  \itemize{
+    \item \code{test}: Name of the test ("Levene's Test")
+    \item \code{assumption}: Which assumption was tested ("Homogeneity of Variance")
+    \item \code{assumption_met}: Logical. TRUE if assumption is met (p > alpha)
+    \item \code{p_value}: P-value from Levene's test
+    \item \code{p_value_formatted}: APA 7 formatted p-value (from Level 1)
+    \item \code{statistic}: F-statistic from Levene's test
+    \item \code{df1}: Numerator degrees of freedom
+    \item \code{df2}: Denominator degrees of freedom
+    \item \code{n_total}: Total sample size (after removing NA)
+    \item \code{n_missing}: Number of NA values removed
+    \item \code{n_groups}: Number of groups
+    \item \code{group_names}: Names of the groups
+    \item \code{variance_ratio}: Ratio of largest to smallest group variance
+    \item \code{group_statistics}: Detailed statistics for each group
+    \item \code{alpha}: Significance level used
+    \item \code{interpretation}: One-sentence summary for quick reference
+    \item \code{recommendation}: Actionable next steps
+    \item \code{publication_text}: APA 7 formatted text for manuscripts
+    \item \code{verbose_explanation}: Educational explanation for beginners
+    \item \code{visual_guide}: How to create diagnostic plots
+  }
 }
 \description{
 Tests whether groups have equal variances using Levene's test.
-Required for t-tests and ANOVA.
+Required assumption for t-tests and ANOVA. Provides comprehensive
+interpretation for beginners, including visual diagnostics, variance ratios,
+and APA 7 formatted results.
+
+This function is designed to be self-explanatory for users new to statistics,
+with extensive validation and beginner-friendly error messages.
+}
+\details{
+**What is homogeneity of variance?**
+
+This assumption means that all groups being compared should have similar
+amounts of variability (spread). For example, if comparing customer satisfaction
+across 3 segments, each segment should have roughly the same standard deviation.
+
+**How to interpret results:**
+- If p > 0.05: Variances are equal (good news!)
+- If p < 0.05: Variances differ (use Welch corrections)
+
+**What to do if violated:**
+1. Use Welch's t-test (for 2 groups) instead of Student's t-test
+2. Use Welch's ANOVA (for 3+ groups) instead of standard ANOVA
+3. Consider data transformation if variance ratio > 10
 }
 \examples{
-check_homogeneity_of_variance(c(rnorm(50, 5, 1), rnorm(50, 6, 1)),
-                               rep(c("A", "B"), each = 50))
+# Example 1: Equal variances (assumption met)
+set.seed(123)
+data1 <- c(rnorm(50, mean = 10, sd = 2), rnorm(50, mean = 12, sd = 2))
+groups1 <- rep(c("Group A", "Group B"), each = 50)
+check_homogeneity_of_variance(data1, groups1)
+
+# Example 2: Unequal variances (assumption violated)
+data2 <- c(rnorm(50, mean = 10, sd = 1), rnorm(50, mean = 12, sd = 5))
+groups2 <- rep(c("Low Var", "High Var"), each = 50)
+check_homogeneity_of_variance(data2, groups2)
+
+# Example 3: With missing values
+data3 <- c(rnorm(45, 10, 2), rep(NA, 5), rnorm(48, 12, 2), rep(NA, 2))
+groups3 <- rep(c("A", "B"), each = 50)
+check_homogeneity_of_variance(data3, groups3)
+
 }

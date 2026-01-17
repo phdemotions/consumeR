@@ -2,26 +2,108 @@
 % Please edit documentation in R/assumptions.R
 \name{check_independence}
 \alias{check_independence}
-\title{Check Independence of Observations}
+\title{Check Independence of Observations - Gold Standard}
 \usage{
 check_independence(
+  data = NULL,
   data_structure = "cross-sectional survey",
   is_independent = TRUE,
+  id_var = NULL,
+  time_var = NULL,
   clustering_note = NULL
 )
 }
 \arguments{
-\item{data_structure}{Description of data collection design}
+\item{data}{Numeric vector of residuals or raw data (optional). If provided,
+will test for autocorrelation. If NULL, provides design-based guidance only.}
 
-\item{is_independent}{Logical - are observations independent?}
+\item{data_structure}{Character. Description of your data collection design.
+Options: "cross-sectional survey" (default), "repeated measures",
+"time series", "clustered", "matched pairs", "panel data", "other".}
 
-\item{clustering_note}{Optional note about clustering/nesting in data}
+\item{is_independent}{Logical. Do you believe observations are independent
+based on your study design? Default TRUE.}
+
+\item{id_var}{Optional vector of participant/cluster IDs for detecting
+repeated observations.}
+
+\item{time_var}{Optional vector indicating time order for autocorrelation testing.}
+
+\item{clustering_note}{Optional character string with additional context
+about data structure (e.g., "students nested within 12 classrooms").}
 }
 \value{
-List with guidance on independence assumption
+An S3 object of class "assumption_check" containing:
+  \itemize{
+    \item \code{test}: Type of assessment performed
+    \item \code{assumption}: "Independence of Observations"
+    \item \code{assumption_met}: Logical. TRUE if independent (based on design + tests)
+    \item \code{data_structure}: Your specified data structure
+    \item \code{has_autocorrelation}: Logical or NA (if tested)
+    \item \code{autocorrelation}: Lag-1 autocorrelation coefficient (if tested)
+    \item \code{durbin_watson}: Durbin-Watson statistic (if tested)
+    \item \code{n_unique_ids}: Number of unique IDs (if id_var provided)
+    \item \code{n_obs}: Total observations
+    \item \code{avg_obs_per_id}: Average observations per ID (if applicable)
+    \item \code{interpretation}: One-sentence summary
+    \item \code{recommendation}: Actionable next steps
+    \item \code{publication_text}: APA 7 formatted text
+    \item \code{verbose_explanation}: Educational explanation
+    \item \code{design_checklist}: Questions to assess independence
+    \item \code{visual_guide}: How to diagnose independence violations
+  }
 }
 \description{
-Provides guidance on the independence assumption.
-True independence is a design issue, not something that can be statistically tested
-after data collection.
+Provides comprehensive guidance and testing for the independence assumption.
+While true independence is primarily a design issue, this function helps you:
+(1) Think through your study design, (2) Detect potential violations,
+(3) Test for autocorrelation in time series or sequential data, and
+(4) Get actionable recommendations for violations.
+
+Independence violations are among the most serious assumption violations because
+they directly inflate Type I error (false positives). This function provides
+extensive educational support for beginners.
+}
+\details{
+**What is the independence assumption?**
+
+Independence means each observation is unrelated to other observations.
+One person's response doesn't influence another's response (beyond random chance).
+
+**Common violations:**
+- Repeated measures (same person multiple times)
+- Time series (today depends on yesterday)
+- Clusters (students in same class, customers in same store)
+- Matched pairs or siblings
+- Social networks (friends influence friends)
+
+**How to check:**
+1. Think about study design (primary method)
+2. Provide data to test for autocorrelation
+3. Provide ID variable to detect repeated measures
+}
+\examples{
+# Example 1: Design-based check (independent)
+check_independence(data_structure = "cross-sectional survey",
+                   is_independent = TRUE)
+
+# Example 2: Design-based check (violation)
+check_independence(data_structure = "repeated measures",
+                   is_independent = FALSE,
+                   clustering_note = "3 measurements per participant")
+
+# Example 3: Test for autocorrelation
+set.seed(123)
+residuals <- arima.sim(model = list(ar = 0.7), n = 100)
+check_independence(data = residuals,
+                   data_structure = "time series")
+
+# Example 4: Detect repeated measures
+set.seed(123)
+data_vals <- rnorm(150)
+ids <- rep(1:50, each = 3)  # 3 obs per person
+check_independence(data = data_vals,
+                   id_var = ids,
+                   data_structure = "repeated measures")
+
 }

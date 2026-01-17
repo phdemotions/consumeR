@@ -2,24 +2,74 @@
 % Please edit documentation in R/assumptions.R
 \name{check_normality}
 \alias{check_normality}
-\title{Check Normality Assumption}
+\title{Check Normality Assumption (Gold Standard)}
 \usage{
 check_normality(data, variable_name = "data", alpha = 0.05)
 }
 \arguments{
-\item{data}{Numeric vector to test}
+\item{data}{Numeric vector to test for normality}
 
-\item{variable_name}{Name of variable (for reporting)}
+\item{variable_name}{Character string naming the variable (for reporting).
+Default is "data". Used in all output messages.}
 
-\item{alpha}{Significance level (default 0.05)}
+\item{alpha}{Numeric. Significance level for the test (default 0.05).
+Must be between 0 and 1.}
 }
 \value{
-List with test results and interpretation
+An S3 object of class "assumption_check" containing:
+  \itemize{
+    \item \code{test}: Name of the test ("Shapiro-Wilk")
+    \item \code{assumption}: Which assumption was tested ("Normality")
+    \item \code{assumption_met}: Logical. TRUE if assumption is met (p > alpha)
+    \item \code{p_value}: P-value from Shapiro-Wilk test (APA 7 formatted)
+    \item \code{statistic}: W statistic (ranges 0-1, higher = more normal)
+    \item \code{n}: Sample size (after removing NA)
+    \item \code{n_missing}: Number of NA values removed
+    \item \code{alpha}: Significance level used
+    \item \code{skewness}: Measure of asymmetry (0 = symmetric)
+    \item \code{kurtosis}: Measure of tail heaviness (0 = normal tails)
+    \item \code{interpretation}: One-sentence summary for quick reference
+    \item \code{recommendation}: Actionable next steps
+    \item \code{publication_text}: APA 7 formatted text for manuscripts
+    \item \code{verbose_explanation}: Educational explanation for beginners
+    \item \code{visual_guide}: How to create diagnostic plots
+  }
 }
 \description{
 Tests whether data follows a normal distribution using the Shapiro-Wilk test.
-Provides detailed interpretation for publication and education.
+Provides comprehensive interpretation for beginners, including visual diagnostics,
+educational explanations, and APA 7 formatted results.
+
+This function is designed to be self-explanatory for users new to statistics,
+with extensive validation and beginner-friendly error messages.
+}
+\details{
+**What is the normality assumption?**
+
+Many statistical tests (t-tests, ANOVA, linear regression) assume that data
+follows a "normal distribution" (bell-shaped curve). This function tests
+whether your data meets this assumption.
+
+**How to interpret results:**
+- If p > 0.05: Normality assumption is MET (good news!)
+- If p < 0.05: Normality assumption is VIOLATED (need alternatives)
+
+**What to do if violated:**
+1. Use non-parametric tests (don't assume normality)
+2. Transform data (log, square root, Box-Cox)
+3. If n > 30, parametric tests often still work (Central Limit Theorem)
 }
 \examples{
-check_normality(rnorm(100), "satisfaction_scores")
+# Example 1: Normal data
+normal_data <- rnorm(100, mean = 5, sd = 1)
+check_normality(normal_data, "satisfaction_scores")
+
+# Example 2: Skewed data (not normal)
+skewed_data <- rexp(100, rate = 0.5)
+check_normality(skewed_data, "income")
+
+# Example 3: With missing values
+data_with_na <- c(rnorm(95), NA, NA, NA, NA, NA)
+check_normality(data_with_na, "responses")
+
 }

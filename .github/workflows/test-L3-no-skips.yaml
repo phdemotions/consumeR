@@ -1,0 +1,158 @@
+# ============================================================================
+# GitHub Actions Workflow: Enforce No Skipped L3 Tests on Main
+# ============================================================================
+#
+# Purpose: Ensures that Level 3 (user-facing) tests do not have any skips
+#          on the main branch. Skips are technical debt and must be resolved
+#          before merging to main.
+#
+# Philosophy: From inst/dev/consumeR-philosophy.md
+#   "CI Rule: Skipped tests in test-L3-* files are NOT allowed on main branch."
+#
+# When this runs:
+#   - On every push to main
+#   - On every pull request to main
+#
+# What it checks:
+#   - Runs all test-L3-*.R files
+#   - Fails if any tests are skipped
+#   - L1/L2 tests can have skips (they're implementation details)
+#   - Only L3 tests must be skip-free (they're user-facing guarantees)
+#
+# ============================================================================
+
+name: L3 Tests - No Skips Allowed
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-L3-no-skips:
+    runs-on: ${{ matrix.os }}
+
+    name: L3 Tests (${{ matrix.os }}, R ${{ matrix.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        r: ['release']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r }}
+          use-public-rspm: true
+
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::testthat
+            any::devtools
+
+      - name: Run L3 tests and check for skips
+        run: |
+          Rscript -e '
+            # Load the package
+            devtools::load_all()
+
+            # Find all L3 test files
+            l3_files <- list.files(
+              path = "tests/testthat",
+              pattern = "^test-L3-.*\\.R$",
+              full.names = TRUE
+            )
+
+            if (length(l3_files) == 0) {
+              cat("✓ No L3 test files found yet - skipping check\n")
+              cat("  (This is OK during early development)\n")
+              quit(status = 0)
+            }
+
+            cat("Found", length(l3_files), "L3 test file(s):\n")
+            for (f in l3_files) cat("  -", basename(f), "\n")
+            cat("\n")
+
+            # Run L3 tests
+            cat("Running L3 tests...\n")
+            result <- testthat::test_dir(
+              path = "tests/testthat",
+              filter = "^test-L3-",
+              reporter = "summary",
+              stop_on_failure = FALSE
+            )
+
+            # Extract skip count
+            n_skipped <- sum(result$skipped)
+            n_passed <- sum(result$passed)
+            n_failed <- sum(result$failed)
+            n_warned <- sum(result$warning)
+
+            # Report results
+            cat("\n")
+            cat("════════════════════════════════════════════════════════════\n")
+            cat("L3 TEST RESULTS\n")
+            cat("════════════════════════════════════════════════════════════\n")
+            cat("✓ Passed: ", n_passed, "\n")
+            cat("✗ Failed: ", n_failed, "\n")
+            cat("⚠ Warned: ", n_warned, "\n")
+            cat("○ Skipped:", n_skipped, "\n")
+            cat("════════════════════════════════════════════════════════════\n\n")
+
+            # Check for skips
+            if (n_skipped > 0) {
+              cat("❌ FAILURE: L3 tests have", n_skipped, "skip(s)\n\n")
+              cat("consumeR Philosophy:\n")
+              cat("  Skipped tests in test-L3-* files are NOT allowed on main.\n")
+              cat("  L3 tests are user-facing guarantees and must pass completely.\n\n")
+              cat("What this means:\n")
+              cat("  - Skipped L3 tests indicate incomplete features\n")
+              cat("  - L1/L2 skips are OK (implementation details)\n")
+              cat("  - L3 skips are technical debt that must be resolved\n\n")
+              cat("How to fix:\n")
+              cat("  1. Implement the missing L3 functionality\n")
+              cat("  2. Remove the skip() calls from L3 tests\n")
+              cat("  3. Or move tests to L2 if they are not user-facing\n\n")
+              quit(status = 1)
+            }
+
+            # Check for failures
+            if (n_failed > 0) {
+              cat("❌ FAILURE:", n_failed, "L3 test(s) failed\n\n")
+              cat("Fix failing tests before merging to main.\n\n")
+              quit(status = 1)
+            }
+
+            # Success!
+            cat("✅ SUCCESS: All L3 tests passed with no skips!\n")
+            cat("   ", n_passed, "tests passed\n")
+            cat("   0 tests skipped\n")
+            cat("   0 tests failed\n\n")
+            quit(status = 0)
+          '
+
+      - name: Report status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ L3 tests passed with no skips"
+          else
+            echo "❌ L3 tests have skips or failures"
+            exit 1
+          fi

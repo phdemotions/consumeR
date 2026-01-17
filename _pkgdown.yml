@@ -12,7 +12,7 @@ home:
 
 navbar:
   structure:
-    left:  [home, intro, reference, articles, tutorials, news]
+    left:  [home, intro, reference, guides, articles, news]
     right: [search, github]
   components:
     home:
@@ -22,24 +22,27 @@ navbar:
       text: Get Started
       href: articles/getting-started.html
     reference:
-      text: Functions
+      text: Reference
       href: reference/index.html
-    articles:
-      text: Examples
-      menu:
-        - text: Fun Examples Guide
-          href: EXAMPLES_GUIDE.html
-        - text: Quick Start
-          href: QUICKSTART.html
-    tutorials:
+    guides:
       text: Guides
       menu:
+        - text: "────── Getting Started ──────"
         - text: Start Here
-          href: START_HERE.html
-        - text: Development Guide
-          href: DEVELOPMENT.html
+          href: articles/START_HERE.html
+        - text: Quick Start
+          href: articles/QUICKSTART.html
+        - text: "────── Package Info ──────"
         - text: Package Overview
-          href: PACKAGE_OVERVIEW.html
+          href: articles/PACKAGE_OVERVIEW.html
+        - text: Development Guide
+          href: articles/DEVELOPMENT.html
+        - text: "────── Fun Examples ──────"
+        - text: Examples Guide
+          href: articles/EXAMPLES_GUIDE.html
+    articles:
+      text: Articles
+      href: articles/index.html
     news:
       text: News
       href: news/index.html
@@ -107,13 +110,28 @@ reference:
     contents:
       - consumer_survey
 
-  - title: "Internal Documentation"
+  - title: "Internal Helpers (Advanced)"
     desc: >
-      Print methods and internal helper documentation (usually not needed directly)
+      Internal helper functions used by the package. These are documented for transparency
+      but are not exported (use ::: to access). Most users won't need these directly.
     contents:
-      - consumeR-package
+      - labelled_data_helpers
+      - extract_value_labels
+      - identify_problematic_values
+      - recode_to_na
+      - standardization_helpers
+      - standardize_z
+      - standardize_range
+      - standardize_scale
+      - standardize_multiple
       - assumptions
       - publication_text
+
+  - title: "Package Documentation"
+    desc: >
+      Package-level documentation and print methods
+    contents:
+      - consumeR-package
       - starts_with("print.")
 
 articles:

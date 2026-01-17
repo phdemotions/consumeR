@@ -203,3 +203,33 @@ test_that("mann_whitney_test produces identical output after refactoring (FROZEN
   expect_true(is.character(result$interpretation))
   expect_true(nchar(result$interpretation) > 0)
 })
+
+test_that("kruskal_wallis_test produces identical output after refactoring (FROZEN BASELINE)", {
+  # Frozen test data
+  set.seed(99999)
+  test_df <- data.frame(
+    score = c(rnorm(15, 10, 2), rnorm(15, 12, 2), rnorm(15, 11, 2)),
+    group = rep(c("A", "B", "C"), each = 15)
+  )
+  
+  # Execute
+  result <- kruskal_wallis_test(test_df, outcome = "score", group = "group")
+  
+  # Assert: These values are FROZEN from pre-refactoring output
+  expect_equal(as.numeric(result$statistic), 5.129275, tolerance = 1e-6)
+  expect_equal(as.numeric(result$df), 2, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.07694706, tolerance = 1e-6)
+  expect_equal(as.numeric(result$epsilon_squared), 0.1165744, tolerance = 1e-6)
+  expect_equal(result$n_groups, 3)
+  
+  # Verify class (will be updated after refactoring)
+  expect_s3_class(result, "kruskal_wallis")
+  
+  # Check interpretation exists
+  expect_true(is.character(result$interpretation))
+  expect_true(nchar(result$interpretation) > 0)
+  
+  # Check group_medians exists
+  expect_true("group_medians" %in% names(result))
+  expect_s3_class(result$group_medians, "data.frame")
+})

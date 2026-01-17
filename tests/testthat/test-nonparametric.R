@@ -99,16 +99,26 @@ test_that("kruskal_wallis_test works with 3+ groups", {
 
   result <- kruskal_wallis_test(df, outcome = "rating", group = "product")
 
+  # Check classes (new standardized structure)
+  expect_s3_class(result, "kruskal_wallis_result")
   expect_s3_class(result, "kruskal_wallis")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
-  expect_named(result, c("statistic", "df", "p_value", "epsilon_squared",
-                         "group_medians", "n_groups", "interpretation"))
 
+  # Check standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_equal(result$test_type, "kruskal_wallis")
+  expect_equal(result$test_name, "Kruskal-Wallis Test")
+
+  # Check kruskal-specific fields
   expect_true(result$statistic >= 0)
   expect_equal(result$df, 2)  # k - 1 = 3 - 1 = 2
   expect_true(result$p_value >= 0 && result$p_value <= 1)
   expect_s3_class(result$group_medians, "tbl_df")
   expect_equal(nrow(result$group_medians), 3)
+  expect_equal(result$n_groups, 3)
+  expect_true("interpretation" %in% names(result))
 })
 
 test_that("kruskal_wallis_test validates inputs", {
@@ -135,6 +145,9 @@ test_that("kruskal_wallis_test calculates epsilon-squared", {
   )
 
   result <- kruskal_wallis_test(df, outcome = "rating", group = "condition")
+
+  # Check standardized structure
+  expect_s3_class(result, "analysis_result")
 
   # Effect size should be between 0 and 1
   expect_true(result$epsilon_squared >= 0 && result$epsilon_squared <= 1)

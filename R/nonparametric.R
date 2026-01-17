@@ -288,17 +288,23 @@ kruskal_wallis_test <- function(data, outcome, group) {
     interpretation <- paste0(interpretation, "Follow up with pairwise comparisons using Bonferroni correction.")
   }
 
-  result <- list(
-    statistic = as.numeric(H),
-    df = as.numeric(test_result$parameter),
-    p_value = test_result$p.value,
-    epsilon_squared = as.numeric(epsilon_sq),
-    group_medians = group_medians,
-    n_groups = length(groups),
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "kruskal_wallis",
+    test_name = "Kruskal-Wallis Test",
+    core_stats = list(p_value = test_result$p.value, n = n),
+    specific_stats = list(
+      statistic = as.numeric(H),
+      df = as.numeric(test_result$parameter),
+      epsilon_squared = as.numeric(epsilon_sq),
+      group_medians = group_medians,
+      n_groups = length(groups)
+    ),
+    assumptions = NULL,
+    interpretation = interpretation,
+    publication_text = NULL
   )
-
-  class(result) <- "kruskal_wallis"
+  class(result) <- c("kruskal_wallis_result", "kruskal_wallis", "analysis_result", "list")
   result
 }
 

@@ -580,18 +580,24 @@ friedman_test <- function(data, outcome, time, subject) {
     interpretation <- paste0(interpretation, "Follow up with pairwise Wilcoxon signed-rank tests.")
   }
 
-  result <- list(
-    statistic = as.numeric(chi_sq),
-    df = as.numeric(test_result$parameter),
-    p_value = test_result$p.value,
-    kendall_w = as.numeric(kendall_w),
-    time_medians = time_medians,
-    n_subjects = n,
-    n_times = k,
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "friedman",
+    test_name = "Friedman Test",
+    core_stats = list(p_value = test_result$p.value, n = n),
+    specific_stats = list(
+      statistic = as.numeric(chi_sq),
+      df = as.numeric(test_result$parameter),
+      kendall_w = as.numeric(kendall_w),
+      time_medians = time_medians,
+      n_subjects = n,
+      n_times = k
+    ),
+    assumptions = NULL,
+    interpretation = interpretation,
+    publication_text = NULL
   )
-
-  class(result) <- "friedman"
+  class(result) <- c("friedman_result", "friedman", "analysis_result", "list")
   result
 }
 

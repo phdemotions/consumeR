@@ -228,8 +228,39 @@ test_that("kruskal_wallis_test produces identical output after refactoring (FROZ
   # Check interpretation exists
   expect_true(is.character(result$interpretation))
   expect_true(nchar(result$interpretation) > 0)
-  
+
   # Check group_medians exists
   expect_true("group_medians" %in% names(result))
   expect_s3_class(result$group_medians, "data.frame")
+})
+
+# Phase 7: friedman_test frozen baseline
+test_that("friedman_test produces identical output after refactoring (FROZEN BASELINE)", {
+  set.seed(88888)
+  test_df <- expand.grid(
+    subject = 1:20,
+    time = c("T1", "T2", "T3", "T4")
+  )
+  test_df$score <- rnorm(nrow(test_df), mean = 50 + as.numeric(factor(test_df$time)) * 2, sd = 5)
+
+  result <- friedman_test(test_df, outcome = "score", time = "time", subject = "subject")
+
+  # Frozen statistical values (pre-refactoring)
+  expect_equal(as.numeric(result$statistic), 7.02, tolerance = 1e-6)
+  expect_equal(as.numeric(result$df), 3, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.07126302913, tolerance = 1e-7)
+  expect_equal(as.numeric(result$kendall_w), 0.117, tolerance = 1e-6)
+  expect_equal(result$n_subjects, 20)
+  expect_equal(result$n_times, 4)
+
+  # Check class
+  expect_s3_class(result, "friedman")
+
+  # Check interpretation exists
+  expect_true(nchar(result$interpretation) > 0)
+
+  # Check time_medians exists
+  expect_true("time_medians" %in% names(result))
+  expect_s3_class(result$time_medians, "data.frame")
+  expect_equal(nrow(result$time_medians), 4)
 })

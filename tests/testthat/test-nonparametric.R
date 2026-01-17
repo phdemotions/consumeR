@@ -282,17 +282,26 @@ test_that("friedman_test works with long format data", {
 
   result <- friedman_test(df, outcome = "rating", time = "time", subject = "subject")
 
+  # Check classes (new standardized structure)
+  expect_s3_class(result, "friedman_result")
   expect_s3_class(result, "friedman")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
-  expect_named(result, c("statistic", "df", "p_value", "kendall_w",
-                         "time_medians", "n_subjects", "n_times",
-                         "interpretation"))
 
+  # Check standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_equal(result$test_type, "friedman")
+  expect_equal(result$test_name, "Friedman Test")
+
+  # Check friedman-specific fields
   expect_true(result$statistic >= 0)
   expect_equal(result$df, 2)  # k - 1 = 3 - 1
   expect_true(result$p_value >= 0 && result$p_value <= 1)
   expect_equal(result$n_subjects, 25)
   expect_equal(result$n_times, 3)
+  expect_true("interpretation" %in% names(result))
+  expect_true("time_medians" %in% names(result))
 })
 
 test_that("friedman_test validates inputs", {
@@ -322,6 +331,9 @@ test_that("friedman_test calculates Kendall's W", {
   df$rating <- rpois(nrow(df), lambda = 4 + as.numeric(factor(df$time)))
 
   result <- friedman_test(df, outcome = "rating", time = "time", subject = "subject")
+
+  # Check standardized structure
+  expect_s3_class(result, "analysis_result")
 
   # Kendall's W should be between 0 and 1
   expect_true(result$kendall_w >= 0 && result$kendall_w <= 1)

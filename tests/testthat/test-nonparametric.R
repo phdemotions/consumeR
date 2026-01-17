@@ -7,11 +7,23 @@ test_that("mann_whitney_test works with data frame input", {
 
   result <- mann_whitney_test(df, outcome = "score", group = "group")
 
+  # Updated for standardized structure
   expect_s3_class(result, "mann_whitney")
+  expect_s3_class(result, "mann_whitney_result")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
-  expect_named(result, c("statistic", "p_value", "rank_biserial", "n1", "n2",
-                         "median1", "median2", "group_names", "alternative",
-                         "interpretation"))
+
+  # Should have core standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_true("p_value" %in% names(result))
+  expect_true("n" %in% names(result))
+
+  # Should have mann_whitney-specific fields
+  expect_true("statistic" %in% names(result))
+  expect_true("rank_biserial" %in% names(result))
+  expect_true("median1" %in% names(result))
+  expect_true("median2" %in% names(result))
 
   expect_true(result$statistic >= 0)
   expect_true(result$p_value >= 0 && result$p_value <= 1)

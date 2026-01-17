@@ -173,3 +173,33 @@ test_that("wilcoxon_signed_rank_test produces identical output after refactoring
   expect_true(is.character(result$interpretation))
   expect_true(nchar(result$interpretation) > 0)
 })
+
+test_that("mann_whitney_test produces identical output after refactoring (FROZEN BASELINE)", {
+  # Frozen test data
+  set.seed(54321)
+  group1_data <- c(12, 15, 18, 14, 16, 20, 13, 17, 19, 15)
+  group2_data <- c(22, 25, 28, 24, 26, 30, 23, 27, 29, 25)
+  
+  # Execute
+  result <- mann_whitney_test(x = group1_data, y = group2_data)
+  
+  # Assert: These values are FROZEN from pre-refactoring output
+  expect_equal(as.numeric(result$statistic), 0, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.0001806347, tolerance = 1e-6)
+  expect_equal(result$n1, 10)
+  expect_equal(result$n2, 10)
+  expect_equal(as.numeric(result$median1), 15.5, tolerance = 1e-10)
+  expect_equal(as.numeric(result$median2), 25.5, tolerance = 1e-10)
+  expect_equal(as.numeric(result$rank_biserial), 1, tolerance = 1e-10)
+  expect_equal(result$group_names, c("Group 1", "Group 2"))
+  expect_equal(result$alternative, "two.sided")
+  
+  # Verify class (updated for standardized naming after refactoring)
+  expect_s3_class(result, "mann_whitney_result")
+  expect_s3_class(result, "mann_whitney")  # Backward compatibility
+  expect_s3_class(result, "analysis_result")
+  
+  # Check interpretation exists and is character
+  expect_true(is.character(result$interpretation))
+  expect_true(nchar(result$interpretation) > 0)
+})

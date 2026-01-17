@@ -143,20 +143,31 @@ mann_whitney_test <- function(data = NULL,
     effect_size_interp
   )
 
-  result <- list(
-    statistic = as.numeric(U),
-    p_value = test_result$p.value,
-    rank_biserial = r_rb,
-    n1 = n1,
-    n2 = n2,
-    median1 = median1,
-    median2 = median2,
-    group_names = group_names,
-    alternative = alternative,
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "mann_whitney",
+    test_name = "Mann-Whitney U Test",
+    core_stats = list(
+      p_value = test_result$p.value,
+      n = n1 + n2
+    ),
+    specific_stats = list(
+      statistic = as.numeric(U),
+      rank_biserial = r_rb,
+      n1 = n1,
+      n2 = n2,
+      median1 = median1,
+      median2 = median2,
+      group_names = group_names,
+      alternative = alternative
+    ),
+    assumptions = NULL,  # No assumption checking for non-parametric test
+    interpretation = interpretation,
+    publication_text = NULL  # Could add APA7 template in future
   )
 
-  class(result) <- "mann_whitney"
+  # Keep backward-compatible class for existing code
+  class(result) <- c("mann_whitney_result", "mann_whitney", "analysis_result", "list")
   result
 }
 

@@ -233,25 +233,28 @@ chisq_test <- function(data = NULL,
 
   message("\n", interpretation)
 
-  # Return structured result
-  structure(
-    list(
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "chisq",
+    test_name = "Chi-Square Test of Independence",
+    core_stats = list(p_value = p_value, n = n_total),
+    specific_stats = list(
       statistic = as.numeric(chisq_stat),
       df = as.numeric(df),
-      p_value = p_value,
       cramers_v = cramers_v,
       effect_interp = effect_interp,
-      n = n_total,
       observed = obs_table,
       expected = exp_table,
       residuals = std_residuals,
       cells_low_expected = cells_low,
-      use_fisher = use_fisher,
-      interpretation = interpretation,
-      publication_text = pub_text
+      use_fisher = use_fisher
     ),
-    class = c("chisq_result", "list")
+    assumptions = NULL,  # Assumptions checked inline (cells_low_expected field)
+    interpretation = interpretation,
+    publication_text = pub_text
   )
+  class(result) <- c("chisq_analysis_result", "chisq_result", "analysis_result", "list")
+  result
 }
 
 

@@ -11,19 +11,28 @@ test_that("chisq_test works with 2x2 table", {
 
   result <- chisq_test(df, x = "condition", y = "response")
 
+  # Check classes (new standardized structure)
+  expect_s3_class(result, "chisq_analysis_result")
   expect_s3_class(result, "chisq_result")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
 
-  # Check that all essential fields are present (function may return more, which is good!)
-  essential_fields <- c("statistic", "df", "p_value", "cramers_v",
-                       "observed", "expected", "residuals", "interpretation")
-  expect_true(all(essential_fields %in% names(result)))
+  # Check standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_equal(result$test_type, "chisq")
+  expect_equal(result$test_name, "Chi-Square Test of Independence")
 
+  # Check chi-square specific fields
   expect_true(result$statistic > 0)
   expect_equal(result$df, 1)
   expect_true(result$p_value >= 0 && result$p_value <= 1)
   expect_true(result$cramers_v >= 0 && result$cramers_v <= 1)
   expect_type(result$interpretation, "character")
+  expect_true("observed" %in% names(result))
+  expect_true("expected" %in% names(result))
+  expect_true("residuals" %in% names(result))
+  expect_true("publication_text" %in% names(result))
 })
 
 test_that("chisq_test works with 3x3 table", {

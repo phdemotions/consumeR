@@ -264,3 +264,33 @@ test_that("friedman_test produces identical output after refactoring (FROZEN BAS
   expect_s3_class(result$time_medians, "data.frame")
   expect_equal(nrow(result$time_medians), 4)
 })
+
+# Phase 8: chisq_test frozen baseline
+test_that("chisq_test produces identical output after refactoring (FROZEN BASELINE)", {
+  set.seed(99999)
+  test_df <- tibble::tibble(
+    group = rep(c("A", "B"), each = 60),
+    outcome = c(
+      rep(c("Yes", "No"), times = c(25, 35)),
+      rep(c("Yes", "No"), times = c(40, 20))
+    )
+  )
+
+  result <- suppressMessages(chisq_test(test_df, x = "group", y = "outcome"))
+
+  # Frozen statistical values (pre-refactoring)
+  expect_equal(as.numeric(result$statistic), 6.579021, tolerance = 1e-6)
+  expect_equal(as.numeric(result$df), 1, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.01031876317, tolerance = 1e-6)
+  expect_equal(as.numeric(result$cramers_v), 0.2341478, tolerance = 1e-6)
+  expect_equal(result$n, 120)
+
+  # Check class
+  expect_s3_class(result, "chisq_result")
+
+  # Check essential fields exist
+  expect_true("interpretation" %in% names(result))
+  expect_true("publication_text" %in% names(result))
+  expect_true("observed" %in% names(result))
+  expect_true("expected" %in% names(result))
+})

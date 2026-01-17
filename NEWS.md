@@ -1,3 +1,13 @@
+# consumeR 0.1.0.9000 (Development)
+
+## Internal Improvements
+
+* Consolidated all p-value formatting to `format_p()` utility
+  - Removed duplicate `format_pvalue()` implementation from publication_text.R
+  - Standardized on 3-decimal APA formatting throughout package
+  - Improved consistency and maintainability of publication text generation
+  - All p-values now use comprehensive validation from utilities.R
+
 # consumeR 0.1.0
 
 ## Initial Release

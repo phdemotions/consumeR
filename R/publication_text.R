@@ -208,11 +208,7 @@ generate_ttest_results <- function(results, effect_sizes = NULL) {
   ci_upper <- if ("ci_upper" %in% names(results)) results$ci_upper else NULL
 
   # Format p-value
-  p_text <- if (p_val < 0.001) {
-    "p < .001"
-  } else {
-    paste0("p = ", format_pvalue(p_val))
-  }
+  p_text <- format_p(p_val)
 
   # Build results text
   result_text <- paste0(
@@ -288,11 +284,7 @@ generate_paired_t_results <- function(results, effect_sizes = NULL) {
   df <- results$df
   p_val <- results$p_value
 
-  p_text <- if (p_val < 0.001) {
-    "p < .001"
-  } else {
-    paste0("p = ", format_pvalue(p_val))
-  }
+  p_text <- format_p(p_val)
 
   result_text <- paste0(
     "The paired-samples t-test ",
@@ -316,17 +308,6 @@ generate_paired_t_results <- function(results, effect_sizes = NULL) {
   }
 
   paste0(result_text, ".")
-}
-
-
-#' Format P-Value for Publication
-#' @noRd
-format_pvalue <- function(p) {
-  if (p < 0.001) return("< .001")
-  if (p >= 0.10) return(sprintf("%.2f", p))
-  # Remove leading zero
-  formatted <- sprintf("%.3f", p)
-  sub("^0", "", formatted)
 }
 
 
@@ -372,13 +353,13 @@ generate_anova_results <- function(results, effect_sizes = NULL) {
   df2 <- results$df2
   p_val <- results$p_value
 
-  p_text <- format_pvalue(p_val)
+  p_text <- format_p(p_val)
 
   result_text <- paste0(
     "The ANOVA ",
     ifelse(p_val < 0.05, "revealed a statistically significant", "did not reveal a statistically significant"),
     " effect (F(", df1, ", ", round(df2, 1), ") = ", round(f_stat, 2),
-    ", p = ", p_text, ")"
+    ", ", p_text, ")"
   )
 
   if (!is.null(effect_sizes) && "eta_squared" %in% names(effect_sizes)) {
@@ -417,7 +398,7 @@ generate_regression_results <- function(results) {
     result_text <- paste0(
       "The overall regression model ",
       ifelse(p_val < 0.05, "was statistically significant", "was not statistically significant"),
-      " (F = ", round(f_stat, 2), ", p = ", format_pvalue(p_val),
+      " (F = ", round(f_stat, 2), ", ", format_p(p_val),
       ", R^2 = ", round(r_sq, 3), ")"
     )
 
@@ -464,7 +445,7 @@ generate_correlation_results <- function(results) {
     method, "'s correlation analysis ",
     ifelse(p_val < 0.05, "revealed a statistically significant", "did not reveal a statistically significant"),
     " relationship (r = ", round(r, 2), ", n = ", n,
-    ", p = ", format_pvalue(p_val), ")"
+    ", ", format_p(p_val), ")"
   )
 
   paste0(result_text, ".")

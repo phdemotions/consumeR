@@ -28,9 +28,9 @@
   ),
 
   correlation = list(
-    methods = "A Pearson correlation was computed to assess the relationship between {var1} and {var2}.",
-    results = "The correlation {significance_text} (r({df}) = {r}, {p_text}, {ci_text}).",
-    assumptions = "Assumptions of linearity and bivariate normality were assessed.",
+    methods = "A {method} correlation was computed to assess the relationship between {var1} and {var2}.",
+    results = "The correlation {significance_text} ({statistic_label}({df}) = {r}, {p_text}{ci_text}).",
+    assumptions = "Assumptions of {assumptions_text} were assessed.",
     interpretation = "There was a {strength} {direction} relationship between {var1} and {var2}."
   ),
 

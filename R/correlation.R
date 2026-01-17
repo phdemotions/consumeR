@@ -136,6 +136,7 @@ analyze_correlation <- function(data,
   # Step 3: Check assumptions (for method selection if auto)
   # ---------------------------------------------------------
   assumptions <- list()
+  has_outliers <- FALSE
 
   if (check_assumptions) {
     if (verbose) {
@@ -156,8 +157,10 @@ analyze_correlation <- function(data,
     )
 
     # Check for outliers (simple z-score method)
-    z_scores_x <- abs((x_clean - mean(x_clean)) / sd(x_clean))
-    z_scores_y <- abs((y_clean - mean(y_clean)) / sd(y_clean))
+    sd_x <- sd(x_clean)
+    sd_y <- sd(y_clean)
+    z_scores_x <- if (sd_x > 0) abs((x_clean - mean(x_clean)) / sd_x) else rep(0, length(x_clean))
+    z_scores_y <- if (sd_y > 0) abs((y_clean - mean(y_clean)) / sd_y) else rep(0, length(y_clean))
     outliers_x <- sum(z_scores_x > 3)
     outliers_y <- sum(z_scores_y > 3)
 
@@ -182,6 +185,18 @@ analyze_correlation <- function(data,
 
     # Note: Linearity would be assessed visually via scatterplot
     # We'll mention this in the output
+    assumptions$overall_pass <- TRUE
+    assumptions$warnings <- character(0)
+
+    if (!assumptions$normality_x$assumption_met || !assumptions$normality_y$assumption_met) {
+      assumptions$overall_pass <- FALSE
+      assumptions$warnings <- c(assumptions$warnings, "Normality assumption may be violated")
+    }
+
+    if (has_outliers) {
+      assumptions$overall_pass <- FALSE
+      assumptions$warnings <- c(assumptions$warnings, "Outliers detected (|z| > 3)")
+    }
 
     if (verbose) {
       message("Assumption checks complete.\n")
@@ -269,10 +284,11 @@ analyze_correlation <- function(data,
 
   # Create interpretation
   method_name <- ifelse(method == "pearson", "Pearson", "Spearman")
+  statistic_label <- ifelse(method == "pearson", "r", "rho")
 
   interpretation <- paste0(
     "The ", method_name, " correlation between ", x_name, " and ", y_name, " is ",
-    strength, " and ", direction, " (r = ", round(r, 3), ", n = ", n,
+    strength, " and ", direction, " (", statistic_label, " = ", round(r, 3), ", n = ", n,
     ", p = ", round(p_value, 4), "). "
   )
 
@@ -312,50 +328,82 @@ analyze_correlation <- function(data,
 
   # Step 7: Generate publication text
   # ----------------------------------
-  pub_block <- generate_publication_block(
-    test_type = "correlation",
-    assumptions_checks = if (check_assumptions) assumptions else NULL,
-    test_results = list(
-      method = method_name,
-      correlation = r,
-      p_value = p_value,
-      n = n,
-      ci_lower = ci_lower,
-      ci_upper = ci_upper,
-      var1_name = x_name,
-      var2_name = y_name
+  ci_text <- if (method == "pearson") {
+    paste0(", 95% CI [", round(ci_lower, 2), ", ", round(ci_upper, 2), "]")
+  } else {
+    ""
+  }
+
+  assumptions_text <- if (method == "pearson") {
+    "linearity, bivariate normality, and absence of influential outliers"
+  } else {
+    "monotonicity and independence, with outliers assessed for robustness"
+  }
+
+  apa_values <- list(
+    method = method_name,
+    var1 = x_name,
+    var2 = y_name,
+    statistic_label = statistic_label,
+    df = n - 2,
+    r = round(r, 2),
+    p_text = format_p_apa7(p_value),
+    ci_text = ci_text,
+    significance_text = if (is_significant) "was significant" else "was not significant",
+    strength = strength,
+    direction = direction,
+    assumptions_text = assumptions_text
+  )
+
+  additional_notes <- paste0(
+    "Correlation strength was interpreted using Cohen's (1988) guidelines. ",
+    "The correlation coefficient of ", round(r, 3), " indicates that the variables ",
+    "share approximately ", round(r_squared * 100, 1), "% common variance (r^2 = ",
+    round(r_squared, 3), ")."
+  )
+
+  pub_block <- structure(
+    list(
+      assumptions = if (check_assumptions) {
+        render_apa7_text("correlation", "assumptions", apa_values)
+      } else {
+        NULL
+      },
+      methods = render_apa7_text("correlation", "methods", apa_values),
+      results = render_apa7_text("correlation", "results", apa_values),
+      interpretation = render_apa7_text("correlation", "interpretation", apa_values),
+      additional = additional_notes
     ),
-    additional_notes = paste0(
-      "Correlation strength was interpreted using Cohen's (1988) guidelines. ",
-      "The correlation coefficient of ", round(r, 3), " indicates that the variables ",
-      "share approximately ", round(r_squared * 100, 1), "% common variance (r^2 = ",
-      round(r_squared, 3), ")."
-    )
+    class = "publication_block"
   )
 
   # Step 8: Package results
   # -----------------------
-  results <- list(
-    method = method_name,
-    correlation = round(r, 4),
-    p_value = round(p_value, 6),
-    significant = is_significant,
-    alpha = alpha,
-    n = n,
-    ci_lower = if (!is.na(ci_lower)) round(ci_lower, 4) else NA,
-    ci_upper = if (!is.na(ci_upper)) round(ci_upper, 4) else NA,
-    r_squared = round(r_squared, 4),
-    strength = strength,
-    direction = direction,
-    var1_name = x_name,
-    var2_name = y_name,
+  results <- build_analysis_result(
+    test_type = "correlation",
+    test_name = paste(method_name, "Correlation"),
+    core_stats = list(
+      p_value = p_value,
+      n = n,
+      significant = is_significant
+    ),
+    specific_stats = list(
+      method = method_name,
+      correlation = round(r, 4),
+      ci_lower = if (!is.na(ci_lower)) round(ci_lower, 4) else NA,
+      ci_upper = if (!is.na(ci_upper)) round(ci_upper, 4) else NA,
+      r_squared = round(r_squared, 4),
+      strength = strength,
+      direction = direction,
+      var1_name = x_name,
+      var2_name = y_name
+    ),
     assumptions = if (check_assumptions && length(assumptions) > 0) assumptions else NULL,
     interpretation = interpretation,
     publication_text = pub_block,
+    alpha = alpha,
     cor_test_output = cor_test
   )
-
-  class(results) <- c("correlation_result", "list")
 
   if (verbose) {
     message("Correlation analysis complete!\n")
@@ -450,4 +498,3 @@ print.correlation_result <- function(x, show_assumptions = FALSE, show_publicati
 
   invisible(x)
 }
-

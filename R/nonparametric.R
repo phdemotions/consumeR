@@ -416,20 +416,31 @@ wilcoxon_signed_rank_test <- function(data = NULL,
     median_diff
   )
 
-  result <- list(
-    statistic = as.numeric(V),
-    p_value = test_result$p.value,
-    rank_biserial = r_rb,
-    n_pairs = n_pairs,
-    median_before = stats::median(x),
-    median_after = stats::median(y),
-    median_diff = median_diff,
-    var_names = var_names,
-    alternative = alternative,
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "wilcoxon",
+    test_name = "Wilcoxon Signed-Rank Test",
+    core_stats = list(
+      p_value = test_result$p.value,
+      n = n_pairs
+    ),
+    specific_stats = list(
+      statistic = as.numeric(V),
+      rank_biserial = r_rb,
+      n_pairs = n_pairs,
+      median_before = stats::median(x),
+      median_after = stats::median(y),
+      median_diff = median_diff,
+      var_names = var_names,
+      alternative = alternative
+    ),
+    assumptions = NULL,  # No assumption checking for non-parametric test
+    interpretation = interpretation,
+    publication_text = NULL  # Could add APA7 template in future
   )
 
-  class(result) <- "wilcoxon_signed_rank"
+  # Keep backward-compatible class for existing code
+  class(result) <- c("wilcoxon_result", "wilcoxon_signed_rank", "analysis_result", "list")
   result
 }
 

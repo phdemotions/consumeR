@@ -152,11 +152,24 @@ test_that("wilcoxon_signed_rank_test works with data frame input", {
 
   result <- wilcoxon_signed_rank_test(df, before = "pre", after = "post")
 
+  # Updated for standardized structure
   expect_s3_class(result, "wilcoxon_signed_rank")
+  expect_s3_class(result, "wilcoxon_result")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
-  expect_named(result, c("statistic", "p_value", "rank_biserial", "n_pairs",
-                         "median_before", "median_after", "median_diff",
-                         "var_names", "alternative", "interpretation"))
+
+  # Should have core standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_true("p_value" %in% names(result))
+  expect_true("n" %in% names(result))
+
+  # Should have wilcoxon-specific fields
+  expect_true("statistic" %in% names(result))
+  expect_true("rank_biserial" %in% names(result))
+  expect_true("median_before" %in% names(result))
+  expect_true("median_after" %in% names(result))
+  expect_true("median_diff" %in% names(result))
 
   expect_true(result$statistic >= 0)
   expect_true(result$p_value >= 0 && result$p_value <= 1)

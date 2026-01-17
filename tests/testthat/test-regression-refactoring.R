@@ -143,3 +143,33 @@ test_that("analyze_correlation produces identical output after refactoring (FROZ
   expect_s3_class(result, "correlation_result")
   expect_s3_class(result$cor_test_output, "htest")
 })
+
+test_that("wilcoxon_signed_rank_test produces identical output after refactoring (FROZEN BASELINE)", {
+  # Frozen test data
+  set.seed(12345)
+  pre_data <- c(23, 45, 34, 56, 45, 67, 34, 28, 39, 41)
+  post_data <- c(34, 56, 45, 67, 56, 78, 45, 38, 49, 51)
+  
+  # Execute
+  result <- wilcoxon_signed_rank_test(x = pre_data, y = post_data)
+  
+  # Assert: These values are FROZEN from pre-refactoring output
+  expect_equal(as.numeric(result$statistic), 0, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.004156648, tolerance = 1e-6)
+  expect_equal(result$n_pairs, 10)
+  expect_equal(as.numeric(result$median_before), 40, tolerance = 1e-10)
+  expect_equal(as.numeric(result$median_after), 50, tolerance = 1e-10)
+  expect_equal(as.numeric(result$median_diff), 11, tolerance = 1e-10)
+  expect_equal(as.numeric(result$rank_biserial), 0.9063159, tolerance = 1e-6)
+  expect_equal(result$var_names, c("Before", "After"))
+  expect_equal(result$alternative, "two.sided")
+  
+  # Verify class (updated for standardized naming after refactoring)
+  expect_s3_class(result, "wilcoxon_result")
+  expect_s3_class(result, "wilcoxon_signed_rank")  # Backward compatibility
+  expect_s3_class(result, "analysis_result")
+  
+  # Check interpretation exists and is character
+  expect_true(is.character(result$interpretation))
+  expect_true(nchar(result$interpretation) > 0)
+})

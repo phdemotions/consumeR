@@ -12,20 +12,8 @@
 #' @param round_digits Integer. Number of decimal places for rounding results.
 #'   Default is 2.
 #'
-#' @return A named list containing the following statistics:
-#'   \itemize{
-#'     \item \code{n}: Sample size (number of observations)
-#'     \item \code{mean}: Arithmetic mean
-#'     \item \code{median}: Median (50th percentile)
-#'     \item \code{sd}: Standard deviation
-#'     \item \code{min}: Minimum value
-#'     \item \code{max}: Maximum value
-#'     \item \code{q25}: First quartile (25th percentile)
-#'     \item \code{q75}: Third quartile (75th percentile)
-#'     \item \code{variance}: Variance (if include_all = TRUE)
-#'     \item \code{range}: Range (max - min) (if include_all = TRUE)
-#'     \item \code{iqr}: Interquartile range (if include_all = TRUE)
-#'   }
+#' @return An analysis_result object containing descriptive statistics, including
+#'   sample size, location/dispersion measures, and optional extended metrics.
 #'
 #' @examples
 #' # Example 1: Basic usage with sample consumer spending data
@@ -46,178 +34,53 @@ calculate_summary_stats <- function(data,
                                    round_digits = 2) {
 
   # ============================================================================
-  # COMPREHENSIVE INPUT VALIDATION (Gold Standard)
+  # INPUT VALIDATION (Standardized Utilities)
   # ============================================================================
 
-  # Check 1: Type validation
-  if (!is.numeric(data)) {
-    rlang::abort(c(
-      "Data must be numeric",
-      "x" = paste0("You provided: ", class(data)[1], " (", typeof(data), ")"),
-      "i" = "Summary statistics require numeric data (numbers)",
-      "i" = "Common mistake: Passing character or factor variables",
-      ">" = "For character data: Convert with as.numeric()",
-      ">" = "For factors: Convert with as.numeric(as.character())",
-      ">" = "For data frames: Extract column with data$column_name"
-    ))
-  }
+  assert_beginner_safe(
+    data,
+    type = "numeric",
+    allow_na = TRUE,
+    min_length = 1,
+    arg_name = "data",
+    context = "summary statistics"
+  )
 
-  # Check 2: Handle empty vector
-  if (length(data) == 0) {
-    rlang::abort(c(
-      "Cannot calculate statistics on empty data",
-      "x" = "You provided a vector with 0 elements",
-      "i" = "Need at least 1 observation to calculate statistics",
-      ">" = "Check: Did you subset incorrectly?",
-      ">" = "Check: Is your variable name correct?",
-      ">" = "Try: length(your_data) to see how many values you have"
-    ))
-  }
+  assert_beginner_safe(
+    include_all,
+    type = "logical",
+    min_length = 1,
+    max_length = 1,
+    arg_name = "include_all",
+    context = "summary statistics"
+  )
 
-  # Check 3: Detect NaN values
-  if (any(is.nan(data))) {
-    nan_count <- sum(is.nan(data))
-    rlang::warn(c(
-      "NaN (Not a Number) values detected",
-      "!" = paste0(nan_count, " NaN value(s) found"),
-      "i" = "NaN indicates a calculation error (e.g., 0/0, Inf/Inf)",
-      "i" = "These will be treated as missing (NA) and removed",
-      ">" = "Check: How was this data created?",
-      ">" = "Run: summary(your_data) to inspect"
-    ))
-    # Convert NaN to NA for consistent handling
-    data[is.nan(data)] <- NA
-  }
+  assert_beginner_safe(
+    round_digits,
+    type = "numeric",
+    min_length = 1,
+    max_length = 1,
+    min_value = 0,
+    max_value = 10,
+    arg_name = "round_digits",
+    context = "summary statistics"
+  )
 
-  # Check 4: Detect Infinite values
-  if (any(is.infinite(data))) {
-    inf_count <- sum(is.infinite(data))
-    inf_pos <- sum(data == Inf, na.rm = TRUE)
-    inf_neg <- sum(data == -Inf, na.rm = TRUE)
-    rlang::warn(c(
-      "Infinite values detected",
-      "!" = paste0(inf_count, " infinite value(s): ",
-                   if (inf_pos > 0) paste0(inf_pos, " Inf"), " ",
-                   if (inf_neg > 0) paste0(inf_neg, " -Inf")),
-      "i" = "Infinite values will bias statistics (mean, SD, etc.)",
-      "i" = "These will be treated as missing (NA) and removed",
-      "!" = "Common causes:",
-      "  " = "  • Division by zero (x/0 = Inf)",
-      "  " = "  • Overflow from very large calculations",
-      "  " = "  • Data entry errors",
-      ">" = "Inspect: your_data[is.infinite(your_data)]",
-      ">" = "Consider: Removing or recoding these values"
-    ))
-    # Convert Inf to NA
-    data[is.infinite(data)] <- NA
-  }
+  data_sanitized <- data
+  data_sanitized[is.nan(data_sanitized)] <- NA
+  data_sanitized[is.infinite(data_sanitized)] <- NA
 
-  # Step 2: Remove missing values
-  n_missing <- sum(is.na(data))
-  data_clean <- data[!is.na(data)]
+  n_missing <- sum(is.na(data_sanitized))
+  data_clean <- data_sanitized[!is.na(data_sanitized)]
 
-  # Check 5: Handle all-NA data
-  if (length(data_clean) == 0) {
-    rlang::abort(c(
-      "No valid (non-missing) data points found",
-      "x" = paste0("All ", length(data), " values are NA, NaN, or Inf"),
-      "i" = "Cannot calculate statistics without any valid numbers",
-      "!" = "Possible causes:",
-      "  " = "  • Data import failed",
-      "  " = "  • Wrong column selected",
-      "  " = "  • Calculation error created only missing values",
-      ">" = "Check: summary(your_original_data)",
-      ">" = "Check: str(your_data) to see structure"
-    ))
-  }
-
-  # Check 6: Warn about single value
-  if (length(data_clean) == 1) {
-    rlang::warn(c(
-      "Only one valid data point",
-      "!" = paste0("Value: ", data_clean[1]),
-      "i" = "Statistics will be limited with n = 1:",
-      "  " = "  • SD and variance cannot be calculated (need n >= 2)",
-      "  " = "  • Mean = Median = Min = Max (all equal to the single value)",
-      "  " = "  • Quartiles will all equal the value",
-      ">" = "Consider: Do you have more data available?",
-      ">" = "This is not enough for meaningful statistical analysis"
-    ))
-  }
-
-  # Check 7: Warn about very small sample
-  if (length(data_clean) >= 2 && length(data_clean) < 5) {
-    rlang::warn(c(
-      "Very small sample size",
-      "!" = paste0("n = ", length(data_clean), " (after removing ",
-                   n_missing, " missing)"),
-      "i" = "Statistics will be unreliable with n < 5",
-      "i" = "Confidence intervals will be very wide",
-      "i" = "Outliers will have huge influence",
-      ">" = "Recommendation: Collect more data before drawing conclusions",
-      ">" = "Use with caution in any analysis"
-    ))
-  }
-
-  # Check 8: Inform about missing values (if moderate amount)
-  if (n_missing > 0) {
-    pct_missing <- round(100 * n_missing / length(data), 1)
-
-    if (pct_missing > 50) {
-      rlang::warn(c(
-        "More than half of data is missing",
-        "!" = paste0(n_missing, " of ", length(data), " values are NA (",
-                     pct_missing, "%)"),
-        "i" = "Results based on only ", length(data_clean), " observations",
-        "!" = "High missingness may indicate:",
-        "  " = "  • Data collection problems",
-        "  " = "  • Wrong variable selected",
-        "  " = "  • Systematic bias (non-random missingness)",
-        ">" = "Investigate: Why is so much data missing?",
-        ">" = "Consider: Imputation or collecting more complete data"
-      ))
-    } else if (pct_missing > 20) {
-      rlang::warn(c(
-        "Substantial missing data",
-        "!" = paste0(n_missing, " of ", length(data), " values are NA (",
-                     pct_missing, "%)"),
-        "i" = "Statistics computed on ", length(data_clean), " complete cases",
-        ">" = "Consider: Investigating pattern of missingness"
-      ))
-    } else {
-      message("Note: ", n_missing, " missing value(s) removed from calculations (",
-              pct_missing, "% of data)")
-    }
-  }
-
-  # Check 9: Detect zero variance (all values identical)
-  if (length(unique(data_clean)) == 1) {
-    rlang::warn(c(
-      "Zero variance: all values are identical",
-      "!" = paste0("All ", length(data_clean), " values = ", data_clean[1]),
-      "i" = "SD and variance will be 0",
-      "i" = "Range and IQR will be 0",
-      "!" = "This is unusual and may indicate:",
-      "  " = "  • Constant/fixed value (by design)",
-      "  " = "  • Rounding error (all rounded to same value)",
-      "  " = "  • Data entry error",
-      "  " = "  • Wrong variable selected",
-      ">" = "Check: Is this expected?",
-      ">" = "Statistical tests will fail with zero variance"
-    ))
-  }
-
-  # Check 10: Validate round_digits parameter
-  if (!is.numeric(round_digits) || length(round_digits) != 1 ||
-      round_digits < 0 || round_digits > 10) {
-    rlang::abort(c(
-      "Invalid 'round_digits' parameter",
-      "x" = paste0("You provided: ", round_digits),
-      "i" = "round_digits must be a single integer between 0 and 10",
-      "i" = "APA 7 recommends: 2 decimals for most descriptive statistics",
-      ">" = "Example: calculate_summary_stats(data, round_digits = 2)"
-    ))
-  }
+  assert_beginner_safe(
+    data_clean,
+    type = "numeric",
+    allow_na = FALSE,
+    min_length = 1,
+    arg_name = "data",
+    context = "summary statistics"
+  )
 
   # ============================================================================
   # CALCULATE STATISTICS (APA 7 compliant)
@@ -234,11 +97,7 @@ calculate_summary_stats <- function(data,
 
   # Standard deviation - how spread out the data is (SD)
   # APA 7: Use SD (not s) for sample standard deviation
-  if (n == 1) {
-    sd_value <- NA  # Cannot calculate SD with n=1
-  } else {
-    sd_value <- sd(data_clean)
-  }
+  sd_value <- if (n == 1) NA else sd(data_clean)
 
   # Minimum and maximum - the range boundaries
   min_value <- min(data_clean)
@@ -252,10 +111,7 @@ calculate_summary_stats <- function(data,
   # PACKAGE RESULTS
   # ============================================================================
 
-  # Create results list with core statistics
-  # APA 7: Round to 2 decimal places for descriptive statistics
-  results <- list(
-    n = n,
+  specific_stats <- list(
     n_missing = n_missing,
     mean = round(mean_value, round_digits),
     median = round(median_value, round_digits),
@@ -281,14 +137,30 @@ calculate_summary_stats <- function(data,
     # IQR - interquartile range (Q3 - Q1)
     iqr_value <- IQR(data_clean)
 
-    # Add these to our results
-    results$variance <- if (is.na(variance_value)) NA else round(variance_value, round_digits)
-    results$range <- round(range_value, round_digits)
-    results$iqr <- round(iqr_value, round_digits)
+    specific_stats$variance <- if (is.na(variance_value)) NA else round(variance_value, round_digits)
+    specific_stats$range <- round(range_value, round_digits)
+    specific_stats$iqr <- round(iqr_value, round_digits)
   }
 
-  # Add class for potential print method
-  class(results) <- c("summary_stats", "list")
+  interpretation <- if (n == 1) {
+    glue::glue(
+      "The data contain a single observation (N = {n}) with a value of {specific_stats$mean}."
+    )
+  } else {
+    glue::glue(
+      "The data have a mean of {specific_stats$mean} (SD = {specific_stats$sd}, ",
+      "Mdn = {specific_stats$median}, N = {n})."
+    )
+  }
 
-  return(results)
+  build_analysis_result(
+    test_type = "summary_stats",
+    test_name = "Descriptive Statistics",
+    core_stats = list(
+      n = n,
+      p_value = NA_real_
+    ),
+    specific_stats = specific_stats,
+    interpretation = interpretation
+  )
 }

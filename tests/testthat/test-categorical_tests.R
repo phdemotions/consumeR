@@ -110,14 +110,26 @@ test_that("fisher_exact_test works with 2x2 table", {
 
   result <- fisher_exact_test(df, x = "treatment", y = "outcome")
 
+  # Check classes (new standardized structure)
+  expect_s3_class(result, "fisher_exact_result")
+  expect_s3_class(result, "fisher_exact")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
-  # Check essential fields are present (function may include additional helpful info)
-  essential_fields <- c("p_value", "odds_ratio", "or_ci_lower", "or_ci_upper",
-                        "alternative", "interpretation")
-  expect_true(all(essential_fields %in% names(result)))
+
+  # Check standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_equal(result$test_type, "fisher_exact")
+  expect_equal(result$test_name, "Fisher's Exact Test")
+
+  # Check fisher-specific fields
   expect_true(result$p_value >= 0 && result$p_value <= 1)
   expect_true(result$odds_ratio > 0)
   expect_type(result$interpretation, "character")
+  expect_true("or_ci_lower" %in% names(result))
+  expect_true("or_ci_upper" %in% names(result))
+  expect_true("alternative" %in% names(result))
+  expect_true("observed" %in% names(result))
 })
 
 test_that("fisher_exact_test handles alternative hypotheses", {

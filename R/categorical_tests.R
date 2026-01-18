@@ -367,15 +367,24 @@ fisher_exact_test <- function(data = NULL,
 
   message("\n", interpretation)
 
-  tibble::tibble(
-    p_value = p_value,
-    odds_ratio = or,
-    or_ci_lower = or_ci_lower,
-    or_ci_upper = or_ci_upper,
-    alternative = alternative,
-    n = sum(obs_table),
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "fisher_exact",
+    test_name = "Fisher's Exact Test",
+    core_stats = list(p_value = p_value, n = sum(obs_table)),
+    specific_stats = list(
+      odds_ratio = or,
+      or_ci_lower = or_ci_lower,
+      or_ci_upper = or_ci_upper,
+      alternative = alternative,
+      observed = obs_table  # Add for completeness
+    ),
+    assumptions = NULL,  # Fisher's exact has no assumptions to check
+    interpretation = interpretation,
+    publication_text = NULL  # Could add APA7 template later
   )
+  class(result) <- c("fisher_exact_result", "fisher_exact", "analysis_result", "list")
+  result
 }
 
 

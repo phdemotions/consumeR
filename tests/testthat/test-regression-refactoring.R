@@ -294,3 +294,29 @@ test_that("chisq_test produces identical output after refactoring (FROZEN BASELI
   expect_true("observed" %in% names(result))
   expect_true("expected" %in% names(result))
 })
+
+# Phase 9: fisher_exact_test frozen baseline
+test_that("fisher_exact_test produces identical output after refactoring (FROZEN BASELINE)", {
+  set.seed(77777)
+  test_df <- data.frame(
+    treatment = c(rep("Drug", 25), rep("Placebo", 25)),
+    outcome = c(
+      rep(c("Success", "Failure"), times = c(18, 7)),
+      rep(c("Success", "Failure"), times = c(10, 15))
+    )
+  )
+
+  result <- suppressMessages(fisher_exact_test(test_df, x = "treatment", y = "outcome"))
+
+  # Frozen statistical values (pre-refactoring)
+  expect_equal(as.numeric(result$p_value), 0.04500454048, tolerance = 1e-6)
+  expect_equal(as.numeric(result$odds_ratio), 0.2668958, tolerance = 1e-6)
+  expect_equal(as.numeric(result$or_ci_lower), 0.06658675, tolerance = 1e-7)
+  expect_equal(as.numeric(result$or_ci_upper), 0.975315, tolerance = 1e-6)
+  expect_equal(result$alternative, "two.sided")
+  expect_equal(result$n, 50)
+
+  # Check interpretation exists
+  expect_true("interpretation" %in% names(result))
+  expect_true(nchar(result$interpretation) > 0)
+})

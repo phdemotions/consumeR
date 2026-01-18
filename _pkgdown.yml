@@ -7,7 +7,6 @@ home:
   title: "consumeR: Transparent Consumer Research Analysis"
   description: >
     Make your consumer research transparent, reproducible, and reviewer-friendly.
-    Inspired by Superstore and The Office for relatable examples!
 
 navbar:
   structure:
@@ -36,7 +35,7 @@ navbar:
           href: articles/PACKAGE_OVERVIEW.html
         - text: Development Guide
           href: articles/DEVELOPMENT.html
-        - text: "────── Fun Examples ──────"
+        - text: "────── Examples ──────"
         - text: Examples Guide
           href: articles/EXAMPLES_GUIDE.html
     articles:

@@ -9,9 +9,10 @@
 `consumeR` is an R package designed for researchers in marketing and consumer psychology who want to conduct transparent, reproducible statistical analyses. It provides structured workflows that document data cleaning steps, check statistical assumptions, and generate clear reports—all while maintaining readability for reviewers and collaborators who may not be expert programmers.
 
 ### Who is this for?
+
 consumeR supports the most common analytical workflows in business and consumer research, with planned extensions for multilevel models, measurement models, and generalized linear models. All methods—current and future—adhere to the same transparency and reporting constraints.
 
-### 🎯 Why consumeR?
+### Why consumeR?
 
 This package is for researchers who:
 - Need to document their analytical decisions clearly for peer review
@@ -32,9 +33,9 @@ remotes::install_github("phdemotions/consumeR")
 
 ## Quick Start
 
-### Not Sure Which Test to Use? 🤔
+### Not Sure Which Test to Use?
 
-**NEW!** The package includes a helper for beginners:
+The package includes a helper for beginners:
 
 ```r
 library(consumeR)
@@ -106,23 +107,23 @@ print(cleaned)
 final_data <- cleaned$clean_data
 ```
 
-## Roadmap
+## Feature Overview
 
-### Currently Supported
+### Core Capabilities
 
-consumeR provides functions for transparent analytical workflows:
+consumeR provides comprehensive support for common research workflows:
 
-| Category | Functions |
-|----------|-----------|
-| **Data Management** | Import (CSV, SPSS), variable checking, name cleaning |
-| **Data Cleaning** | Exclusion tracking, attention check validation, missing data reporting |
+| Analysis Category | Included Methods |
+|:-----------------|:-----------------|
+| **Data Management** | CSV/SPSS import, variable type checking, name standardization |
+| **Data Cleaning** | Exclusion tracking, attention check validation, missing data reports |
 | **Descriptive Statistics** | Summary statistics, correlation matrices |
 | **Group Comparisons** | t-tests, ANOVA, repeated measures ANOVA, post-hoc contrasts |
-| **Regression** | OLS with assumption checks, robust standard errors, logistic regression |
+| **Regression** | OLS with diagnostics, robust standard errors, logistic regression |
 | **Reliability & Validity** | Cronbach's alpha, composite reliability, AVE |
-| **Factor Analysis** | Exploratory (EFA) with diagnostics, Confirmatory (CFA) with fit indices |
-| **Mediation & Moderation** | Simple, parallel, serial, and moderated mediation; simple slopes; Johnson-Neyman |
-| **Multilevel Models** | Random-intercept models, ICC calculation, assumption diagnostics |
+| **Factor Analysis** | EFA with diagnostics, CFA with fit indices |
+| **Mediation & Moderation** | Simple/parallel/serial mediation, simple slopes, Johnson-Neyman |
+| **Multilevel Models** | Random-intercept models, ICC, assumption diagnostics |
 | **Structural Equation Modeling** | Path analysis, indirect effects, model comparison |
 | **Categorical Analysis** | Chi-square, Fisher's exact, McNemar's test, odds ratios |
 | **Non-Parametric Tests** | Mann-Whitney, Kruskal-Wallis, Wilcoxon, Friedman |
@@ -241,9 +242,11 @@ If you use consumeR in your research, please cite it:
 citation("consumeR")
 ```
 
-Once the Zenodo DOI is minted, citations will include:
+**Suggested citation:**
 
-> Gonzales, J. (2026). consumeR: Transparent and Reproducible Consumer Research Analysis. R package version 0.1.0. DOI: 10.5281/zenodo.18217192
+> Gonzales, J. (2026). *consumeR: Transparent and Reproducible Consumer Research Analysis*. R package version 0.1.0. https://github.com/phdemotions/consumeR
+
+Once published, a Zenodo DOI will be available for archival citation.
 
 ## Contributing
 

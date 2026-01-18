@@ -39,7 +39,7 @@ test_that("reverse_score_likert non-strict mode warns and preserves", {
 
   expect_warning(
     result <- reverse_score_likert(x, strict = FALSE),
-    "out of range"
+    "value.*outside.*range"
   )
 
   # 1→7, 2→6, 8→8 (preserved), 4→4, 5→3
@@ -317,7 +317,7 @@ test_that("score_composite validates inputs", {
   expect_error(score_composite("not df", items = "q1"), "df must be a data frame")
 
   # Missing items
-  expect_error(score_composite(df, items = "missing"), "Missing variables")
+  expect_error(score_composite(df, items = "missing"), "Missing variable")
 
   # Non-numeric items
   df_bad <- data.frame(q1 = "a", q2 = "b")
@@ -357,8 +357,8 @@ test_that("add_composite adds column correctly", {
   expect_true("satisfaction" %in% names(result))
   expect_equal(ncol(result), ncol(df) + 1)
 
-  # Values should be correct
-  expect_equal(result$satisfaction, c(6, 7, 8))
+  # Values should be correct (ignore attributes from composite_meta)
+  expect_equal(as.numeric(result$satisfaction), c(6, 7, 8))
 
   # Original columns preserved
   expect_equal(result$id, c(1, 2, 3))
@@ -391,7 +391,7 @@ test_that("add_composite passes arguments to score_composite", {
 
   # neg reversed: 1→7, 2→6
   # Sum: (7+7+7)=21, (6+6+6)=18
-  expect_equal(result$attitude, c(21, 18))
+  expect_equal(as.numeric(result$attitude), c(21, 18))
 })
 
 test_that("add_composite validates col_name", {

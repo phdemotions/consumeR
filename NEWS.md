@@ -1,3 +1,13 @@
+# consumeR (development version)
+
+## Documentation
+
+* Enabled automated pkgdown site deployment via GitHub Actions
+* Reorganized function reference page into statistical technique hierarchy
+  (Data Management → Measurement → Diagnostics → Inference → Reporting)
+* Applied Tufte-inspired academic styling to documentation website
+* Cleaned up README formatting (removed duplicate roadmap content)
+
 # consumeR 0.1.0.9000 (Development)
 
 ## Internal Improvements

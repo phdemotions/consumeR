@@ -47,23 +47,39 @@ navbar:
       href: news/index.html
 
 reference:
+  - title: "Getting Started"
+    desc: >
+      Quick start tools and example datasets for learning.
+    contents:
+      - quick_test_help
+      - select_statistical_test
+      - consumer_survey
+
   - title: "Data Management"
     desc: >
       Import, clean, and prepare survey data with transparent exclusion tracking.
-      Includes example datasets for learning and teaching.
     contents:
       - import_research_data
       - check_variable_types
       - clean_survey_data
-      - consumer_survey
+      - clean_names_safe
+      - assert_vars_present
 
   - title: "Measurement & Scales"
     desc: >
       Assess reliability, validity, and dimensionality of psychological measures.
     contents:
       - calculate_alpha
+      - alpha_table
       - calculate_composite_reliability
+      - add_composite
+      - score_composite
+      - reverse_score_likert
       - perform_efa
+      - efa_diagnostics
+      - run_cfa
+      - tidy_cfa_fit
+      - compare_cfa_models
 
   - title: "Assumption Diagnostics"
     desc: >
@@ -72,6 +88,9 @@ reference:
       - check_normality
       - check_homogeneity_of_variance
       - check_independence
+      - assumption_checks
+      - logistic_assumptions
+      - mlm_assumptions
 
   - title: "Descriptive Analysis"
     desc: >
@@ -79,40 +98,113 @@ reference:
     contents:
       - calculate_summary_stats
       - create_analysis_report
+      - row_sd
 
-  - title: "Inferential Analysis"
+  - title: "Correlations"
     desc: >
-      Test hypotheses about group differences and relationships between variables.
+      Analyze bivariate relationships between variables.
+    contents:
+      - analyze_correlation
+      - correlation_table
+
+  - title: "Group Comparisons (Parametric)"
+    desc: >
+      Compare groups using t-tests and ANOVA with assumption checking.
     contents:
       - test_group_differences
       - compare_groups_anova
-      - analyze_correlation
+      - run_anova
+      - run_rm_anova
+      - rm_pairwise
+      - emmeans_contrasts
+      - cohens_d_table
+
+  - title: "Group Comparisons (Non-Parametric)"
+    desc: >
+      Distribution-free tests for group comparisons.
+    contents:
+      - mann_whitney_test
+      - wilcoxon_signed_rank_test
+      - kruskal_wallis_test
+      - friedman_test
+
+  - title: "Categorical Data Analysis"
+    desc: >
+      Tests for categorical and frequency data.
+    contents:
+      - chisq_test
+      - fisher_exact_test
+      - mcnemar_test
+      - odds_ratio_table
+
+  - title: "Regression Analysis"
+    desc: >
+      Linear and logistic regression with diagnostics.
+    contents:
       - analyze_regression
+      - run_logistic
+      - tidy_logistic
+      - logistic_assumptions
+      - pseudo_r2
+      - compare_ols_robust
+      - tidy_lm_robust
+
+  - title: "Mediation & Moderation"
+    desc: >
+      Test indirect effects and conditional relationships.
+    contents:
+      - mediation_simple
+      - mediation_parallel
+      - mediation_serial
+      - moderated_mediation
+      - simple_slopes
+      - johnson_neyman
+
+  - title: "Multilevel Models"
+    desc: >
+      Analyze nested and hierarchical data structures.
+    contents:
+      - run_mlm
+      - tidy_mlm
+      - icc_calculate
+      - mlm_assumptions
+
+  - title: "Structural Equation Modeling"
+    desc: >
+      Path analysis and latent variable models.
+    contents:
+      - run_sem
+      - tidy_sem
+      - compare_sem_models
 
   - title: "Reporting & Publication"
     desc: >
-      Generate APA-formatted text for your results sections.
+      Generate APA-formatted text and tables for your results.
     contents:
       - generate_publication_block
+      - format_p
+      - format_n
+      - format_est_ci
+      - make_table_md
+      - make_table_tsv
+      - write_table
 
   - title: "Package Internals (Advanced)"
     desc: >
-      Internal helper functions and package-level documentation. These are documented
-      for transparency but are not exported (use ::: to access). Most users won't
-      need these directly.
+      Package-level documentation and internal infrastructure. Most users won't need these directly.
     contents:
-      - labelled_data_helpers
-      - extract_value_labels
-      - identify_problematic_values
-      - recode_to_na
-      - standardization_helpers
-      - standardize_z
-      - standardize_range
-      - standardize_scale
-      - standardize_multiple
-      - assumptions
-      - publication_text
       - consumeR-package
+      - assumptions
+      - categorical_tests
+      - composite_scoring
+      - modeling
+      - psychometrics
+      - publication_text
+      - robust
+      - table_formatting
+      - utilities
+      - format_p_apa7
+      - render_apa7_text
       - starts_with("print.")
 
 articles:

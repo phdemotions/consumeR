@@ -2,7 +2,6 @@ url: https://phdemotions.github.io/consumeR
 
 template:
   bootstrap: 5
-  bootswatch: flatly
 
 home:
   title: "consumeR: Transparent Consumer Research Analysis"
@@ -48,72 +47,59 @@ navbar:
       href: news/index.html
 
 reference:
-  - title: "Data Import & Preparation"
+  - title: "Data Management"
     desc: >
-      Import and clean survey data with interactive validation and transparent exclusion reporting
+      Import, clean, and prepare survey data with transparent exclusion tracking.
+      Includes example datasets for learning and teaching.
     contents:
       - import_research_data
       - check_variable_types
       - clean_survey_data
+      - consumer_survey
 
-  - title: "Descriptive Statistics"
+  - title: "Measurement & Scales"
     desc: >
-      Calculate and report summary statistics for your data
-    contents:
-      - calculate_summary_stats
-      - create_analysis_report
-
-  - title: "Reliability & Scale Analysis"
-    desc: >
-      Assess internal consistency and composite reliability of measurement scales
+      Assess reliability, validity, and dimensionality of psychological measures.
     contents:
       - calculate_alpha
       - calculate_composite_reliability
+      - perform_efa
 
-  - title: "Statistical Assumptions Testing"
+  - title: "Assumption Diagnostics"
     desc: >
-      Test assumptions required for parametric statistical tests
+      Explicitly test statistical assumptions before running parametric tests.
     contents:
       - check_normality
       - check_homogeneity_of_variance
       - check_independence
 
-  - title: "Group Comparisons"
+  - title: "Descriptive Analysis"
     desc: >
-      Compare groups using t-tests, Wilcoxon tests, and ANOVA
+      Calculate and report summary statistics for your data.
+    contents:
+      - calculate_summary_stats
+      - create_analysis_report
+
+  - title: "Inferential Analysis"
+    desc: >
+      Test hypotheses about group differences and relationships between variables.
     contents:
       - test_group_differences
       - compare_groups_anova
-
-  - title: "Correlation & Regression Analysis"
-    desc: >
-      Analyze relationships between variables
-    contents:
       - analyze_correlation
       - analyze_regression
 
-  - title: "Exploratory Factor Analysis"
+  - title: "Reporting & Publication"
     desc: >
-      Explore dimensionality and factor structure of your measures
-    contents:
-      - perform_efa
-
-  - title: "Publication Support"
-    desc: >
-      Generate APA-formatted text for your results sections
+      Generate APA-formatted text for your results sections.
     contents:
       - generate_publication_block
 
-  - title: "Datasets"
+  - title: "Package Internals (Advanced)"
     desc: >
-      Example datasets for learning and teaching
-    contents:
-      - consumer_survey
-
-  - title: "Internal Helpers (Advanced)"
-    desc: >
-      Internal helper functions used by the package. These are documented for transparency
-      but are not exported (use ::: to access). Most users won't need these directly.
+      Internal helper functions and package-level documentation. These are documented
+      for transparency but are not exported (use ::: to access). Most users won't
+      need these directly.
     contents:
       - labelled_data_helpers
       - extract_value_labels
@@ -126,11 +112,6 @@ reference:
       - standardize_multiple
       - assumptions
       - publication_text
-
-  - title: "Package Documentation"
-    desc: >
-      Package-level documentation and print methods
-    contents:
       - consumeR-package
       - starts_with("print.")
 

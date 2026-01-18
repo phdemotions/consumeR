@@ -502,16 +502,26 @@ mcnemar_test <- function(data,
 
   message("\n", interpretation)
 
-  tibble::tibble(
-    statistic = as.numeric(chisq_stat),
-    df = 1,
-    p_value = p_value,
-    n_pairs = sum(obs_table),
-    n_changed = n_changed,
-    pct_changed = pct_changed,
-    odds_ratio_change = or_change,
-    interpretation = interpretation
+  # Build standardized result using infrastructure
+  result <- build_analysis_result(
+    test_type = "mcnemar",
+    test_name = "McNemar's Test",
+    core_stats = list(p_value = p_value, n = sum(obs_table)),
+    specific_stats = list(
+      statistic = as.numeric(chisq_stat),
+      df = 1,
+      n_pairs = sum(obs_table),
+      n_changed = n_changed,
+      pct_changed = pct_changed,
+      odds_ratio_change = or_change,
+      observed = obs_table  # Add for completeness
+    ),
+    assumptions = NULL,  # Paired categorical test
+    interpretation = interpretation,
+    publication_text = NULL  # Could add APA7 template later
   )
+  class(result) <- c("mcnemar_result", "mcnemar", "analysis_result", "list")
+  result
 }
 
 

@@ -320,3 +320,24 @@ test_that("fisher_exact_test produces identical output after refactoring (FROZEN
   expect_true("interpretation" %in% names(result))
   expect_true(nchar(result$interpretation) > 0)
 })
+
+# Phase 10: mcnemar_test frozen baseline
+test_that("mcnemar_test produces identical output after refactoring (FROZEN BASELINE)", {
+  set.seed(55555)
+  test_df <- data.frame(
+    before = sample(c("Yes", "No"), 60, replace = TRUE, prob = c(0.4, 0.6)),
+    after = sample(c("Yes", "No"), 60, replace = TRUE, prob = c(0.6, 0.4))
+  )
+
+  result <- suppressMessages(mcnemar_test(test_df, "before", "after"))
+
+  # Frozen statistical values (pre-refactoring)
+  expect_equal(as.numeric(result$statistic), 7.84, tolerance = 1e-10)
+  expect_equal(as.numeric(result$df), 1, tolerance = 1e-10)
+  expect_equal(as.numeric(result$p_value), 0.005110260661, tolerance = 1e-6)
+  expect_equal(result$n_pairs, 60)
+
+  # Check interpretation exists
+  expect_true("interpretation" %in% names(result))
+  expect_true(nchar(result$interpretation) > 0)
+})

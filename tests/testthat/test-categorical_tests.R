@@ -179,19 +179,28 @@ test_that("mcnemar_test works with paired data", {
 
   result <- mcnemar_test(df, var1 = "before", var2 = "after")
 
+  # Check classes (new standardized structure)
+  expect_s3_class(result, "mcnemar_result")
+  expect_s3_class(result, "mcnemar")
+  expect_s3_class(result, "analysis_result")
   expect_type(result, "list")
 
-  # Check essential fields (function returns more helpful info which is good!)
-  essential_fields <- c("statistic", "df", "p_value", "n_pairs", "n_changed",
-                       "pct_changed", "odds_ratio_change", "interpretation")
-  expect_true(all(essential_fields %in% names(result)))
+  # Check standardized fields
+  expect_true("test_type" %in% names(result))
+  expect_true("test_name" %in% names(result))
+  expect_equal(result$test_type, "mcnemar")
+  expect_equal(result$test_name, "McNemar's Test")
 
+  # Check mcnemar-specific fields
   expect_true(result$statistic >= 0)
   expect_true(result$p_value >= 0 && result$p_value <= 1)
   expect_true(result$n_pairs >= 0)
   expect_true(result$n_changed >= 0)
   expect_true(result$pct_changed >= 0 && result$pct_changed <= 100)
   expect_type(result$interpretation, "character")
+  expect_true("df" %in% names(result))
+  expect_true("odds_ratio_change" %in% names(result))
+  expect_true("observed" %in% names(result))
 })
 
 test_that("mcnemar_test handles continuity correction", {
